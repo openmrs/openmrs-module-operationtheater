@@ -1,0 +1,6 @@
+org/openmrs/module/operationtheater/api/OperationTheaterService.class
+org/openmrs/module/operationtheater/OperationTheaterConfig.class
+org/openmrs/module/operationtheater/Item.class
+org/openmrs/module/operationtheater/api/dao/OperationTheaterDao.class
+org/openmrs/module/operationtheater/OperationTheaterActivator.class
+org/openmrs/module/operationtheater/api/impl/OperationTheaterServiceImpl.class

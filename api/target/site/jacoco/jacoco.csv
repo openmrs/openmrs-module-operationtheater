@@ -1,0 +1,6 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+OperationTheater API,org.openmrs.module.operationtheater.api.impl,OperationTheaterServiceImpl,5,26,1,1,1,8,2,4,1,4
+OperationTheater API,org.openmrs.module.operationtheater,OperationTheaterActivator,18,0,0,0,6,0,3,0,3,0
+OperationTheater API,org.openmrs.module.operationtheater,Item,17,14,0,0,7,6,5,4,5,4
+OperationTheater API,org.openmrs.module.operationtheater,OperationTheaterConfig,3,0,0,0,1,0,1,0,1,0
+OperationTheater API,org.openmrs.module.operationtheater.api.dao,OperationTheaterDao,24,0,0,0,5,0,4,0,4,0
