@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="org.openmrs.module.operationtheater.SurgicalBlock" table="surgical_block">
+
+        <id name="id" type="int" column="surgical_block_id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+
+        <many-to-one name="provider" column="primary_provider_id" class="org.openmrs.Provider" not-null="true" />
+        <many-to-one name="location" column="location_id" class="org.openmrs.Location" not-null="true" />
+
+        <property name="startDatetime" type="java.util.Date" column="start_datetime" not-null="true" length="19"/>
+        <property name="endDatetime" type="java.util.Date" column="end_datetime" length="19"/>
+
+        <property name="uuid" type="java.lang.String"
+                  column="uuid" length="38" unique="true"/>
+
+        <many-to-one name="creator" class="org.openmrs.User" lazy="no-proxy" />
+
+        <property name="dateCreated" type="java.util.Date"
+                  column="date_created" not-null="true" length="19" />
+
+        <many-to-one name="changedBy" class="org.openmrs.User" column="changed_by" />
+
+        <property name="dateChanged" type="java.util.Date"
+                  column="date_changed" length="19" />
+
+        <property name="voided" type="boolean" not-null="true" />
+
+        <many-to-one name="voidedBy" class="org.openmrs.User" column="voided_by" />
+
+        <property name="dateVoided" type="java.util.Date"
+                  column="date_voided" length="19" />
+
+        <property name="voidReason" type="java.lang.String"
+                  column="void_reason" length="255" />
+    </class>
+</hibernate-mapping>
+
