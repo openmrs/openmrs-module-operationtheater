@@ -7,6 +7,8 @@ import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+
 public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements SurgicalBlockService {
 
     @Autowired
@@ -17,10 +19,23 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
         if (surgicalBlock.getEndDatetime().before(surgicalBlock.getStartDatetime())) {
             throw new IllegalPropertyException("Surgical Block start date after end date");
         }
-        if (!surgicalBlockDAO.getOverlappingSurgicalBlocks(surgicalBlock).isEmpty()) {
-            throw new IllegalPropertyException("Surgical Block has conflicting time with existing block(s)");
-
+        if (!getOverlappingSurgicalBlocksForProvider(surgicalBlock).isEmpty()) {
+            throw new IllegalPropertyException("Surgical Block has conflicting time with existing block(s) for this provider");
         }
+        if (!getOverlappingSurgicalBlocksForLocation(surgicalBlock).isEmpty()) {
+            throw new IllegalPropertyException("Surgical Block has conflicting time with existing block(s) for this OT");
+        }
+
         return surgicalBlockDAO.save(surgicalBlock);
+    }
+
+    private ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksForProvider(SurgicalBlock surgicalBlock) {
+        return surgicalBlockDAO.getOverlappingSurgicalBlocksFor(
+                surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), surgicalBlock.getProvider(), null);
+    }
+
+    private ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksForLocation(SurgicalBlock surgicalBlock) {
+        return surgicalBlockDAO.getOverlappingSurgicalBlocksFor(
+                surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), null, surgicalBlock.getLocation());
     }
 }

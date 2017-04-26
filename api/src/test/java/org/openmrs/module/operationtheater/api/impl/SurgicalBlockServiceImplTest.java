@@ -1,16 +1,18 @@
 package org.openmrs.module.operationtheater.api.impl;
 
-import org.mockito.InjectMocks;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.openmrs.Location;
+import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
+import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -18,9 +20,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(PowerMockRunner.class)
@@ -56,7 +57,27 @@ public class SurgicalBlockServiceImplTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnes() throws ParseException {
+    public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesAtALocation() throws ParseException {
+        SurgicalBlock surgicalBlock = new SurgicalBlock();
+        Location location = new Location(1);
+        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
+        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+        surgicalBlock.setLocation(location);
+
+        ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<SurgicalBlock>();
+        surgicalBlocks.add(surgicalBlock);
+
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalBlock.getProvider()), eq(null))).thenReturn(new ArrayList<>());
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), eq(surgicalBlock.getLocation()))).thenReturn(surgicalBlocks);
+
+
+        exception.expect(IllegalPropertyException.class);
+        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this OT");
+        surgicalBlockService.save(surgicalBlock);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesForAProvider() throws ParseException {
         SurgicalBlock surgicalBlock = new SurgicalBlock();
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
@@ -64,11 +85,11 @@ public class SurgicalBlockServiceImplTest {
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<SurgicalBlock>();
         surgicalBlocks.add(surgicalBlock);
 
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocks(surgicalBlock)).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null))).thenReturn(surgicalBlocks);
 
 
         exception.expect(IllegalPropertyException.class);
-        exception.expectMessage("Surgical Block has conflicting time with existing block(s)");
+        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this provider");
         surgicalBlockService.save(surgicalBlock);
     }
 
@@ -77,8 +98,11 @@ public class SurgicalBlockServiceImplTest {
         SurgicalBlock surgicalBlock = new SurgicalBlock();
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+        surgicalBlock.setLocation(new Location(1));
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<>();
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocks(surgicalBlock)).thenReturn(surgicalBlocks);
+
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null))).thenReturn(surgicalBlocks);
         when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 
         surgicalBlockService.save(surgicalBlock);
