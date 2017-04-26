@@ -21,7 +21,7 @@ public class SurgicalBlock extends BaseOpenmrsData {
     }
 
     @Override
-    public void setId(Integer integer) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

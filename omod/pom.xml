@@ -29,12 +29,10 @@
             <type>test-jar</type>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>test</scope>
+            <groupId>org.openmrs.module</groupId>
+            <artifactId>webservices.rest-omod</artifactId>
+            <scope>provided</scope>
         </dependency>
-
     </dependencies>
 </dependencyManagement>
 

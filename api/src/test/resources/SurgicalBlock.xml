@@ -1,6 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-<surgical_block surgical_block_id="1" primary_provider_id="1" location_id="1" start_datetime="2014-04-23 10:00:00.0" end_datetime="2014-04-24 11:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d199f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+    <person person_id="1" uuid="5631b434-78aa-102b-91a0-001e378eb17e" gender="M" birthdate="1950-04-01" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <person_name person_name_id="1" preferred="true" person_id="2" given_name="Doctor" middle_name=" " family_name="Strange" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f127d08-076b-4fc6-acac-4bb91515141e"/>
+
+    <location location_id="1" name="Operation Theater" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="c36906e5-9fbb-4f20-866b-0ece245615a1"/>
+
+    <provider provider_id="1" person_id="1" identifier="2" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="04d96c50-772c-42d5-88ba-5a582957afa8" />
+    <surgical_block surgical_block_id="1" primary_provider_id="1" location_id="1" start_datetime="2017-04-24 10:00:00.0" end_datetime="2017-04-24 11:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
 </dataset>
 
 
