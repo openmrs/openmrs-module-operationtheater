@@ -27,27 +27,27 @@ import static org.mockito.MockitoAnnotations.initMocks;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Context.class})
 public class SurgicalBlockServiceImplTest {
-
-    private SimpleDateFormat simpleDateFormat;
-
     @Mock
     SurgicalBlockDAO surgicalBlockDAO;
 
     @InjectMocks
     SurgicalBlockServiceImpl surgicalBlockService;
 
+    private SimpleDateFormat simpleDateFormat;
+    private SurgicalBlock surgicalBlock;
+
     @Before
     public void run() {
         initMocks(this);
         simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        surgicalBlock = new SurgicalBlock();
     }
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void shouldThrowExceptionWhenSurgicalBlockWhenStartDatetimeIsAfterEndDatetime() throws ParseException {
-        SurgicalBlock surgicalBlock = new SurgicalBlock();
+    public void shouldThrowExceptionWhenSurgicalBlockStartDatetimeIsAfterEndDatetime() throws ParseException {
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 11:45:00"));
 
@@ -58,7 +58,6 @@ public class SurgicalBlockServiceImplTest {
 
     @Test
     public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesAtALocation() throws ParseException {
-        SurgicalBlock surgicalBlock = new SurgicalBlock();
         Location location = new Location(1);
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
@@ -78,7 +77,6 @@ public class SurgicalBlockServiceImplTest {
 
     @Test
     public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesForAProvider() throws ParseException {
-        SurgicalBlock surgicalBlock = new SurgicalBlock();
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
 
@@ -95,7 +93,6 @@ public class SurgicalBlockServiceImplTest {
 
     @Test
     public void shouldSaveAValidSurgicalBlock() throws ParseException {
-        SurgicalBlock surgicalBlock = new SurgicalBlock();
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
         surgicalBlock.setLocation(new Location(1));

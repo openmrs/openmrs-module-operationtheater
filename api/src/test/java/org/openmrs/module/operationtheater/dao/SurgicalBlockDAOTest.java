@@ -39,7 +39,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichFallInsideTheDateRangeAtALocation() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichFallInsideTheGivenDateRangeForAGivenLocation() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-23 11:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Location location = Context.getLocationService().getLocation(1);
@@ -51,7 +51,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichStartedBeforeTheDateRangeAndEndedInTheDateRangeAtALocation() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichStartedBeforeTheDateRangeAndEndedInTheDateRangeForAGivenLocation() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 11:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Location location = Context.getLocationService().getLocation(1);
@@ -63,7 +63,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichStartedInTheDateRangeAndEndedAfterTheDateRange() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichStartedInTheDateRangeAndEndedAfterTheDateRangeForAGivenLocation() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 09:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Location location = Context.getLocationService().getLocation(1);
@@ -75,7 +75,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldNotGetSurgicalBlocksWhichStartedAndEndedBeforeTheDateRange() throws ParseException {
+    public void shouldNotGetOverlappingSurgicalBlocksWhichStartedAndEndedBeforeTheDateRangeForAGivenLocation() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 09:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 09:59:59");
         Location location = Context.getLocationService().getLocation(1);
@@ -86,7 +86,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldNotGetSurgicalBlocksWhichStartedAndEndedAfterTheDateRange() throws ParseException {
+    public void shouldNotGetOverlappingSurgicalBlocksWhichStartedAndEndedAfterTheDateRangeForAGivenLocation() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 11:30:01");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:59:59");
         Location location = Context.getLocationService().getLocation(1);
@@ -96,6 +96,31 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         assertNotNull(surgicalBlocks);
         assertEquals(0, surgicalBlocks.size());
 
+    }
+
+    @Test
+    public void shouldGetOverlappingSurgicalBlockWhichStartedOutsideTheDateRangeAndEndedAfterTheDateRangeForAGivenLocation() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:30:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 11:00:00");
+        Location location = Context.getLocationService().getLocation(1);
+
+        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+
+        assertEquals(1, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldGetAllOverlappingSurgicalBlocksForGivenDateRangeForAGivenLocation() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:30:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Location location = Context.getLocationService().getLocation(1);
+
+        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(3, surgicalBlocks.get(1).getId(), 0.0);
     }
 
     @Test
@@ -111,11 +136,15 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 
         SurgicalBlock savedSurgicalBlock = surgicalBlockDAO.save(surgicalBlock);
 
-        assertEquals(2, savedSurgicalBlock.getId(), 0.0);
+        assertNotNull(savedSurgicalBlock);
+        assertEquals(provider, savedSurgicalBlock.getProvider());
+        assertEquals(location, savedSurgicalBlock.getLocation());
+        assertEquals(startDatetime, savedSurgicalBlock.getStartDatetime());
+        assertEquals(endDatetime, savedSurgicalBlock.getEndDatetime());
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichFallInsideTheDateRangeForAProvider() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichFallInsideTheDateRangeForAProvider() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-23 11:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
@@ -127,7 +156,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichStartedBeforeTheDateRangeAndEndedInTheDateRangeForAProvider() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichStartedBeforeTheDateRangeAndEndedInTheDateRangeForAProvider() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 11:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
@@ -140,7 +169,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
     }
 
     @Test
-    public void shouldGetSurgicalBlocksWhichStartedInTheDateRangeAndEndedAfterTheDateRangeForAProvider() throws ParseException {
+    public void shouldGetOverlappingSurgicalBlocksWhichStartedInTheDateRangeAndEndedAfterTheDateRangeForAProvider() throws ParseException {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 09:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
@@ -173,5 +202,18 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 
         assertNotNull(surgicalBlocks);
         assertEquals(0, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldGetAllOverlappingSurgicalBlocksForGivenDateRangeForAGivenProvider() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:30:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Provider provider = Context.getProviderService().getProvider(1);
+
+        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
     }
 }
