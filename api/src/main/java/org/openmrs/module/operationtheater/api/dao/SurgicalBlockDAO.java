@@ -30,8 +30,8 @@ public class SurgicalBlockDAO {
     public ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider, Location location) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(SurgicalBlock.class, "surgicalBlock");
-        criteria.add(Restrictions.le("startDatetime", endDatetime));
-        criteria.add(Restrictions.ge("endDatetime", startDatetime));
+        criteria.add(Restrictions.lt("startDatetime", endDatetime));
+        criteria.add(Restrictions.gt("endDatetime", startDatetime));
         criteria.add(Restrictions.eq("voided", false));
         if (provider != null) {
             criteria.add(Restrictions.eq("provider", provider));

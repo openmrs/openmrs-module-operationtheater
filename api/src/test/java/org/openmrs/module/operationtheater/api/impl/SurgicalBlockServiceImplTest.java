@@ -59,8 +59,8 @@ public class SurgicalBlockServiceImplTest {
     @Test
     public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesAtALocation() throws ParseException {
         Location location = new Location(1);
-        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
-        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-24 13:45:00"));
+        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-24 14:45:00"));
         surgicalBlock.setLocation(location);
 
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<SurgicalBlock>();
