@@ -12,7 +12,7 @@ import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
-import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
+import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -51,7 +51,7 @@ public class SurgicalBlockServiceImplTest {
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 11:45:00"));
 
-        exception.expect(IllegalPropertyException.class);
+        exception.expect(ValidationException.class);
         exception.expectMessage("Surgical Block start date after end date");
         surgicalBlockService.save(surgicalBlock);
     }
@@ -70,7 +70,7 @@ public class SurgicalBlockServiceImplTest {
         when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), eq(surgicalBlock.getLocation()))).thenReturn(surgicalBlocks);
 
 
-        exception.expect(IllegalPropertyException.class);
+        exception.expect(ValidationException.class);
         exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this OT");
         surgicalBlockService.save(surgicalBlock);
     }
@@ -86,7 +86,7 @@ public class SurgicalBlockServiceImplTest {
         when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null))).thenReturn(surgicalBlocks);
 
 
-        exception.expect(IllegalPropertyException.class);
+        exception.expect(ValidationException.class);
         exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this provider");
         surgicalBlockService.save(surgicalBlock);
     }
