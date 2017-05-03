@@ -6,13 +6,19 @@ import org.openmrs.module.operationtheater.api.SurgicalBlockService;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.webservices.rest.web.response.IllegalPropertyException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+@Service
 public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements SurgicalBlockService {
 
     @Autowired
     SurgicalBlockDAO surgicalBlockDAO;
+
+    public void setSurgicalBlockDAO(SurgicalBlockDAO surgicalBlockDAO) {
+        this.surgicalBlockDAO = surgicalBlockDAO;
+    }
 
     @Override
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {

@@ -14,6 +14,7 @@ import org.openmrs.api.APIException;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.operationtheater.OperationTheaterConfig;
 import org.openmrs.module.operationtheater.Item;
+import org.openmrs.module.operationtheater.SurgicalBlock;
 import org.springframework.transaction.annotation.Transactional;
 
 /**

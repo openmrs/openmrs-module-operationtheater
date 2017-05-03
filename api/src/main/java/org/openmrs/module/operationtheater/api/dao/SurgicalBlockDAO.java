@@ -19,6 +19,9 @@ public class SurgicalBlockDAO {
     @Autowired
     SessionFactory sessionFactory;
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
         Session session = sessionFactory.getCurrentSession();

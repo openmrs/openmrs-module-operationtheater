@@ -7,7 +7,7 @@
 	<name>${project.parent.name}</name>
 	<version>${project.parent.version}</version>
 	<package>org.openmrs.module.operationtheater</package>
-	<author>pramidat</author>
+	<author>Bahmni</author>
 	<description>
 			${project.parent.description}
 	</description>
@@ -28,8 +28,10 @@
 	<aware_of_modules>
 		<aware_of_module>org.openmrs.module.legacyui</aware_of_module>
 	</aware_of_modules>
-	
-	
+
+	<require_modules>
+		<require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
+	</require_modules>
 	<!-- AOP
 	<advice>
 		<point>org.openmrs.api.FormService</point>
