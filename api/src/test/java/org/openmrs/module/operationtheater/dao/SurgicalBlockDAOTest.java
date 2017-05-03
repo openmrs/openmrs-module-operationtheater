@@ -14,8 +14,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -44,7 +45,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -56,7 +57,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -68,7 +69,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:30:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -80,7 +81,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(0, surgicalBlocks.size());
     }
@@ -91,7 +92,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertNotNull(surgicalBlocks);
         assertEquals(0, surgicalBlocks.size());
@@ -104,7 +105,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 11:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -116,7 +117,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
         Location location = Context.getLocationService().getLocation(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, location);
 
         assertEquals(2, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -149,7 +150,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -162,7 +163,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Provider provider = Context.getProviderService().getProvider(1);
 
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -174,7 +175,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:30:00");
         Provider provider = Context.getProviderService().getProvider(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertEquals(1, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -186,7 +187,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertEquals(0, surgicalBlocks.size());
     }
@@ -198,7 +199,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Provider provider = Context.getProviderService().getProvider(1);
 
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertNotNull(surgicalBlocks);
         assertEquals(0, surgicalBlocks.size());
@@ -210,7 +211,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
 
-        ArrayList<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
 
         assertEquals(2, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);

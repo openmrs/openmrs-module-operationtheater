@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Repository
 public class SurgicalBlockDAO {
@@ -30,7 +31,7 @@ public class SurgicalBlockDAO {
         return surgicalBlock;
     }
 
-    public ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider, Location location) {
+    public List<SurgicalBlock> getOverlappingSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider, Location location) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(SurgicalBlock.class, "surgicalBlock");
         criteria.add(Restrictions.lt("startDatetime", endDatetime));
@@ -42,6 +43,6 @@ public class SurgicalBlockDAO {
         if (location != null) {
             criteria.add(Restrictions.eq("location", location));
         }
-        return (ArrayList<SurgicalBlock>) criteria.list();
+        return criteria.list();
     }
 }

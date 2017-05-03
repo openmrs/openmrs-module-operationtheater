@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements SurgicalBlockService {
@@ -31,16 +32,15 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
         if (!getOverlappingSurgicalBlocksForLocation(surgicalBlock).isEmpty()) {
             throw new IllegalPropertyException("Surgical Block has conflicting time with existing block(s) for this OT");
         }
-
         return surgicalBlockDAO.save(surgicalBlock);
     }
 
-    private ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksForProvider(SurgicalBlock surgicalBlock) {
+    private List<SurgicalBlock> getOverlappingSurgicalBlocksForProvider(SurgicalBlock surgicalBlock) {
         return surgicalBlockDAO.getOverlappingSurgicalBlocksFor(
                 surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), surgicalBlock.getProvider(), null);
     }
 
-    private ArrayList<SurgicalBlock> getOverlappingSurgicalBlocksForLocation(SurgicalBlock surgicalBlock) {
+    private List<SurgicalBlock> getOverlappingSurgicalBlocksForLocation(SurgicalBlock surgicalBlock) {
         return surgicalBlockDAO.getOverlappingSurgicalBlocksFor(
                 surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), null, surgicalBlock.getLocation());
     }

@@ -32,6 +32,11 @@
 	<require_modules>
 		<require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
 	</require_modules>
+
+	<mappingFiles>
+		SurgicalBlock.hbm.xml
+	</mappingFiles>
+
 	<!-- AOP
 	<advice>
 		<point>org.openmrs.api.FormService</point>
