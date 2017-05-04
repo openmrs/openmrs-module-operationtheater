@@ -6,11 +6,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Location;
 import org.openmrs.Provider;
-import org.openmrs.module.operationtheater.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

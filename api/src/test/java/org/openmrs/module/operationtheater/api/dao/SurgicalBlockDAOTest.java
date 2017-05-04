@@ -1,4 +1,4 @@
-package org.openmrs.module.operationtheater.dao;
+package org.openmrs.module.operationtheater.api.dao;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -6,8 +6,7 @@ import org.junit.runner.RunWith;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.operationtheater.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -16,7 +15,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Date;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

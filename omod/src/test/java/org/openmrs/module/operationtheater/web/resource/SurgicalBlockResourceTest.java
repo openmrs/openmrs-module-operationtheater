@@ -1,7 +1,6 @@
 package org.openmrs.module.operationtheater.web.resource;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -9,8 +8,8 @@ import org.mockito.MockitoAnnotations;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.operationtheater.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.SurgicalBlockService;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;

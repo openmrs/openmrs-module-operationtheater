@@ -1,4 +1,4 @@
-package org.openmrs.module.operationtheater.api.impl;
+package org.openmrs.module.operationtheater.api.service.impl;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.operationtheater.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.powermock.core.classloader.annotations.PrepareForTest;

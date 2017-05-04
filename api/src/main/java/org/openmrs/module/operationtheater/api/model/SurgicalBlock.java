@@ -1,4 +1,4 @@
-package org.openmrs.module.operationtheater;
+package org.openmrs.module.operationtheater.api.model;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Location;

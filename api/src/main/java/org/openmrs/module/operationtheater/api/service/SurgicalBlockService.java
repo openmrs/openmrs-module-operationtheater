@@ -1,8 +1,8 @@
-package org.openmrs.module.operationtheater.api;
+package org.openmrs.module.operationtheater.api.service;
 
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.module.operationtheater.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional

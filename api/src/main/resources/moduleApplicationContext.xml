@@ -25,38 +25,6 @@
 
     <context:component-scan base-package="org.openmrs.module.operationtheater" />
 
-    <!-- Wraps OperationTheaterService methods in DB transactions and OpenMRS interceptors,
-    which set audit info like dateCreated, changedBy, etc.-->
-    <!--<bean id="operationtheater.OperationTheaterService"-->
-            <!--class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">-->
-        <!--<property name="transactionManager">-->
-            <!--<ref bean="transactionManager" />-->
-        <!--</property>-->
-        <!--<property name="target">-->
-            <!--<bean class="org.openmrs.module.operationtheater.api.impl.OperationTheaterServiceImpl">-->
-                <!--<property name="dao" ref="operationtheater.OperationTheaterDao" />-->
-            <!--</bean>-->
-        <!--</property>-->
-        <!--<property name="preInterceptors">-->
-            <!--<ref bean="serviceInterceptors" />-->
-        <!--</property>-->
-        <!--<property name="transactionAttributeSource">-->
-            <!--<ref bean="transactionAttributeSource" />-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!-- Adds OperationTheaterService to OpenMRS context so it can be accessed
-    calling Context.getService(OperationTheaterService.class) -->
-    <!--<bean parent="serviceContext">-->
-        <!--<property name="moduleService">-->
-            <!--<list>-->
-                <!--<value>org.openmrs.module.operationtheater.api.OperationTheaterService</value>-->
-                <!--<ref bean="operationtheater.OperationTheaterService" />-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
-
-
     <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
         <property name="configLocations">
             <list>
@@ -67,7 +35,6 @@
         <property name="mappingJarLocations">
             <ref bean="mappingJarResources"/>
         </property>
-        <!--  default properties must be set in the hibernate.default.properties -->
     </bean>
 
     <bean id="surgicalBlockService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
@@ -75,7 +42,7 @@
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.operationtheater.api.impl.SurgicalBlockServiceImpl">
+            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalBlockServiceImpl">
                 <property name="surgicalBlockDAO">
                     <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO">
                         <property name="sessionFactory">
@@ -96,8 +63,7 @@
     <bean parent="serviceContext">
         <property name="moduleService">
             <list merge="true">
-                <value>org.openmrs.module.operationtheater.api.SurgicalBlockService</value>
-                <!--<value>${project.parent.groupId}.${project.parent.artifactId}.SurgicalBlockService</value>-->
+                <value>org.openmrs.module.operationtheater.api.service.SurgicalBlockService</value>
                 <ref local="surgicalBlockService"/>
             </list>
         </property>

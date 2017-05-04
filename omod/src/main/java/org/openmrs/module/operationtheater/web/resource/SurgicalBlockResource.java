@@ -2,8 +2,8 @@ package org.openmrs.module.operationtheater.web.resource;
 
 
 import org.openmrs.api.context.Context;
-import org.openmrs.module.operationtheater.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.SurgicalBlockService;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;

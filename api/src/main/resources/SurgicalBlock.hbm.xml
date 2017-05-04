@@ -3,7 +3,7 @@
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="org.openmrs.module.operationtheater.SurgicalBlock" table="surgical_block">
+    <class name="org.openmrs.module.operationtheater.api.model.SurgicalBlock" table="surgical_block">
 
         <id name="id" type="int" column="surgical_block_id" unsaved-value="0">
             <generator class="native"/>

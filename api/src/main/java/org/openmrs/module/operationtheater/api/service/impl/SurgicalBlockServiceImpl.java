@@ -1,8 +1,8 @@
-package org.openmrs.module.operationtheater.api.impl;
+package org.openmrs.module.operationtheater.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.operationtheater.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.SurgicalBlockService;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,9 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
         if (surgicalBlock.getEndDatetime().before(surgicalBlock.getStartDatetime())) {
             throw new ValidationException("Surgical Block start date after end date");
-        }
-        if (!getOverlappingSurgicalBlocksForProvider(surgicalBlock).isEmpty()) {
+        } else if (!getOverlappingSurgicalBlocksForProvider(surgicalBlock).isEmpty()) {
             throw new ValidationException("Surgical Block has conflicting time with existing block(s) for this provider");
-        }
-        if (!getOverlappingSurgicalBlocksForLocation(surgicalBlock).isEmpty()) {
+        } else if (!getOverlappingSurgicalBlocksForLocation(surgicalBlock).isEmpty()) {
             throw new ValidationException("Surgical Block has conflicting time with existing block(s) for this OT");
         }
         return surgicalBlockDAO.save(surgicalBlock);
