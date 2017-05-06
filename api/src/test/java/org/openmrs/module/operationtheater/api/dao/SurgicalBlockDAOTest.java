@@ -215,4 +215,65 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
         assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
     }
+
+    @Test
+    public void shouldGetAllSurgicalBlocksForGivenDateRangeForAGivenProvider() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Provider provider = Context.getProviderService().getProvider(1);
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldGetAllSurgicalBlocksForGivenDateRangeForAGivenLocation() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Location location = Context.getLocationService().getLocation(2);
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+
+        assertEquals(1, surgicalBlocks.size());
+        assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldGetAllSurgicalBlocksForGivenDateRangeForAGivenLocationAndProvider() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Provider provider = Context.getProviderService().getProvider(1);
+        Location location = Context.getLocationService().getLocation(2);
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, location);
+
+        assertEquals(1, surgicalBlocks.size());
+        assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldGetAllSurgicalBlocksForGivenDateRange() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+
+        assertEquals(3, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+        assertEquals(3, surgicalBlocks.get(2).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnEmptySurgicalBlocksForGivenDateRangeWhenThereAreNoSurgicalBlocksExist() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-25 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-29 16:00:00");
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
 }

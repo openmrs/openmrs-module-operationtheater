@@ -14,6 +14,7 @@
     <surgical_block surgical_block_id="1" primary_provider_id="1" location_id="1" start_datetime="2017-04-24 10:00:00.0" end_datetime="2017-04-24 11:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
     <surgical_block surgical_block_id="2" primary_provider_id="1" location_id="2" start_datetime="2017-04-24 13:00:00.0" end_datetime="2017-04-24 15:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f2" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
     <surgical_block surgical_block_id="3" primary_provider_id="2" location_id="1" start_datetime="2017-04-24 13:00:00.0" end_datetime="2017-04-24 15:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f3" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+    <surgical_block surgical_block_id="4" primary_provider_id="2" location_id="2" start_datetime="2017-04-24 10:00:00.0" end_datetime="2017-04-24 11:30:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f4" creator="1" date_created="2017-04-28 00:00:00.0" voided="true"/>
 </dataset>
 
 
