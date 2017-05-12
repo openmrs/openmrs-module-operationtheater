@@ -1,6 +1,7 @@
 package org.openmrs.module.operationtheater.api.service.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -8,8 +9,11 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.exception.ValidationException;
@@ -19,6 +23,8 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -30,8 +36,14 @@ public class SurgicalBlockServiceImplTest {
     @Mock
     SurgicalBlockDAO surgicalBlockDAO;
 
+    @Mock
+    SurgicalAppointmentDao surgicalAppointmentDao;
+
     @InjectMocks
     SurgicalBlockServiceImpl surgicalBlockService;
+
+    @Mock
+    SurgicalAppointmentServiceImpl surgicalAppointmentService;
 
     private SimpleDateFormat simpleDateFormat;
     private SurgicalBlock surgicalBlock;
@@ -66,8 +78,8 @@ public class SurgicalBlockServiceImplTest {
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<SurgicalBlock>();
         surgicalBlocks.add(surgicalBlock);
 
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalBlock.getProvider()), eq(null))).thenReturn(new ArrayList<>());
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), eq(surgicalBlock.getLocation()))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalBlock.getProvider()), eq(null), eq(null))).thenReturn(new ArrayList<>());
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), eq(surgicalBlock.getLocation()), eq(null))).thenReturn(surgicalBlocks);
 
 
         exception.expect(ValidationException.class);
@@ -83,7 +95,7 @@ public class SurgicalBlockServiceImplTest {
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<SurgicalBlock>();
         surgicalBlocks.add(surgicalBlock);
 
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null),eq(null))).thenReturn(surgicalBlocks);
 
 
         exception.expect(ValidationException.class);
@@ -92,14 +104,33 @@ public class SurgicalBlockServiceImplTest {
     }
 
     @Test
-    public void shouldSaveAValidSurgicalBlock() throws ParseException {
+    public void shouldReturnSurgicalBlockIfItsAlreadySaved() throws ParseException {
         surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
         surgicalBlock.setLocation(new Location(1));
+        surgicalBlock.setId(1);
+        surgicalBlock.setSurgicalAppointments(new HashSet<>());
         ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<>();
 
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class))).thenReturn(surgicalBlocks);
-        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(surgicalBlock.getId()))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(surgicalBlock.getId()))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
+
+        surgicalBlockService.save(surgicalBlock);
+
+        verify(surgicalBlockDAO, times(1)).save(surgicalBlock);
+    }
+
+    @Test
+    public void shouldSaveAValidNewSurgicalBlock() throws ParseException {
+        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
+        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+        surgicalBlock.setLocation(new Location(1));
+        surgicalBlock.setSurgicalAppointments(new HashSet<>());
+        ArrayList<SurgicalBlock> surgicalBlocks = new ArrayList<>();
+
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(null))).thenReturn(surgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(null))).thenReturn(surgicalBlocks);
         when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 
         surgicalBlockService.save(surgicalBlock);

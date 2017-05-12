@@ -47,20 +47,24 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
 
     @Override
     public DelegatingResourceDescription getRepresentationDescription(Representation representation) {
-        if ((representation instanceof DefaultRepresentation) || (representation instanceof RefRepresentation)) {
+        if ((representation instanceof DefaultRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("id");
             description.addProperty("provider", Representation.DEFAULT);
             description.addProperty("location", Representation.DEFAULT);
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
+            description.addProperty("surgicalAppointments", Representation.REF);
             return description;
         }
         if ((representation instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
+            description.addProperty("id");
             description.addProperty("provider", Representation.FULL);
             description.addProperty("location", Representation.FULL);
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
+            description.addProperty("surgicalAppointments", Representation.FULL);
             return description;
         }
         return null;
@@ -69,10 +73,12 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
     @Override
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
+        delegatingResourceDescription.addProperty("id");
         delegatingResourceDescription.addRequiredProperty("provider");
         delegatingResourceDescription.addRequiredProperty("location");
         delegatingResourceDescription.addRequiredProperty("startDatetime");
         delegatingResourceDescription.addRequiredProperty("endDatetime");
+        delegatingResourceDescription.addProperty("surgicalAppointments");
         return delegatingResourceDescription;
     }
 }

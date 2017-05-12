@@ -25,12 +25,12 @@ public class SurgicalBlockDAO {
 
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
         Session session = sessionFactory.getCurrentSession();
-        session.save(surgicalBlock);
+        session.saveOrUpdate(surgicalBlock);
         session.flush();
         return surgicalBlock;
     }
 
-    public List<SurgicalBlock> getOverlappingSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider, Location location) {
+    public List<SurgicalBlock> getOverlappingSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider, Location location, Integer surgicalBlockId) {
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(SurgicalBlock.class, "surgicalBlock");
         criteria.add(Restrictions.lt("startDatetime", endDatetime));
@@ -41,6 +41,9 @@ public class SurgicalBlockDAO {
         }
         if (location != null) {
             criteria.add(Restrictions.eq("location", location));
+        }
+        if(surgicalBlockId != null) {
+            criteria.add(Restrictions.ne("id", surgicalBlockId));
         }
         return criteria.list();
     }

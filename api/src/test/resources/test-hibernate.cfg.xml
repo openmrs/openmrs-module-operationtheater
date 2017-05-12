@@ -5,6 +5,7 @@
 
 <hibernate-configuration>
     <session-factory>
+        <mapping resource="SurgicalAppointment.hbm.xml"/>
         <mapping resource="SurgicalBlock.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

@@ -4,7 +4,9 @@ import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 
+import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 
 public class SurgicalBlock extends BaseOpenmrsData {
 
@@ -13,6 +15,7 @@ public class SurgicalBlock extends BaseOpenmrsData {
     private Location location;
     private Date startDatetime;
     private Date endDatetime;
+    private Set<SurgicalAppointment> surgicalAppointments;
 
 
     @Override
@@ -55,5 +58,13 @@ public class SurgicalBlock extends BaseOpenmrsData {
 
     public void setEndDatetime(Date endDatetime) {
         this.endDatetime = endDatetime;
+    }
+
+    public Set<SurgicalAppointment> getSurgicalAppointments() {
+        return surgicalAppointments;
+    }
+
+    public void setSurgicalAppointments(Set<SurgicalAppointment> surgicalAppointments) {
+        this.surgicalAppointments = surgicalAppointments;
     }
 }

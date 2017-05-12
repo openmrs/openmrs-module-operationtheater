@@ -37,6 +37,38 @@
         </property>
     </bean>
 
+    <bean id="surgicalAppointmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentServiceImpl">
+                <property name="surgicalAppointmentDao">
+                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService</value>
+                <ref local="surgicalAppointmentService"/>
+            </list>
+        </property>
+    </bean>
+
     <bean id="surgicalBlockService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>

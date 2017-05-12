@@ -23,6 +23,7 @@
 	</require_modules>
 
 	<mappingFiles>
+		SurgicalAppointment.hbm.xml
 		SurgicalBlock.hbm.xml
 	</mappingFiles>
 	
