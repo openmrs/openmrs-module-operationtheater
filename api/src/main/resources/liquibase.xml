@@ -152,4 +152,63 @@
                                  baseTableName="surgical_appointment" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
+    <changeSet id="20170512103950" author="Santhosh, Shireesha">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="surgical_appointment_attribute_type"/>
+            </not>
+        </preConditions>
+        <comment> Creating the surgical_appointment_attribute_type table</comment>
+        <createTable tableName="surgical_appointment_attribute_type">
+            <column autoIncrement="true" name="surgical_appointment_attribute_type_id" type="int">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="format" type="varchar(50)"/>
+            <column name="sort_weight" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="creator" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="changed_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="date_changed" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="retired" type="tinyint(1)" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retired_by" type="int">
+                <constraints nullable="true"/>
+            </column>
+            <column name="date_retired" type="datetime">
+                <constraints nullable="true"/>
+            </column>
+            <column name="retire_reason" type="varchar(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint constraintName="surgical_appointment_attribute_type_creator_by_fk"
+                                 baseTableName="surgical_appointment_attribute_type" baseColumnNames="creator"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="surgical_appointment_attribute_type_changed_by_fk"
+                                 baseTableName="surgical_appointment_attribute_type" baseColumnNames="changed_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+        <addForeignKeyConstraint constraintName="surgical_appointment_attribute_type_voided_by_fk"
+                                 baseTableName="surgical_appointment_attribute_type" baseColumnNames="retired_by"
+                                 referencedTableName="users" referencedColumnNames="user_id"/>
+    </changeSet>
 </databaseChangeLog>

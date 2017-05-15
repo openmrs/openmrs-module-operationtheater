@@ -100,4 +100,36 @@
             </list>
         </property>
     </bean>
+
+    <bean id="surgicalAppointmentAttributeTypeService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+        <property name="transactionManager">
+            <ref bean="transactionManager"/>
+        </property>
+        <property name="target">
+            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentAttributeTypeServiceImpl">
+                <property name="surgicalAppointmentAttributeTypeDAO">
+                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentAttributeTypeDAO">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="preInterceptors">
+            <ref bean="serviceInterceptors"/>
+        </property>
+        <property name="transactionAttributeSource">
+            <ref bean="transactionAttributeSource"/>
+        </property>
+    </bean>
+
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list merge="true">
+                <value>org.openmrs.module.operationtheater.api.service.SurgicalAppointmentAttributeTypeService</value>
+                <ref local="surgicalAppointmentAttributeTypeService"/>
+            </list>
+        </property>
+    </bean>
 </beans>

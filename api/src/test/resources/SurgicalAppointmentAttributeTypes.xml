@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <surgical_appointment_attribute_type surgical_appointment_attribute_type_id="1" name="Procedure"  description="procedure" format="java.lang.String" sort_weight="1" creator="1" date_created="2005-01-01 00:00:00.0" uuid="0f1f7d08-076b-4fc6-acac-4bb915151sdd" retired="false"/>
+    <surgical_appointment_attribute_type surgical_appointment_attribute_type_id="2" name="Anaesthetist"  description="provider info" format="java.lang.String" sort_weight="3" creator="1" date_created="2005-01-01 00:00:00.0" uuid="0f1f7d08-076b-4fc6-acac-4bb915151sda" retired="false"/>
+    <surgical_appointment_attribute_type surgical_appointment_attribute_type_id="3" name="Nurse"  description="provider info" format="java.lang.String" sort_weight="2" creator="1" date_created="2005-01-01 00:00:00.0" uuid="0f1f7d08-076b-4fc6-acac-4bb915151sdb" retired="false"/>
+</dataset>

@@ -7,5 +7,6 @@
     <session-factory>
         <mapping resource="SurgicalBlock.hbm.xml"/>
         <mapping resource="SurgicalAppointment.hbm.xml"/>
+        <mapping resource="SurgicalAppointmentAttributeType.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

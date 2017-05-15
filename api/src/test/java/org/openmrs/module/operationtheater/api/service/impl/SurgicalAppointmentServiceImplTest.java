@@ -17,8 +17,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -48,7 +46,7 @@ public class SurgicalAppointmentServiceImplTest {
     public final ExpectedException exception = ExpectedException.none();
 
     @Test
-    public void shouldThrowExceptionWhenTheNewSurgicalBlockOverlapsWithExistingOnesForAProvider() throws ParseException {
+    public void shouldSaveTheSurgicalAppointmet() throws ParseException {
         surgicalAppointment.setActualStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
         surgicalAppointment.setActualEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
         surgicalAppointment.setPatient(new Patient());
