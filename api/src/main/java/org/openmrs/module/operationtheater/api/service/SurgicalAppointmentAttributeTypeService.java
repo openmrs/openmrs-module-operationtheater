@@ -10,4 +10,6 @@ import java.util.List;
 @Transactional
 public interface SurgicalAppointmentAttributeTypeService extends OpenmrsService {
     List<SurgicalAppointmentAttributeType> getAllAttributeTypes();
+
+    SurgicalAppointmentAttributeType getSurgicalAppointmentAttributeTypeByUuid(String uuid);
 }

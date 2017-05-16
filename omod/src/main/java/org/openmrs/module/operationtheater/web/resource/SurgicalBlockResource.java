@@ -2,19 +2,25 @@ package org.openmrs.module.operationtheater.web.resource;
 
 
 import org.openmrs.api.context.Context;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
+import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
+import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
 import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
-import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+
+import java.util.List;
+import java.util.Set;
 
 @Resource(name = RestConstants.VERSION_1 + "/surgicalBlock", supportedClass = SurgicalBlock.class, supportedOpenmrsVersions = {"2.0.*", "2.1.*"})
 public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBlock> {
@@ -54,7 +60,7 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
             description.addProperty("location", Representation.DEFAULT);
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
-            description.addProperty("surgicalAppointments", Representation.REF);
+            description.addProperty("surgicalAppointments");
             return description;
         }
         if ((representation instanceof FullRepresentation)) {
@@ -64,7 +70,7 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
             description.addProperty("location", Representation.FULL);
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
-            description.addProperty("surgicalAppointments", Representation.FULL);
+            description.addProperty("surgicalAppointments");
             return description;
         }
         return null;
@@ -81,4 +87,22 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
         delegatingResourceDescription.addProperty("surgicalAppointments");
         return delegatingResourceDescription;
     }
+
+    @PropertyGetter("surgicalAppointments")
+    public static Set<SurgicalAppointment> getSurgicalAppointments(SurgicalBlock surgicalBlock) {
+        return surgicalBlock.getSurgicalAppointments();
+    }
+
+    @PropertySetter("surgicalAppointments")
+    public static void setSurgicalAppointments(SurgicalBlock instance, Set<SurgicalAppointment> surgicalAppointments) {
+        for (SurgicalAppointment surgicalAppointment : surgicalAppointments) {
+            surgicalAppointment.setSurgicalBlock(instance);
+            for (SurgicalAppointmentAttribute surgicalAppointmentAttribute : surgicalAppointment.getSurgicalAppointmentAttributes()) {
+                surgicalAppointmentAttribute.setSurgicalAppointment(surgicalAppointment);
+            }
+        }
+        instance.setSurgicalAppointments(surgicalAppointments);
+    }
+
+
 }

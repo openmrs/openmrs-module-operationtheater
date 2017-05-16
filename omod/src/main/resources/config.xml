@@ -26,6 +26,7 @@
 		SurgicalAppointment.hbm.xml
 		SurgicalBlock.hbm.xml
 		SurgicalAppointmentAttributeType.hbm.xml
+		SurgicalAppointmentAttribute.hbm.xml
 	</mappingFiles>
 	
 	<messages>

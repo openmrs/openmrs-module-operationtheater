@@ -21,4 +21,9 @@ public class SurgicalAppointmentAttributeTypeServiceImpl extends BaseOpenmrsServ
     public List<SurgicalAppointmentAttributeType> getAllAttributeTypes() {
         return surgicalAppointmentAttributeTypeDAO.getAllAttributeTypes();
     }
+
+    @Override
+    public SurgicalAppointmentAttributeType getSurgicalAppointmentAttributeTypeByUuid(String uuid) {
+        return surgicalAppointmentAttributeTypeDAO.getSurgicalAppointmentAttributeTypeByUuid(uuid);
+    }
 }

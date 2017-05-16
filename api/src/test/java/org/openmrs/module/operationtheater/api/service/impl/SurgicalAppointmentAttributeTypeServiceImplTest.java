@@ -40,7 +40,6 @@ public class SurgicalAppointmentAttributeTypeServiceImplTest {
 
     @Test
     public void shouldGetAllSurgicalAppointmentAttributeTypes() throws ParseException {
-
         List<SurgicalAppointmentAttributeType> surgicalAppointmentAttributeTypes = new ArrayList<>();
         SurgicalAppointmentAttributeType procedureAttributeType = new SurgicalAppointmentAttributeType();
         procedureAttributeType.setId(1);
@@ -51,5 +50,18 @@ public class SurgicalAppointmentAttributeTypeServiceImplTest {
         surgicalAppointmentAttributeTypeService.getAllAttributeTypes();
 
         verify(surgicalAppointmentAttributeTypeDAO, times(1)).getAllAttributeTypes();
+    }
+
+    @Test
+    public void shouldGetTheSurgicalAppointmentAttributeTypeByUsingGivenUuid() throws ParseException {
+        String uuid = "0f1f7d08-076b-4fc6-acac-4bb915151sdd";
+        SurgicalAppointmentAttributeType procedureAttributeType = new SurgicalAppointmentAttributeType();
+        procedureAttributeType.setId(1);
+        procedureAttributeType.setName("Procedure");
+        when(surgicalAppointmentAttributeTypeDAO.getSurgicalAppointmentAttributeTypeByUuid(uuid)).thenReturn(procedureAttributeType);
+
+        surgicalAppointmentAttributeTypeService.getSurgicalAppointmentAttributeTypeByUuid(uuid);
+
+        verify(surgicalAppointmentAttributeTypeDAO, times(1)).getSurgicalAppointmentAttributeTypeByUuid(uuid);
     }
 }

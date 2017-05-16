@@ -2,8 +2,10 @@ package org.openmrs.module.operationtheater.api.model;
 
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Patient;
+import org.openmrs.util.OpenmrsUtil;
+import org.springframework.util.StringUtils;
 
-import java.util.Date;
+import java.util.*;
 
 public class SurgicalAppointment extends BaseOpenmrsData {
     private Integer id;
@@ -14,6 +16,7 @@ public class SurgicalAppointment extends BaseOpenmrsData {
     private String status;
     private String notes;
     private Integer sortWeight;
+    private Set<SurgicalAppointmentAttribute> surgicalAppointmentAttributes;
 
     @Override
     public Integer getId() {
@@ -79,5 +82,26 @@ public class SurgicalAppointment extends BaseOpenmrsData {
 
     public void setSortWeight(Integer sortWeight) {
         this.sortWeight = sortWeight;
+    }
+
+    public Set<SurgicalAppointmentAttribute> getSurgicalAppointmentAttributes() {
+        if (surgicalAppointmentAttributes == null) {
+            surgicalAppointmentAttributes = new TreeSet<>();
+        }
+        return surgicalAppointmentAttributes;
+    }
+
+    public void setSurgicalAppointmentAttributes(Set<SurgicalAppointmentAttribute> surgicalAppointmentAttributes) {
+        this.surgicalAppointmentAttributes = surgicalAppointmentAttributes;
+    }
+
+    public List<SurgicalAppointmentAttribute> getActiveAttributes() {
+        List<SurgicalAppointmentAttribute> attrs = new Vector<>();
+        for (SurgicalAppointmentAttribute attr : getSurgicalAppointmentAttributes()) {
+            if (!attr.getVoided()) {
+                attrs.add(attr);
+            }
+        }
+        return attrs;
     }
 }

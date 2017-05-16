@@ -37,5 +37,9 @@
 
         <property name="uuid" type="java.lang.String" column="uuid" length="38" unique="true"/>
 
+        <set name="surgicalAppointmentAttributes" inverse="true" cascade="all">
+            <key column="surgical_appointment_id"/>
+            <one-to-many class="org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute"/>
+        </set>
     </class>
 </hibernate-mapping>

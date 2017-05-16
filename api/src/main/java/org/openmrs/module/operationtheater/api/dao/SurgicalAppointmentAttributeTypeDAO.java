@@ -29,4 +29,11 @@ public class SurgicalAppointmentAttributeTypeDAO {
         return (List<SurgicalAppointmentAttributeType>) criteria.list();
     }
 
+    public SurgicalAppointmentAttributeType getSurgicalAppointmentAttributeTypeByUuid(String uuid) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(SurgicalAppointmentAttributeType.class, "surgicalAppointmentAttributeType");
+        criteria.add(Restrictions.eq("retired", false));
+        criteria.add(Restrictions.eq("uuid", uuid));
+        return (SurgicalAppointmentAttributeType) criteria.uniqueResult();
+    }
 }

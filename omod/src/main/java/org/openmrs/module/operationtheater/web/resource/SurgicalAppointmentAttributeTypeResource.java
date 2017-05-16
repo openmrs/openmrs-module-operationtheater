@@ -28,8 +28,8 @@ public class SurgicalAppointmentAttributeTypeResource extends MetadataDelegating
     }
 
     @Override
-    public SurgicalAppointmentAttributeType getByUniqueId(String s) {
-        return null;
+    public SurgicalAppointmentAttributeType getByUniqueId(String uuid) {
+        return Context.getService(SurgicalAppointmentAttributeTypeService.class).getSurgicalAppointmentAttributeTypeByUuid(uuid);
     }
 
     @Override

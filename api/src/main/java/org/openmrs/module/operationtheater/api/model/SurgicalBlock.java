@@ -4,9 +4,7 @@ import org.openmrs.BaseOpenmrsData;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 public class SurgicalBlock extends BaseOpenmrsData {
 
@@ -61,6 +59,9 @@ public class SurgicalBlock extends BaseOpenmrsData {
     }
 
     public Set<SurgicalAppointment> getSurgicalAppointments() {
+        if (surgicalAppointments == null) {
+            surgicalAppointments = new TreeSet<>();
+        }
         return surgicalAppointments;
     }
 

@@ -2,6 +2,7 @@ package org.openmrs.module.operationtheater.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
 import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -27,11 +29,6 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
     @Override
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
         checkForOverlappingSurgicalBlocks(surgicalBlock);
-        if(surgicalBlock.getSurgicalAppointments() != null) {
-            for (SurgicalAppointment surgicalAppointment : surgicalBlock.getSurgicalAppointments()) {
-                surgicalAppointment.setSurgicalBlock(surgicalBlock);
-            }
-        }
         return surgicalBlockDAO.save(surgicalBlock);
     }
 

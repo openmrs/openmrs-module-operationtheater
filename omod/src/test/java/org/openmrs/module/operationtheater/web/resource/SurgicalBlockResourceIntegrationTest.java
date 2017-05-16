@@ -110,4 +110,72 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
         assertEquals("5631b434-78aa-102b-91a0-001e378eb17e", patient.get("uuid"));
     }
+
+    @Test
+    public void shouldSaveTheValidSurgicalBlockWithSurgicalAppointmentsAndAttributes() throws Exception {
+        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
+                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000+0530\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000+0530\"," +
+                " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
+                ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
+                "}]}";
+        SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
+        SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+
+        assertNotNull(surgicalBlock);
+        assertNotNull(surgicalBlock.get("id"));
+        assertNotNull(surgicalBlock.get("provider"));
+        assertNotNull(surgicalBlock.get("location"));
+        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
+        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+
+        java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
+        LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
+        assertNotNull(surgicalAppointment.get("id"));
+        assertEquals("2017-04-25T10:00:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
+        assertEquals("2017-04-25T11:00:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals("Scheduled", surgicalAppointment.get("status"));
+        assertEquals("need more assistants", surgicalAppointment.get("notes"));
+        LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
+        assertEquals("5631b434-78aa-102b-91a0-001e378eb17e", patient.get("uuid"));
+
+        java.util.List surgicalAppointmentAttributes = (java.util.List) surgicalAppointment.get("surgicalAppointmentAttributes");
+        LinkedHashMap<String, Object> surgicalAppointmentAttribute = (LinkedHashMap<String, Object>) surgicalAppointmentAttributes.get(0);
+        assertNotNull(surgicalAppointmentAttribute.get("id"));
+        assertEquals("Surgery on left leg", surgicalAppointmentAttribute.get("value"));
+    }
+
+    @Test
+    public void shouldUpdateTheValidSurgicalBlockWithSurgicalAppointmentsAndAttributes() throws Exception {
+        String json = "{\"id\": 1, \"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
+                " \"surgicalAppointments\":[{\"id\": 1, \"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000+0530\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000+0530\"," +
+                    " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
+                ", \"surgicalAppointmentAttributes\": [{\"id\": 1, \"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
+                "}]}";
+        SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
+        SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+
+        assertNotNull(surgicalBlock);
+        assertNotNull(surgicalBlock.get("id"));
+        assertNotNull(surgicalBlock.get("provider"));
+        assertNotNull(surgicalBlock.get("location"));
+        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
+        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+
+        java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
+        LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
+        assertNotNull(surgicalAppointment.get("id"));
+        assertEquals(1, surgicalAppointment.get("id"));
+        assertEquals("2017-04-25T10:00:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
+        assertEquals("2017-04-25T11:00:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals("Scheduled", surgicalAppointment.get("status"));
+        assertEquals("need more assistants", surgicalAppointment.get("notes"));
+        LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
+        assertEquals("5631b434-78aa-102b-91a0-001e378eb17e", patient.get("uuid"));
+
+        java.util.List surgicalAppointmentAttributes = (java.util.List) surgicalAppointment.get("surgicalAppointmentAttributes");
+        LinkedHashMap<String, Object> surgicalAppointmentAttribute = (LinkedHashMap<String, Object>) surgicalAppointmentAttributes.get(0);
+        assertNotNull(surgicalAppointmentAttribute.get("id"));
+        assertEquals(1, surgicalAppointmentAttribute.get("id"));
+        assertEquals("Surgery on left leg", surgicalAppointmentAttribute.get("value"));
+    }
 }
