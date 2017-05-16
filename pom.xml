@@ -208,7 +208,7 @@
 		<powerMockVersion>1.6.5</powerMockVersion>
 		<hamcrestVersion>1.3</hamcrestVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
-		<webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
+		<webservicesRestModuleVersion>2.17</webservicesRestModuleVersion>
 		<javaxServletVersion>3.0.1</javaxServletVersion>
 	</properties>
 </project>
