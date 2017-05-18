@@ -178,4 +178,18 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         assertEquals(1, surgicalAppointmentAttribute.get("id"));
         assertEquals("Surgery on left leg", surgicalAppointmentAttribute.get("value"));
     }
+
+    @Test
+    public void shouldThowAValidationExceptionIfThereAreAnyConflictingSurgicalAppointmentsForGivenPatientFromNewSurgicalAppointments() throws Exception {
+        exception.expect(RuntimeException.class);
+        exception.expectMessage("Patient One has conflicting appointment at OT1 with Doctor Strange");
+
+        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000+0530\", \"endDatetime\": \"2017-04-24T12:00:00.000+0530\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"2\"}," +
+                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
+                ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
+                "}]}";
+        SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
+        deserialize(handle(newPostRequest(getURI(), post)));
+
+    }
 }

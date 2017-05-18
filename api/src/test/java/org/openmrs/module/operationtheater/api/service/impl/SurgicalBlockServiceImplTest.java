@@ -8,9 +8,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.openmrs.Location;
-import org.openmrs.Patient;
-import org.openmrs.Provider;
+import org.openmrs.*;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
@@ -22,9 +20,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
@@ -136,5 +132,50 @@ public class SurgicalBlockServiceImplTest {
         surgicalBlockService.save(surgicalBlock);
 
         verify(surgicalBlockDAO, times(1)).save(surgicalBlock);
+    }
+
+    @Test
+    public void shouldCheckForOverlappingSurgicalAppointmentsForThePatient() throws ParseException {
+        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
+        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+
+        Provider provider = new Provider(1);
+        Set<PersonName> personNamesForProvider = new LinkedHashSet<>();
+        personNamesForProvider.add(new PersonName("Dr.", "Tony", "Stark"));
+        Person person = new Person(1);
+        person.setNames(personNamesForProvider);
+        provider.setPerson(person);
+        provider.setName("Tony Stark");
+        surgicalBlock.setProvider(provider);
+
+        Location location = new Location(1);
+        location.setName("Stark Labs");
+        surgicalBlock.setLocation(location);
+
+        Set<SurgicalAppointment> surgicalAppointments = new HashSet<>();
+        SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+        surgicalAppointment.setSurgicalBlock(surgicalBlock);
+
+        Set<PersonName> personNames = new LinkedHashSet<>();
+        personNames.add(new PersonName("Iron", "Returns", "Man"));
+        Patient patient = new Patient(1);
+        patient.setNames(personNames);
+        surgicalAppointment.setPatient(patient);
+
+        surgicalAppointments.add(surgicalAppointment);
+        surgicalBlock.setSurgicalAppointments(surgicalAppointments);
+
+        ArrayList<SurgicalBlock> overlappingSurgicalBlocks = new ArrayList<>();
+        ArrayList<SurgicalAppointment> overlappingSurgicalAppointments = new ArrayList<>();
+        overlappingSurgicalAppointments.add(surgicalAppointment);
+
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(null))).thenReturn(overlappingSurgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(null))).thenReturn(overlappingSurgicalBlocks);
+        when(surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalAppointment.getPatient()))).thenReturn(overlappingSurgicalAppointments);
+        when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
+
+        exception.expect(ValidationException.class);
+        exception.expectMessage("Iron Man has conflicting appointment at Stark Labs with Dr. Tony Stark");
+        surgicalBlockService.save(surgicalBlock);
     }
 }

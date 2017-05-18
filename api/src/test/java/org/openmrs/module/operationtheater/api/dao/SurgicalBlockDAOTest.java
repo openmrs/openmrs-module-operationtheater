@@ -1,7 +1,6 @@
 package org.openmrs.module.operationtheater.api.dao;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openmrs.Location;
@@ -237,5 +236,17 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
 
         assertEquals(0, surgicalBlocks.size());
+    }
+
+
+    @Test
+    public void shouldReturnOverlappingSurgicalSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatient() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient);
+
+        assertEquals(1, surgicalBlocks.size());
     }
 }

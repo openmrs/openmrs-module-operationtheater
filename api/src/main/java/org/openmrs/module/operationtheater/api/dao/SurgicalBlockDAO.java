@@ -1,11 +1,14 @@
 package org.openmrs.module.operationtheater.api.dao;
 
 import org.hibernate.Criteria;
+import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Location;
+import org.openmrs.Patient;
 import org.openmrs.Provider;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -60,6 +63,19 @@ public class SurgicalBlockDAO {
         if (location != null) {
             criteria.add(Restrictions.eq("location", location));
         }
+        return criteria.list();
+    }
+
+
+    public List<SurgicalAppointment> getOverlappingSurgicalAppointmentsForPatient(Date startDatetime, Date endDatetime, Patient patient){
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(SurgicalAppointment.class, "surgicalAppointment");
+        criteria.createAlias("surgicalAppointment.surgicalBlock", "surgicalBlock");
+        criteria.add(Restrictions.le("surgicalBlock.endDatetime", endDatetime));
+        criteria.add(Restrictions.ge("surgicalBlock.startDatetime", startDatetime));
+        criteria.add(Restrictions.eq("surgicalBlock.voided", false));
+        criteria.add(Restrictions.eq("patient", patient));
+        criteria.add(Restrictions.eq("voided", false));
         return criteria.list();
     }
 }
