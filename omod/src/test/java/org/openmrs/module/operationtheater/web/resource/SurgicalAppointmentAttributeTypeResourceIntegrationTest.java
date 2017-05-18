@@ -43,13 +43,13 @@ public class SurgicalAppointmentAttributeTypeResourceIntegrationTest extends Mai
 
         assertNotNull(attributeTypes);
         LinkedHashMap<String, Object> procedureAttributeType = (LinkedHashMap<String, Object>) attributeTypes.get(0);
-        assertNotNull(procedureAttributeType.get("id"));
+        assertEquals("0f1f7d08-076b-4fc6-acac-4bb915151sdd", procedureAttributeType.get("uuid"));
         assertEquals("Procedure", procedureAttributeType.get("name"));
         LinkedHashMap<String, Object> nurseAttributeType = (LinkedHashMap<String, Object>) attributeTypes.get(1);
-        assertNotNull(nurseAttributeType.get("id"));
+        assertEquals("0f1f7d08-076b-4fc6-acac-4bb915151sdb", nurseAttributeType.get("uuid"));
         assertEquals("Nurse", nurseAttributeType.get("name"));
         LinkedHashMap<String, Object> anaesthetistAttributeType = (LinkedHashMap<String, Object>) attributeTypes.get(2);
-        assertNotNull(anaesthetistAttributeType.get("id"));
+        assertEquals("0f1f7d08-076b-4fc6-acac-4bb915151sda", anaesthetistAttributeType.get("uuid"));
         assertEquals("Anaesthetist", anaesthetistAttributeType.get("name"));
     }
 }
