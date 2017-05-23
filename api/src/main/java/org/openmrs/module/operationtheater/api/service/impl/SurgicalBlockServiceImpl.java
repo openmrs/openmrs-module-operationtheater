@@ -49,7 +49,7 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
         if (surgicalBlock.getEndDatetime().before(surgicalBlock.getStartDatetime())) {
             throw new ValidationException("Surgical Block start date after end date");
         } else if (!getOverlappingSurgicalBlocksForProvider(surgicalBlock).isEmpty()) {
-            throw new ValidationException("Surgical Block has conflicting time with existing block(s) for this provider");
+            throw new ValidationException("Surgical Block has conflicting time with existing block(s) for this surgeon");
         } else if (!getOverlappingSurgicalBlocksForLocation(surgicalBlock).isEmpty()) {
             throw new ValidationException("Surgical Block has conflicting time with existing block(s) for this OT");
         }

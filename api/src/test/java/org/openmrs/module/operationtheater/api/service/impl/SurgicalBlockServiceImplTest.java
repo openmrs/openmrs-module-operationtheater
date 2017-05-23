@@ -95,7 +95,7 @@ public class SurgicalBlockServiceImplTest {
 
 
         exception.expect(ValidationException.class);
-        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this provider");
+        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this surgeon");
         surgicalBlockService.save(surgicalBlock);
     }
 

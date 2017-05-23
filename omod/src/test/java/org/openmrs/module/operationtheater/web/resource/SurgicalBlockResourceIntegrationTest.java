@@ -58,7 +58,7 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
     @Test
     public void shouldThrowARuntimeExceptionExceptionWhenThereAreAnyOverlappingSergicalBlocksForTheGivenProvider() throws Exception {
         exception.expect(RuntimeException.class);
-        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this provider");
+        exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this surgeon");
 
         String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000+0530\", \"endDatetime\": \"2017-04-24T11:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"2\"}}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
