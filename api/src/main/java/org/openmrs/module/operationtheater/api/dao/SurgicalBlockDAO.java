@@ -1,7 +1,6 @@
 package org.openmrs.module.operationtheater.api.dao;
 
 import org.hibernate.Criteria;
-import org.hibernate.FetchMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
@@ -77,5 +76,13 @@ public class SurgicalBlockDAO {
         criteria.add(Restrictions.eq("patient", patient));
         criteria.add(Restrictions.eq("voided", false));
         return criteria.list();
+    }
+
+    public SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(SurgicalBlock.class, "surgicalBlock");
+        criteria.add(Restrictions.eq("voided", false));
+        criteria.add(Restrictions.eq("uuid", surgicalBlockUuid));
+        return (SurgicalBlock) criteria.uniqueResult();
     }
 }

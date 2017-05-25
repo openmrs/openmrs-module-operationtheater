@@ -27,8 +27,9 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
 
 
     @Override
-    public SurgicalBlock getByUniqueId(String s) {
-        return null;
+    public SurgicalBlock getByUniqueId(String surgicalBlockUuid) {
+        SurgicalBlockService surgicalBlockService = (SurgicalBlockService) Context.getService(SurgicalBlockService.class);
+        return (SurgicalBlock) surgicalBlockService.getSurgicalBlockWithAppointments(surgicalBlockUuid);
     }
 
     @Override
@@ -56,6 +57,7 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
         if ((representation instanceof DefaultRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("provider", Representation.DEFAULT);
             description.addProperty("location", Representation.DEFAULT);
             description.addProperty("startDatetime");
@@ -66,6 +68,7 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
         if ((representation instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("provider", Representation.FULL);
             description.addProperty("location", Representation.FULL);
             description.addProperty("startDatetime");
@@ -80,6 +83,7 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
         delegatingResourceDescription.addProperty("id");
+        delegatingResourceDescription.addProperty("uuid");
         delegatingResourceDescription.addRequiredProperty("provider");
         delegatingResourceDescription.addRequiredProperty("location");
         delegatingResourceDescription.addRequiredProperty("startDatetime");

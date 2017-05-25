@@ -1,20 +1,15 @@
 package org.openmrs.module.operationtheater.api.service.impl;
 
 import org.openmrs.api.impl.BaseOpenmrsService;
-import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
-import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
-import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
-import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
+import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements SurgicalBlockService {
@@ -31,6 +26,11 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
         checkForOverlappingSurgicalBlocks(surgicalBlock);
         checkForOverlappingSurgicalAppointmentsForThePatient(surgicalBlock);
         return surgicalBlockDAO.save(surgicalBlock);
+    }
+
+    @Override
+    public SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid) {
+        return surgicalBlockDAO.getSurgicalBlockWithAppointments(surgicalBlockUuid);
     }
 
     private void checkForOverlappingSurgicalAppointmentsForThePatient(SurgicalBlock surgicalBlock) {

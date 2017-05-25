@@ -1,16 +1,12 @@
 package org.openmrs.module.operationtheater.api.service.impl;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.*;
 import org.openmrs.api.context.Context;
-import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
@@ -31,9 +27,6 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class SurgicalBlockServiceImplTest {
     @Mock
     SurgicalBlockDAO surgicalBlockDAO;
-
-    @Mock
-    SurgicalAppointmentDao surgicalAppointmentDao;
 
     @InjectMocks
     SurgicalBlockServiceImpl surgicalBlockService;
@@ -177,5 +170,33 @@ public class SurgicalBlockServiceImplTest {
         exception.expect(ValidationException.class);
         exception.expectMessage("Iron Man has conflicting appointment at Stark Labs with Dr. Tony Stark");
         surgicalBlockService.save(surgicalBlock);
+    }
+
+    @Test
+    public void shouldGetTheSurgicalBlockWithAppointmentWithGivenSurgicalBlockUuid() throws Exception {
+        surgicalBlock.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
+        surgicalBlock.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+
+        Provider provider = new Provider(1);
+        surgicalBlock.setProvider(provider);
+
+        Location location = new Location(1);
+        surgicalBlock.setLocation(location);
+
+        Set<SurgicalAppointment> surgicalAppointments = new HashSet<>();
+        SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+        surgicalAppointment.setSurgicalBlock(surgicalBlock);
+        Patient patient = new Patient(1);
+        surgicalAppointment.setPatient(patient);
+
+        surgicalAppointments.add(surgicalAppointment);
+        surgicalBlock.setSurgicalAppointments(surgicalAppointments);
+
+        String surgicalBlockUuid = "surgicalBlockUuid";
+        when(surgicalBlockDAO.getSurgicalBlockWithAppointments(surgicalBlockUuid)).thenReturn(surgicalBlock);
+
+        SurgicalBlock surgicalBlockWithAppointments = surgicalBlockService.getSurgicalBlockWithAppointments(surgicalBlockUuid);
+
+        verify(surgicalBlockDAO, times(1)).getSurgicalBlockWithAppointments(surgicalBlockUuid);
     }
 }

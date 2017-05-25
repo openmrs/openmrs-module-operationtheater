@@ -8,6 +8,7 @@ import org.openmrs.Patient;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -248,5 +249,30 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient);
 
         assertEquals(1, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldGetSurgicalBlockWithAllTheAppointmentsInIt() throws Exception {
+        String surgicalBlockUuid = "5580cddd-c290-66c8-8d3a-96dc33d109f2";
+        SurgicalBlock surgicalBlockWithAppointments = surgicalBlockDAO.getSurgicalBlockWithAppointments(surgicalBlockUuid);
+
+        assertNotNull(surgicalBlockWithAppointments);
+        assertEquals(2, surgicalBlockWithAppointments.getId(), 0.0);
+        assertEquals("Doctor Strange", surgicalBlockWithAppointments.getProvider().getName());
+        assertEquals("OT2", surgicalBlockWithAppointments.getLocation().getName());
+        assertNotNull(surgicalBlockWithAppointments.getSurgicalAppointments());
+        assertEquals(1, surgicalBlockWithAppointments.getSurgicalAppointments().size());
+        SurgicalAppointment surgicalAppointment = surgicalBlockWithAppointments.getSurgicalAppointments().iterator().next();
+        assertNotNull(surgicalAppointment);
+        assertEquals(1, surgicalAppointment.getId(), 0.0);
+        assertEquals(2, surgicalAppointment.getSurgicalBlock().getId(), 0.0);
+        assertEquals(1, surgicalAppointment.getPatient().getId(), 0.0);
+        assertNotNull(surgicalAppointment.getSurgicalAppointmentAttributes());
+        SurgicalAppointmentAttribute surgicalAppointmentAttribute = surgicalAppointment.getSurgicalAppointmentAttributes().iterator().next();
+
+        assertNotNull(surgicalAppointmentAttribute);
+        assertEquals(1, surgicalAppointmentAttribute.getId(), 0.0);
+        assertEquals(1, surgicalAppointmentAttribute.getSurgicalAppointmentAttributeType().getId(), 0.0);
+        assertEquals("Procedure", surgicalAppointmentAttribute.getSurgicalAppointmentAttributeType().getName());
     }
 }

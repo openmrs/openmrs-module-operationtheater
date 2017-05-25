@@ -1,14 +1,13 @@
 package org.openmrs.module.operationtheater.web.resource;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.hibernate.mapping.List;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.webservices.rest.SimpleObject;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.LinkedHashMap;
 
@@ -25,7 +24,7 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
 
     @Override
     public String getUuid() {
-        return null;
+        return "5580cddd-c290-66c8-8d3a-96dc33d109f1";
     }
 
     @Override
@@ -190,6 +189,42 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
                 "}]}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         deserialize(handle(newPostRequest(getURI(), post)));
+
+    }
+
+
+    @Test
+    public void shouldGetTheSurgicalBlockWithGivenUuid() throws Exception {
+        MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
+        request.setParameter("v", "full");
+        SimpleObject surgicalBlock = deserialize(handle(request));
+
+        assertNotNull(surgicalBlock);
+        assertNotNull(surgicalBlock.get("id"));
+        assertEquals("1", surgicalBlock.get("id").toString());
+        LinkedHashMap<String, Object> provider = (LinkedHashMap<String, Object>)surgicalBlock.get("provider");
+        assertNotNull(provider);
+        assertEquals("04d96c50-772c-42d5-88ba-5a582957afa8", provider.get("uuid"));
+        LinkedHashMap<String, Object> location = (LinkedHashMap<String, Object>)surgicalBlock.get("location");
+        assertNotNull(location);
+        assertEquals("OT1", location.get("name"));
+        assertEquals("2017-04-24T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
+        assertEquals("2017-04-24T11:30:00.000+0530", surgicalBlock.get("endDatetime"));
+
+        java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
+        LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
+        assertNotNull(surgicalAppointment.get("id"));
+        assertEquals(1, surgicalAppointment.get("id"));
+        assertEquals("Scheduled", surgicalAppointment.get("status"));
+        assertEquals("need more assistants", surgicalAppointment.get("notes"));
+        LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
+        assertEquals("5631b434-78aa-102b-91a0-001e378eb17e", patient.get("uuid"));
+
+        java.util.List surgicalAppointmentAttributes = (java.util.List) surgicalAppointment.get("surgicalAppointmentAttributes");
+        LinkedHashMap<String, Object> surgicalAppointmentAttribute = (LinkedHashMap<String, Object>) surgicalAppointmentAttributes.get(0);
+        assertNotNull(surgicalAppointmentAttribute.get("id"));
+        assertEquals(1, surgicalAppointmentAttribute.get("id"));
+        assertEquals("Surgery on left hand", surgicalAppointmentAttribute.get("value"));
 
     }
 }

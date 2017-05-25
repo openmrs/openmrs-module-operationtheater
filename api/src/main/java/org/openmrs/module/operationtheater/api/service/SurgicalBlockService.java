@@ -8,4 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface SurgicalBlockService extends OpenmrsService {
     SurgicalBlock save(SurgicalBlock surgicalBlock);
+
+    SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid);
 }

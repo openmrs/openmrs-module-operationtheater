@@ -40,7 +40,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldSaveTheValidSurgicalAppointment() throws Exception {
-        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"notes\": \"need more assistants\"}";
+        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
 
@@ -52,7 +52,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldSaveTheValidSurgicalAppointmentWithAttributes() throws Exception {
-        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
+        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
@@ -73,7 +73,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
     public void shouldUpdateTheSurgicalAppointment() throws Exception {
         String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
                 "\"actualStartDatetime\": \"2017-05-11T10:20:00.000+0530\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000+0530\"," +
-                " \"status\": \"Completed\", \"notes\": \"need more assistants\"}";
+                " \"status\": \"Completed\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
 

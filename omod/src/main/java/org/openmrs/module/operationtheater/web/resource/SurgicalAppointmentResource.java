@@ -66,6 +66,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
             description.addProperty("actualEndDatetime");
             description.addProperty("status");
             description.addProperty("notes");
+            description.addProperty("sortWeight");
             description.addProperty("surgicalAppointmentAttributes");
             return description;
         }
@@ -77,6 +78,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
             description.addProperty("actualEndDatetime");
             description.addProperty("status");
             description.addProperty("notes");
+            description.addProperty("sortWeight");
             description.addProperty("surgicalAppointmentAttributes");
             return description;
         }
@@ -93,6 +95,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
         delegatingResourceDescription.addProperty("actualEndDatetime");
         delegatingResourceDescription.addProperty("status");
         delegatingResourceDescription.addProperty("notes");
+        delegatingResourceDescription.addProperty("sortWeight");
         delegatingResourceDescription.addProperty("surgicalAppointmentAttributes");
         return delegatingResourceDescription;
     }
