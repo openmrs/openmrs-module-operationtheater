@@ -9,6 +9,7 @@ import org.openmrs.module.webservices.rest.SimpleObject;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -43,23 +44,24 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
 
     @Test
     public void shouldSaveTheValidSurgicalBlockWithTheGivenStartTimeEndTimeLocationAndProvider() throws Exception {
-        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}}";
+        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalBlock);
         assertNotNull(surgicalBlock.get("provider"));
         assertNotNull(surgicalBlock.get("location"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
-        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-25T12:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
     }
 
     @Test
-    public void shouldThrowARuntimeExceptionExceptionWhenThereAreAnyOverlappingSergicalBlocksForTheGivenProvider() throws Exception {
+    public void shouldThrowARuntimeExceptionExceptionWhenThereAreAnyOverlappingSurgicalBlocksForTheGivenProvider() throws Exception {
         exception.expect(RuntimeException.class);
         exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this surgeon");
 
-        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000+0530\", \"endDatetime\": \"2017-04-24T11:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"2\"}}";
+        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000\", \"endDatetime\": \"2017-04-24T11:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"2\"}}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         deserialize(handle(newPostRequest(getURI(), post)));
     }
@@ -69,7 +71,7 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         exception.expect(RuntimeException.class);
         exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this OT");
 
-        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000+0530\", \"endDatetime\": \"2017-04-24T11:00:00.000+0530\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"1\"}}";
+        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000\", \"endDatetime\": \"2017-04-24T11:00:00.000\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"1\"}}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         deserialize(handle(newPostRequest(getURI(), post)));
     }
@@ -79,31 +81,32 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         exception.expect(RuntimeException.class);
         exception.expectMessage("Surgical Block start date after end date");
 
-        String json = "{\"startDatetime\": \"2017-04-24T12:00:00.000+0530\", \"endDatetime\": \"2017-04-24T10:00:00.000+0530\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"1\"}}";
+        String json = "{\"startDatetime\": \"2017-04-24T12:00:00.000\", \"endDatetime\": \"2017-04-24T10:00:00.000\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"1\"}}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         deserialize(handle(newPostRequest(getURI(), post)));
     }
 
     @Test
     public void shouldSaveTheValidSurgicalBlockWithSurgicalAppointments() throws Exception {
-        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
-                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000+0530\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000+0530\"," +
+        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
+                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000\"," +
                 " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"}]}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalBlock);
         assertNotNull(surgicalBlock.get("id"));
         assertNotNull(surgicalBlock.get("provider"));
         assertNotNull(surgicalBlock.get("location"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
-        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-25T12:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
 
         java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
         LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
         assertNotNull(surgicalAppointment.get("id"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-04-25T11:00:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualStartDatetime")).toString()));
+        assertEquals(simpleDateFormat.parse("2017-04-25T11:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualEndDatetime")).toString()));
         assertEquals("Scheduled", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
         LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
@@ -112,26 +115,27 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
 
     @Test
     public void shouldSaveTheValidSurgicalBlockWithSurgicalAppointmentsAndAttributes() throws Exception {
-        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
-                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000+0530\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000+0530\"," +
+        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
+                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000\"," +
                 " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}]}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalBlock);
         assertNotNull(surgicalBlock.get("id"));
         assertNotNull(surgicalBlock.get("provider"));
         assertNotNull(surgicalBlock.get("location"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
-        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-25T12:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
 
         java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
         LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
         assertNotNull(surgicalAppointment.get("id"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-04-25T11:00:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualStartDatetime")).toString()));
+        assertEquals(simpleDateFormat.parse("2017-04-25T11:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualEndDatetime")).toString()));
         assertEquals("Scheduled", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
         LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
@@ -145,27 +149,28 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
 
     @Test
     public void shouldUpdateTheValidSurgicalBlockWithSurgicalAppointmentsAndAttributes() throws Exception {
-        String json = "{\"id\": 1, \"startDatetime\": \"2017-04-25T10:00:00.000+0530\", \"endDatetime\": \"2017-04-25T12:00:00.000+0530\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
-                " \"surgicalAppointments\":[{\"id\": 1, \"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000+0530\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000+0530\"," +
+        String json = "{\"id\": 1, \"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}," +
+                " \"surgicalAppointments\":[{\"id\": 1, \"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000\"," +
                     " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"id\": 1, \"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}]}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalBlock);
         assertNotNull(surgicalBlock.get("id"));
         assertNotNull(surgicalBlock.get("provider"));
         assertNotNull(surgicalBlock.get("location"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
-        assertEquals("2017-04-25T12:00:00.000+0530", surgicalBlock.get("endDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-25T12:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
 
         java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
         LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals(1, surgicalAppointment.get("id"));
-        assertEquals("2017-04-25T10:00:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-04-25T11:00:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualStartDatetime")).toString()));
+        assertEquals(simpleDateFormat.parse("2017-04-25T11:00:00.000"), simpleDateFormat.parse((surgicalAppointment.get("actualEndDatetime")).toString()));
         assertEquals("Scheduled", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
         LinkedHashMap<String, Object> patient = (LinkedHashMap<String, Object>) surgicalAppointment.get("patient");
@@ -183,7 +188,7 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         exception.expect(RuntimeException.class);
         exception.expectMessage("Patient One has conflicting appointment at OT1 with Doctor Strange");
 
-        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000+0530\", \"endDatetime\": \"2017-04-24T12:00:00.000+0530\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"2\"}," +
+        String json = "{\"startDatetime\": \"2017-04-24T10:00:00.000\", \"endDatetime\": \"2017-04-24T12:00:00.000\", \"provider\":{\"id\": \"2\"}, \"location\": {\"id\": \"2\"}," +
                 " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}]}";
@@ -198,6 +203,7 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
         request.setParameter("v", "full");
         SimpleObject surgicalBlock = deserialize(handle(request));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalBlock);
         assertNotNull(surgicalBlock.get("id"));
@@ -208,8 +214,8 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         LinkedHashMap<String, Object> location = (LinkedHashMap<String, Object>)surgicalBlock.get("location");
         assertNotNull(location);
         assertEquals("OT1", location.get("name"));
-        assertEquals("2017-04-24T10:00:00.000+0530", surgicalBlock.get("startDatetime"));
-        assertEquals("2017-04-24T11:30:00.000+0530", surgicalBlock.get("endDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-04-24T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-24T11:30:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
 
         java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
         LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);

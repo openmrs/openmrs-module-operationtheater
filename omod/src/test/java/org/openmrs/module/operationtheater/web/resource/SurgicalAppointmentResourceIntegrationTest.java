@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openmrs.module.webservices.rest.SimpleObject;
 
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -72,16 +73,18 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
     @Test
     public void shouldUpdateTheSurgicalAppointment() throws Exception {
         String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
-                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000+0530\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000+0530\"," +
+                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Completed\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
-        assertEquals("2017-05-11T10:20:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-05-11T11:30:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+
+        assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
         assertEquals("Completed", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
     }
@@ -89,18 +92,19 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
     @Test
     public void shouldAddNewAttributesToExistingSurgicalAppointment() throws Exception {
         String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
-                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000+0530\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000+0530\"," +
+                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Completed\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
-        assertEquals("2017-05-11T10:20:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-05-11T11:30:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
         assertEquals("Completed", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
 
@@ -114,18 +118,19 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
     @Test
     public void shouldUpdateTheSurgicalAppointmentWithTheAttributes() throws Exception {
         String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
-                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000+0530\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000+0530\"," +
+                "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"id\": 1,\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
-        assertEquals("2017-05-11T10:20:00.000+0530", surgicalAppointment.get("actualStartDatetime"));
-        assertEquals("2017-05-11T11:30:00.000+0530", surgicalAppointment.get("actualEndDatetime"));
+        assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
         assertEquals("Scheduled", surgicalAppointment.get("status"));
         assertEquals("need more assistants", surgicalAppointment.get("notes"));
 
