@@ -9,6 +9,7 @@ import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +32,11 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
     @Override
     public SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid) {
         return surgicalBlockDAO.getSurgicalBlockWithAppointments(surgicalBlockUuid);
+    }
+
+    @Override
+    public List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime) {
+       return surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
     }
 
     private void checkForOverlappingSurgicalAppointmentsForThePatient(SurgicalBlock surgicalBlock) {

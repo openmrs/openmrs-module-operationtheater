@@ -1,15 +1,20 @@
 package org.openmrs.module.operationtheater.api.service.impl;
 
-import org.junit.*;
+
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.*;
 import org.openmrs.api.context.Context;
+
+import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
+import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -18,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -198,5 +204,18 @@ public class SurgicalBlockServiceImplTest {
         SurgicalBlock surgicalBlockWithAppointments = surgicalBlockService.getSurgicalBlockWithAppointments(surgicalBlockUuid);
 
         verify(surgicalBlockDAO, times(1)).getSurgicalBlockWithAppointments(surgicalBlockUuid);
+    }
+
+    @Test
+    public void shouldGetSurgicalBlocksWhichFallInTheDateRange() throws ParseException {
+        Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
+
+        when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null))).thenReturn(Arrays.asList(surgicalBlock));
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime);
+
+        verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+        assertEquals(surgicalBlock,surgicalBlocks.get(0));
     }
 }
