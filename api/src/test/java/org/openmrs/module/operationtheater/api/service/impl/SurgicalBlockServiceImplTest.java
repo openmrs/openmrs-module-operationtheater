@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.openmrs.*;
 import org.openmrs.api.context.Context;
 
-import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
@@ -170,7 +169,7 @@ public class SurgicalBlockServiceImplTest {
 
         when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(null))).thenReturn(overlappingSurgicalBlocks);
         when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(null))).thenReturn(overlappingSurgicalBlocks);
-        when(surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalAppointment.getPatient()))).thenReturn(overlappingSurgicalAppointments);
+        when(surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(eq(surgicalBlock.getStartDatetime()), eq(surgicalBlock.getEndDatetime()), eq(surgicalAppointment.getPatient()), eq(surgicalBlock.getId()))).thenReturn(overlappingSurgicalAppointments);
         when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 
         exception.expect(ValidationException.class);

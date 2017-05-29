@@ -41,7 +41,7 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
 
     private void checkForOverlappingSurgicalAppointmentsForThePatient(SurgicalBlock surgicalBlock) {
         for (SurgicalAppointment surgicalAppointment : surgicalBlock.getSurgicalAppointments()) {
-            List<SurgicalAppointment> overlappingSurgicalAppointmentsForPatient = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), surgicalAppointment.getPatient());
+            List<SurgicalAppointment> overlappingSurgicalAppointmentsForPatient = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(surgicalBlock.getStartDatetime(), surgicalBlock.getEndDatetime(), surgicalAppointment.getPatient(), surgicalBlock.getId());
             if (overlappingSurgicalAppointmentsForPatient.size() >0 ) {
                 SurgicalAppointment conflictingSurgicalAppointment = overlappingSurgicalAppointmentsForPatient.get(0);
                 SurgicalBlock conflictingSurgicalBlock = conflictingSurgicalAppointment.getSurgicalBlock();

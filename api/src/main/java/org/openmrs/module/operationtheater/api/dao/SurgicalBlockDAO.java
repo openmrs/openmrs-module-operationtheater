@@ -66,15 +66,18 @@ public class SurgicalBlockDAO {
     }
 
 
-    public List<SurgicalAppointment> getOverlappingSurgicalAppointmentsForPatient(Date startDatetime, Date endDatetime, Patient patient){
+    public List<SurgicalAppointment> getOverlappingSurgicalAppointmentsForPatient(Date startDatetime, Date endDatetime, Patient patient, Integer surgicalBlockId){
         Session session = sessionFactory.getCurrentSession();
         Criteria criteria = session.createCriteria(SurgicalAppointment.class, "surgicalAppointment");
         criteria.createAlias("surgicalAppointment.surgicalBlock", "surgicalBlock");
-        criteria.add(Restrictions.le("surgicalBlock.endDatetime", endDatetime));
-        criteria.add(Restrictions.ge("surgicalBlock.startDatetime", startDatetime));
+        criteria.add(Restrictions.le("surgicalBlock.startDatetime", endDatetime));
+        criteria.add(Restrictions.ge("surgicalBlock.endDatetime", startDatetime));
         criteria.add(Restrictions.eq("surgicalBlock.voided", false));
         criteria.add(Restrictions.eq("patient", patient));
         criteria.add(Restrictions.eq("voided", false));
+        if(surgicalBlockId != null) {
+            criteria.add(Restrictions.ne("surgicalBlock.id", surgicalBlockId));
+        }
         return criteria.list();
     }
 

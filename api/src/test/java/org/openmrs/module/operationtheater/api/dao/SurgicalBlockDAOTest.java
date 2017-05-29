@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -241,14 +242,108 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 
 
     @Test
-    public void shouldReturnOverlappingSurgicalSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatient() throws Exception {
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatient() throws Exception {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
         Patient patient = Context.getPatientService().getPatient(1);
 
-        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient);
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartedBeforeStartTimeAndEndedBeforeEndTime() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartedAfterStartTimeAndEndedAfterEndTime() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartedAfterStartTimeAndEndedBeforeEndTime() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 15:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartAndEndTimesAreEqualAsThatOfTheBlock() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 15:30:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(2, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartAndEndTimesAreBeforeTheStartTimeOfTheSameBlock() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenStartAndEndTimesAreAfterTheEndTimeOfTheSameBlock() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 20:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatientWhenUpdatingTheSurgicalBlockIfAnyOtherSurgicalBlocksConflicting() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 15:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        Integer surgicalBlockId = 2;
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, surgicalBlockId);
 
         assertEquals(1, surgicalBlocks.size());
+        assertNotNull(surgicalBlocks.get(0));
+        assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
+        assertNotNull(surgicalBlocks.get(0).getPatient());
+        assertEquals(1, surgicalBlocks.get(0).getPatient().getId(), 0.0);
+        assertNotNull(surgicalBlocks.get(0).getSurgicalBlock());
+        assertNotEquals(surgicalBlockId, surgicalBlocks.get(0).getSurgicalBlock().getId());
     }
 
     @Test
