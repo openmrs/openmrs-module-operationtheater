@@ -11,11 +11,13 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -56,5 +58,19 @@ public class SurgicalAppointmentServiceImplTest {
 
         surgicalAppointmentService.save(surgicalAppointment);
         verify(surgicalAppointmentDao, times(1)).save(surgicalAppointment);
+    }
+
+    @Test
+    public void shouldNotSaveWhenActualTimeAreOverlapping() throws ParseException {
+        surgicalAppointment.setActualStartDatetime(simpleDateFormat.parse("2017-06-06 09:00:00"));
+        surgicalAppointment.setActualEndDatetime(simpleDateFormat.parse("2017-06-06 10:00:00"));
+        surgicalAppointment.setPatient(new Patient());
+        surgicalAppointment.setId(1);
+
+        when(surgicalAppointmentDao.getOverlappingActualTimeEntriesForAppointment(surgicalAppointment)).thenReturn(Arrays.asList(surgicalAppointment));
+        exception.expect(ValidationException.class);
+        exception.expectMessage("Surgical Appointment has conflicting actual time with existing appointments in this OT");
+        surgicalAppointmentService.save(surgicalAppointment);
+
     }
 }

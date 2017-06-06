@@ -275,4 +275,13 @@
                                  baseTableName="surgical_appointment_attribute" baseColumnNames="voided_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
+    <changeSet id="Amman-201706061530" author="Shireesha, Maharjun">
+        <preConditions onFail="CONTINUE">
+            <tableExists tableName="surgical_appointment_attribute" schemaName="openmrs"/>
+        </preConditions>
+        <comment>Increase the column size</comment>
+        <sql>
+           ALTER TABLE surgical_appointment_attribute MODIFY value VARCHAR(255);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

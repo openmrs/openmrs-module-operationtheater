@@ -210,11 +210,11 @@ public class SurgicalBlockServiceImplTest {
         Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 
-        when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null))).thenReturn(Arrays.asList(surgicalBlock));
+        when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(null))).thenReturn(Arrays.asList(surgicalBlock));
 
         List<SurgicalBlock> surgicalBlocks = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime);
 
-        verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+        verify(surgicalBlockDAO, times(1)).getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, null, null);
         assertEquals(surgicalBlock,surgicalBlocks.get(0));
     }
 }
