@@ -13,8 +13,10 @@ import org.openmrs.web.test.BaseModuleWebContextSensitiveTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -64,5 +66,39 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
         assertEquals(null, savedSurgicalAppointment.getActualEndDatetime());
         assertEquals("Completed", savedSurgicalAppointment.getStatus());
         assertEquals("need more assistants", savedSurgicalAppointment.getNotes());
+    }
+
+    @Test
+    public void shouldReturnTheListOfSurgicalAppointmentsWithOverlappingActualTime() throws ParseException {
+        Date startDatetime = simpleDateFormat.parse("2017-06-06 9:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-06-06 10:30:00");
+        Location location = Context.getLocationService().getLocation(1);
+        Provider provider = Context.getProviderService().getProvider(1);
+        Patient patient = Context.getPatientService().getPatient(1);
+        surgicalBlock.setId(1);
+        surgicalBlock.setStartDatetime(startDatetime);
+        surgicalBlock.setEndDatetime(endDatetime);
+        surgicalBlock.setLocation(location);
+        surgicalBlock.setProvider(provider);
+
+        surgicalAppointment.setSurgicalBlock(surgicalBlock);
+        surgicalAppointment.setPatient(patient);
+        surgicalAppointment.setStatus("Completed");
+        surgicalAppointment.setNotes("need more assistants");
+        surgicalAppointment.setActualStartDatetime(startDatetime);
+        surgicalAppointment.setActualEndDatetime(endDatetime);
+        List<SurgicalAppointment> overlappingSurgicalAppointments = surgicalAppointmentDao.getOverlappingActualTimeEntriesForAppointment(surgicalAppointment);
+
+        assertEquals(1,overlappingSurgicalAppointments.size());
+        assertEquals( simpleDateFormat.parse("2017-06-06 10:00:00.0"), overlappingSurgicalAppointments.get(0).getActualStartDatetime());
+        assertEquals( simpleDateFormat.parse("2017-06-06 11:00:00.0"), overlappingSurgicalAppointments.get(0).getActualEndDatetime());
+    }
+
+    @Test
+    public void shouldReturnEmptyListForAppointmentsWithNoActualStartDateAndEndDatetime() {
+        SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+        surgicalAppointment.setSurgicalBlock(surgicalBlock);
+        List<SurgicalAppointment> overlappingSurgicalAppointments = surgicalAppointmentDao.getOverlappingActualTimeEntriesForAppointment(surgicalAppointment);
+        assertEquals(0, overlappingSurgicalAppointments.size());
     }
 }
