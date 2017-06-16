@@ -101,4 +101,25 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
         List<SurgicalAppointment> overlappingSurgicalAppointments = surgicalAppointmentDao.getOverlappingActualTimeEntriesForAppointment(surgicalAppointment);
         assertEquals(0, overlappingSurgicalAppointments.size());
     }
+
+    @Test
+    public void shouldNotReturnOverlappingAppointmentsWhichArePostponed() throws ParseException {
+        Date startDatetime = simpleDateFormat.parse("2017-06-06 11:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-06-06 12:30:00");
+        Location location = Context.getLocationService().getLocation(1);
+        Provider provider = Context.getProviderService().getProvider(1);
+        Patient patient = Context.getPatientService().getPatient(1);
+        surgicalBlock.setId(1);
+        surgicalBlock.setStartDatetime(startDatetime);
+        surgicalBlock.setEndDatetime(endDatetime);
+        surgicalBlock.setLocation(location);
+        surgicalBlock.setProvider(provider);
+
+        surgicalAppointment.setSurgicalBlock(surgicalBlock);
+        surgicalAppointment.setPatient(patient);
+        surgicalAppointment.setActualStartDatetime(startDatetime);
+        surgicalAppointment.setActualEndDatetime(endDatetime);
+        List<SurgicalAppointment> overlappingSurgicalAppointments = surgicalAppointmentDao.getOverlappingActualTimeEntriesForAppointment(surgicalAppointment);
+        assertEquals(0,overlappingSurgicalAppointments.size());
+    }
 }

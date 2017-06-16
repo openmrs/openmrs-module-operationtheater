@@ -34,6 +34,7 @@ public class SurgicalAppointmentDao {
         criteria.add(Restrictions.lt("actualStartDatetime", surgicalAppointment.getActualEndDatetime()));
         criteria.add(Restrictions.gt("actualEndDatetime", surgicalAppointment.getActualStartDatetime()));
         criteria.add(Restrictions.eq("surgicalBlock.location", surgicalAppointment.getSurgicalBlock().getLocation()));
+        criteria.add(Restrictions.not(Restrictions.in("status", new String[] {"POSTPONED", "CANCELLED"})));
         if(surgicalAppointment.getId()!= null) {
             criteria.add(Restrictions.ne("surgicalAppointment.id", surgicalAppointment.getId()));
         }
