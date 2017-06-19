@@ -74,6 +74,7 @@ public class SurgicalBlockDAO {
         criteria.add(Restrictions.ge("surgicalBlock.endDatetime", startDatetime));
         criteria.add(Restrictions.eq("surgicalBlock.voided", false));
         criteria.add(Restrictions.eq("patient", patient));
+        criteria.add(Restrictions.not(Restrictions.in("status", new String[] {"POSTPONED", "CANCELLED"})));
         criteria.add(Restrictions.eq("voided", false));
         if(surgicalBlockId != null) {
             criteria.add(Restrictions.ne("surgicalBlock.id", surgicalBlockId));

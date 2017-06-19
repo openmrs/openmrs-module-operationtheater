@@ -370,4 +370,16 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         assertEquals(1, surgicalAppointmentAttribute.getSurgicalAppointmentAttributeType().getId(), 0.0);
         assertEquals("Procedure", surgicalAppointmentAttribute.getSurgicalAppointmentAttributeType().getName());
     }
+
+    @Test
+    public void shouldNotGetOverlappingSurgicalAppointmentsWithStatusAsCancelledOrPostponed() throws ParseException {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 17:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 18:00:00");
+        Patient patient = Context.getPatientService().getPatient(1);
+
+        Integer surgicalBlockId = 2;
+        List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, surgicalBlockId);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
 }
