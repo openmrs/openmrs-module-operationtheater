@@ -20,6 +20,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceD
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
+import java.util.Date;
 import java.util.Set;
 
 @Resource(name = RestConstants.VERSION_1 + "/surgicalBlock", supportedClass = SurgicalBlock.class, supportedOpenmrsVersions = {"2.0.*", "2.1.*"})
@@ -63,6 +64,8 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
             description.addProperty("surgicalAppointments");
+            description.addProperty("voided");
+            description.addProperty("voidReason");
             return description;
         }
         if ((representation instanceof FullRepresentation)) {
@@ -74,6 +77,8 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
             description.addProperty("startDatetime");
             description.addProperty("endDatetime");
             description.addProperty("surgicalAppointments");
+            description.addProperty("voided");
+            description.addProperty("voidReason");
             return description;
         }
         return null;
@@ -89,6 +94,8 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
         delegatingResourceDescription.addRequiredProperty("startDatetime");
         delegatingResourceDescription.addRequiredProperty("endDatetime");
         delegatingResourceDescription.addProperty("surgicalAppointments");
+        delegatingResourceDescription.addProperty("voided");
+        delegatingResourceDescription.addProperty("voidReason");
         return delegatingResourceDescription;
     }
 
@@ -108,5 +115,12 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
         instance.setSurgicalAppointments(surgicalAppointments);
     }
 
-
+    @PropertySetter("voided")
+    public static void setVoided(SurgicalBlock instance, Boolean voided) {
+        instance.setVoided(voided);
+        if (voided) {
+            instance.setVoidedBy(Context.getAuthenticatedUser());
+            instance.setDateVoided(new Date());
+        }
+    }
 }

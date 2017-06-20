@@ -14,6 +14,7 @@ import java.util.LinkedHashMap;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 public class SurgicalBlockResourceIntegrationTest extends MainResourceControllerTest{
@@ -232,5 +233,24 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
         assertEquals(1, surgicalAppointmentAttribute.get("id"));
         assertEquals("Surgery on left hand", surgicalAppointmentAttribute.get("value"));
 
+    }
+
+    @Test
+    public void shouldSetTheVoidReasonAndDateVoidedOfTheSurgicalBlock() throws Exception {
+        String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}, \"voided\": \"true\", \"voidReason\": \"Public holiday\"," +
+                " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000\"," +
+                " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"}]}";
+        SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
+        SimpleObject surgicalBlock = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+        assertNotNull(surgicalBlock);
+        assertNotNull(surgicalBlock.get("id"));
+        assertNotNull(surgicalBlock.get("provider"));
+        assertNotNull(surgicalBlock.get("location"));
+        assertTrue(surgicalBlock.get("voided"));
+        assertEquals("Public holiday", surgicalBlock.get("voidReason"));
+        assertEquals(simpleDateFormat.parse("2017-04-25T10:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("startDatetime")));
+        assertEquals(simpleDateFormat.parse("2017-04-25T12:00:00.000"), simpleDateFormat.parse(surgicalBlock.get("endDatetime")));
     }
 }
