@@ -35,8 +35,8 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
     }
 
     @Override
-    public List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime) {
-       return surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+    public List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime, Boolean includeVoided) {
+       return surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null, includeVoided);
     }
 
     private void checkForOverlappingSurgicalAppointmentsForThePatient(SurgicalBlock surgicalBlock) {

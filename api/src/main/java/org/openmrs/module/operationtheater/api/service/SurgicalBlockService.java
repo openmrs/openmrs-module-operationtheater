@@ -14,5 +14,5 @@ public interface SurgicalBlockService extends OpenmrsService {
 
     SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid);
 
-    List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime);
+    List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime, Boolean includeVoided);
 }

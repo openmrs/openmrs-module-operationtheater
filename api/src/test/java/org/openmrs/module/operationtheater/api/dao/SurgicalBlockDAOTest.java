@@ -180,7 +180,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
         Provider provider = Context.getProviderService().getProvider(1);
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, null, false);
 
         assertEquals(3, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -194,7 +194,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
         Location location = Context.getLocationService().getLocation(2);
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, location, false);
 
         assertEquals(2, surgicalBlocks.size());
         assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
@@ -208,7 +208,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Provider provider = Context.getProviderService().getProvider(1);
         Location location = Context.getLocationService().getLocation(2);
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, location);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, provider, location, false);
 
         assertEquals(2, surgicalBlocks.size());
         assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
@@ -220,7 +220,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false);
 
         assertEquals(5, surgicalBlocks.size());
         assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
@@ -235,7 +235,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         Date startDatetime = simpleDateFormat.parse("2017-04-26 10:00:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-29 16:00:00");
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false);
 
         assertEquals(0, surgicalBlocks.size());
     }
@@ -381,5 +381,21 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, surgicalBlockId);
 
         assertEquals(0, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldGetVoidedSurgicalBlocksIfIncludeVoidedParameterIsTrue() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getSurgicalBlocksFor(startDatetime, endDatetime, null, null, true);
+
+        assertEquals(6, surgicalBlocks.size());
+        assertEquals(1, surgicalBlocks.get(0).getId(), 0.0);
+        assertEquals(2, surgicalBlocks.get(1).getId(), 0.0);
+        assertEquals(3, surgicalBlocks.get(2).getId(), 0.0);
+        assertEquals(4, surgicalBlocks.get(3).getId(), 0.0);
+        assertEquals(8, surgicalBlocks.get(4).getId(), 0.0);
+        assertEquals(9, surgicalBlocks.get(5).getId(), 0.0);
     }
 }

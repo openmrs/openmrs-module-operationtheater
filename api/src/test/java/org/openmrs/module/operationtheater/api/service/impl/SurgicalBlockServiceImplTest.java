@@ -210,11 +210,24 @@ public class SurgicalBlockServiceImplTest {
         Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
         Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 
-        when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null))).thenReturn(Arrays.asList(surgicalBlock));
+        when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(false))).thenReturn(Arrays.asList(surgicalBlock));
 
-        List<SurgicalBlock> surgicalBlocks = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime);
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false);
 
-        verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null);
+        verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false);
+        assertEquals(surgicalBlock,surgicalBlocks.get(0));
+    }
+
+    @Test
+    public void shouldGetSurgicalBlocksAllSurgicalBlocksIncludingVoided() throws ParseException {
+        Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
+
+        when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(true))).thenReturn(Arrays.asList(surgicalBlock));
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, true);
+
+        verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, true);
         assertEquals(surgicalBlock,surgicalBlocks.get(0));
     }
 }
