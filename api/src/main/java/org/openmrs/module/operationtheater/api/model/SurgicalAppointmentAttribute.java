@@ -84,4 +84,27 @@ public class SurgicalAppointmentAttribute extends BaseOpenmrsData implements jav
             return OpenmrsUtil.compareWithNullAsGreatest(saa1.getId(), saa2.getId());
         }
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SurgicalAppointmentAttribute)) return false;
+        if (!super.equals(o)) return false;
+
+        SurgicalAppointmentAttribute that = (SurgicalAppointmentAttribute) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getSurgicalAppointmentAttributeType() != null ? !getSurgicalAppointmentAttributeType().equals(that.getSurgicalAppointmentAttributeType()) : that.getSurgicalAppointmentAttributeType() != null)
+            return false;
+        return getValue() != null ? getValue().equals(that.getValue()) : that.getValue() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getSurgicalAppointmentAttributeType() != null ? getSurgicalAppointmentAttributeType().hashCode() : 0);
+        result = 31 * result + (getValue() != null ? getValue().hashCode() : 0);
+        return result;
+    }
 }

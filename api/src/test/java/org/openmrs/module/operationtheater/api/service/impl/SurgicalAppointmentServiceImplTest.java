@@ -11,6 +11,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -72,5 +73,29 @@ public class SurgicalAppointmentServiceImplTest {
         exception.expectMessage("Surgical Appointment has conflicting actual time with existing appointments in this OT");
         surgicalAppointmentService.save(surgicalAppointment);
 
+    }
+
+    @Test
+    public void shouldGetSurgicalAppointmentByUuid() throws ParseException {
+        String surgicalAppoitmentUuid = "surgicalAppointmentUuid";
+        SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+        surgicalAppointment.setUuid(surgicalAppoitmentUuid);
+
+        when(surgicalAppointmentDao.getSurgicalAppointmentByUuid(surgicalAppoitmentUuid)).thenReturn(surgicalAppointment);
+
+        surgicalAppointmentService.getSurgicalAppointmentByUuid(surgicalAppoitmentUuid);
+        verify(surgicalAppointmentDao, times(1)).getSurgicalAppointmentByUuid(surgicalAppoitmentUuid);
+    }
+
+    @Test
+    public void shouldGetSurgicalAppointmentAttributeByUuid() throws ParseException {
+        String attributeUuid = "surgicalAppointmentAttributeUuid";
+        SurgicalAppointmentAttribute surgicalAppointmentAttribute = new SurgicalAppointmentAttribute();
+        surgicalAppointmentAttribute.setUuid(attributeUuid);
+
+        when(surgicalAppointmentDao.getSurgicalAppointmentAttributeByUuid(attributeUuid)).thenReturn(surgicalAppointmentAttribute);
+
+        surgicalAppointmentService.getSurgicalAppointmentAttributeByUuid(attributeUuid);
+        verify(surgicalAppointmentDao, times(1)).getSurgicalAppointmentAttributeByUuid(attributeUuid);
     }
 }

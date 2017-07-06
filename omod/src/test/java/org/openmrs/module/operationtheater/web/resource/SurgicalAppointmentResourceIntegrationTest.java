@@ -41,7 +41,8 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldSaveTheValidSurgicalAppointment() throws Exception {
-        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
+        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\"}," +
+                " \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
 
@@ -53,9 +54,9 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldSaveTheValidSurgicalAppointmentWithAttributes() throws Exception {
-        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"" +
-                ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
-                "}";
+        String json = "{\"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\" }," +
+                " \"status\": \"Scheduled\", \"sortWeight\": 0, \"notes\": \"need more assistants\"" +
+                ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}] }";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
 
@@ -72,7 +73,8 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldUpdateTheSurgicalAppointment() throws Exception {
-        String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
+        String json = "{\"id\": \"1\", \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d109f1\", \"patient\": {\"id\": 1}," +
+                " \"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\"}, " +
                 "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Completed\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
@@ -82,6 +84,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
+        assertEquals("5580cddd-1111-66c8-8d3a-96dc33d109f1", surgicalAppointment.get("uuid"));
 
         assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
         assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
@@ -91,7 +94,8 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldAddNewAttributesToExistingSurgicalAppointment() throws Exception {
-        String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
+        String json = "{\"id\": \"1\", \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d109f1\", \"patient\": {\"id\": 1}," +
+                " \"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\"}, " +
                 "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Completed\", \"notes\": \"need more assistants\"" +
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
@@ -103,6 +107,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
+        assertEquals("5580cddd-1111-66c8-8d3a-96dc33d109f1", surgicalAppointment.get("uuid"));
         assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
         assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
         assertEquals("Completed", surgicalAppointment.get("status"));
@@ -117,10 +122,11 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Test
     public void shouldUpdateTheSurgicalAppointmentWithTheAttributes() throws Exception {
-        String json = "{\"id\": \"1\", \"patient\": {\"id\": 1}, \"surgicalBlock\": { \"id\": 1 }, " +
+        String json = "{\"id\": \"1\", \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d109f1\", \"patient\": {\"id\": 1}, " +
+                "\"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\"}, " +
                 "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Scheduled\", \"notes\": \"need more assistants\"" +
-                ", \"surgicalAppointmentAttributes\": [{\"id\": 1,\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
+                ", \"surgicalAppointmentAttributes\": [{\"id\": 1, \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d10000\", \"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
         SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
@@ -129,6 +135,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
         assertNotNull(surgicalAppointment);
         assertNotNull(surgicalAppointment.get("id"));
         assertEquals("1", surgicalAppointment.get("id").toString());
+        assertEquals("5580cddd-1111-66c8-8d3a-96dc33d109f1", surgicalAppointment.get("uuid"));
         assertEquals(simpleDateFormat.parse("2017-05-11T10:20:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualStartDatetime")));
         assertEquals(simpleDateFormat.parse("2017-05-11T11:30:00.000"), simpleDateFormat.parse(surgicalAppointment.get("actualEndDatetime")));
         assertEquals("Scheduled", surgicalAppointment.get("status"));

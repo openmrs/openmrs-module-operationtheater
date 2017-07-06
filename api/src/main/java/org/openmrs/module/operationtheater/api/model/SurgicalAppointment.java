@@ -104,4 +104,36 @@ public class SurgicalAppointment extends BaseOpenmrsData {
         }
         return attrs;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SurgicalAppointment)) return false;
+        if (!super.equals(o)) return false;
+
+        SurgicalAppointment that = (SurgicalAppointment) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getPatient() != null ? !getPatient().equals(that.getPatient()) : that.getPatient() != null) return false;
+        if (getActualStartDatetime() != null ? !getActualStartDatetime().equals(that.getActualStartDatetime()) : that.getActualStartDatetime() != null)
+            return false;
+        if (getActualEndDatetime() != null ? !getActualEndDatetime().equals(that.getActualEndDatetime()) : that.getActualEndDatetime() != null)
+            return false;
+        if (getStatus() != null ? !getStatus().equals(that.getStatus()) : that.getStatus() != null) return false;
+        if (getNotes() != null ? !getNotes().equals(that.getNotes()) : that.getNotes() != null) return false;
+        return getSortWeight() != null ? getSortWeight().equals(that.getSortWeight()) : that.getSortWeight() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getPatient() != null ? getPatient().hashCode() : 0);
+        result = 31 * result + (getActualStartDatetime() != null ? getActualStartDatetime().hashCode() : 0);
+        result = 31 * result + (getActualEndDatetime() != null ? getActualEndDatetime().hashCode() : 0);
+        result = 31 * result + (getStatus() != null ? getStatus().hashCode() : 0);
+        result = 31 * result + (getNotes() != null ? getNotes().hashCode() : 0);
+        result = 31 * result + (getSortWeight() != null ? getSortWeight().hashCode() : 0);
+        return result;
+    }
 }

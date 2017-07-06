@@ -1,15 +1,10 @@
 package org.openmrs.module.operationtheater.web.resource;
 
 
-import org.openmrs.VisitAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
-import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttributeType;
-import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
-import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentAttributeTypeService;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
-import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
@@ -32,8 +27,8 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 
 
     @Override
-    public SurgicalAppointment getByUniqueId(String s) {
-        return null;
+    public SurgicalAppointment getByUniqueId(String surgicalAppointmentUuid) {
+        return Context.getService(SurgicalAppointmentService.class).getSurgicalAppointmentByUuid(surgicalAppointmentUuid);
     }
 
     @Override
@@ -61,6 +56,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
         if ((representation instanceof DefaultRepresentation) || (representation instanceof RefRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("patient", Representation.DEFAULT);
             description.addProperty("actualStartDatetime");
             description.addProperty("actualEndDatetime");
@@ -73,6 +69,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
         if ((representation instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("patient", Representation.FULL);
             description.addProperty("actualStartDatetime");
             description.addProperty("actualEndDatetime");
@@ -89,6 +86,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
         delegatingResourceDescription.addProperty("id");
+        delegatingResourceDescription.addProperty("uuid");
         delegatingResourceDescription.addRequiredProperty("patient");
         delegatingResourceDescription.addRequiredProperty("surgicalBlock");
         delegatingResourceDescription.addProperty("actualStartDatetime");

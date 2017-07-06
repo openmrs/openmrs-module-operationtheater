@@ -68,4 +68,33 @@ public class SurgicalBlock extends BaseOpenmrsData {
     public void setSurgicalAppointments(Set<SurgicalAppointment> surgicalAppointments) {
         this.surgicalAppointments = surgicalAppointments;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SurgicalBlock)) return false;
+        if (!super.equals(o)) return false;
+
+        SurgicalBlock that = (SurgicalBlock) o;
+
+        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getProvider() != null ? !getProvider().equals(that.getProvider()) : that.getProvider() != null)
+            return false;
+        if (getLocation() != null ? !getLocation().equals(that.getLocation()) : that.getLocation() != null)
+            return false;
+        if (getStartDatetime() != null ? !getStartDatetime().equals(that.getStartDatetime()) : that.getStartDatetime() != null)
+            return false;
+        return getEndDatetime() != null ? getEndDatetime().equals(that.getEndDatetime()) : that.getEndDatetime() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getProvider() != null ? getProvider().hashCode() : 0);
+        result = 31 * result + (getLocation() != null ? getLocation().hashCode() : 0);
+        result = 31 * result + (getStartDatetime() != null ? getStartDatetime().hashCode() : 0);
+        result = 31 * result + (getEndDatetime() != null ? getEndDatetime().hashCode() : 0);
+        return result;
+    }
 }

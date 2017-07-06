@@ -5,6 +5,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -40,5 +41,21 @@ public class SurgicalAppointmentDao {
         }
         criteria.add(Restrictions.eq("voided", false));
         return criteria.list();
+    }
+
+    public SurgicalAppointment getSurgicalAppointmentByUuid(String uuid) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(SurgicalAppointment.class, "surgicalAppointment");
+        criteria.add(Restrictions.eq("voided", false));
+        criteria.add(Restrictions.eq("uuid", uuid));
+        return (SurgicalAppointment) criteria.uniqueResult();
+    }
+
+    public SurgicalAppointmentAttribute getSurgicalAppointmentAttributeByUuid(String uuid) {
+        Session session = sessionFactory.getCurrentSession();
+        Criteria criteria = session.createCriteria(SurgicalAppointmentAttribute.class, "surgicalAppointmentAttribute");
+        criteria.add(Restrictions.eq("voided", false));
+        criteria.add(Restrictions.eq("uuid", uuid));
+        return (SurgicalAppointmentAttribute) criteria.uniqueResult();
     }
 }

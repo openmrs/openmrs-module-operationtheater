@@ -3,6 +3,7 @@ package org.openmrs.module.operationtheater.api.service.impl;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,5 +27,16 @@ public class SurgicalAppointmentServiceImpl extends BaseOpenmrsService implement
         }
         return surgicalAppointmentDao.save(surgicalAppointment);
     }
+
+    @Override
+    public SurgicalAppointment getSurgicalAppointmentByUuid(String uuid) {
+        return surgicalAppointmentDao.getSurgicalAppointmentByUuid(uuid);
+    }
+
+    @Override
+    public SurgicalAppointmentAttribute getSurgicalAppointmentAttributeByUuid(String uuid) {
+        return surgicalAppointmentDao.getSurgicalAppointmentAttributeByUuid(uuid);
+    }
+
 
 }

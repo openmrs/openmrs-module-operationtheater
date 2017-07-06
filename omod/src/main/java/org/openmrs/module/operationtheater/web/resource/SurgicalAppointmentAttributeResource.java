@@ -6,31 +6,25 @@ import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
-import org.openmrs.module.webservices.rest.web.RestConstants;
-import org.openmrs.module.webservices.rest.web.annotation.PropertySetter;
-import org.openmrs.module.webservices.rest.web.annotation.Resource;
 import org.openmrs.module.webservices.rest.web.annotation.SubResource;
 import org.openmrs.module.webservices.rest.web.representation.DefaultRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.FullRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.RefRepresentation;
 import org.openmrs.module.webservices.rest.web.representation.Representation;
 import org.openmrs.module.webservices.rest.web.resource.api.PageableResult;
-import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingSubResource;
 import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-import java.util.Set;
-
 @SubResource(parent = SurgicalAppointmentResource.class, path = "attribute", supportedClass = SurgicalAppointmentAttribute.class, supportedOpenmrsVersions = {"2.0.*", "2.1.*"})
 public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<SurgicalAppointmentAttribute, SurgicalAppointment, SurgicalAppointmentResource> {
 
 
     @Override
-    public SurgicalAppointmentAttribute getByUniqueId(String s) {
-        return null;
+    public SurgicalAppointmentAttribute getByUniqueId(String uuid) {
+        return Context.getService(SurgicalAppointmentService.class).getSurgicalAppointmentAttributeByUuid(uuid);
     }
 
     @Override
@@ -58,12 +52,14 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
         if ((representation instanceof DefaultRepresentation) || (representation instanceof RefRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("surgicalAppointmentAttributeType", Representation.DEFAULT);
             description.addProperty("value");
             return description;
         } if ((representation instanceof FullRepresentation)) {
             DelegatingResourceDescription description = new DelegatingResourceDescription();
             description.addProperty("id");
+            description.addProperty("uuid");
             description.addProperty("surgicalAppointmentAttributeType", Representation.FULL);
             description.addProperty("value");
             return description;
@@ -75,6 +71,7 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
     public DelegatingResourceDescription getCreatableProperties() {
         DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
         delegatingResourceDescription.addProperty("id");
+        delegatingResourceDescription.addProperty("uuid");
         delegatingResourceDescription.addProperty("surgicalAppointmentAttributeType");
         delegatingResourceDescription.addProperty("value");
         return delegatingResourceDescription;

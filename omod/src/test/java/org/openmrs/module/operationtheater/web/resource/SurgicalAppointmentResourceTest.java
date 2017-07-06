@@ -12,7 +12,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
-import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -22,6 +21,7 @@ import java.util.Date;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @PrepareForTest({Context.class, SurgicalAppointmentResource.class})
@@ -61,5 +61,16 @@ public class SurgicalAppointmentResourceTest {
         SurgicalAppointmentResource surgicalAppointmentResource = new SurgicalAppointmentResource();
         surgicalAppointmentService.save(surgicalAppointment);
         verify(surgicalAppointmentService, times(1)).save(surgicalAppointment);
+    }
+
+    @Test
+    public void shouldGetTheSurgicalAppointment() throws Exception {
+        String surgicalAppointmentUuid = "surgicalAppointmentUuid";
+        SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+        surgicalAppointment.setUuid(surgicalAppointmentUuid);
+        when(surgicalAppointmentService.getSurgicalAppointmentByUuid(surgicalAppointmentUuid)).thenReturn(surgicalAppointment);
+        SurgicalAppointmentResource surgicalAppointmentResource = new SurgicalAppointmentResource();
+        surgicalAppointmentResource.getByUniqueId(surgicalAppointmentUuid);
+        verify(surgicalAppointmentService, times(1)).getSurgicalAppointmentByUuid(surgicalAppointmentUuid);
     }
 }
