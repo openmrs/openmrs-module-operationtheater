@@ -284,4 +284,23 @@
            ALTER TABLE surgical_appointment_attribute MODIFY value VARCHAR(255);
         </sql>
     </changeSet>
+    <changeSet id="Amman-201707101107"  author="Shireesha, Pramida">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='View OT Schedules'</sqlCheck>
+        </preConditions>
+        <comment>Adding privilege for viewing the OT schedules</comment>
+        <sql>
+            INSERT INTO privilege (privilege, description, uuid) VALUES ('View OT Schedules', 'Ability to view OT schedules', uuid());
+        </sql>
+    </changeSet>
+    <changeSet id="Amman-201707101115"  author="Shireesha, Pramida">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">select count(*) from privilege where privilege='Manage OT Schedules'</sqlCheck>
+        </preConditions>
+        <comment>Adding privilege for managing the OT schedules</comment>
+        <sql>
+            INSERT INTO privilege (privilege, description, uuid) VALUES ('Manage OT Schedules', 'Ability to manage OT schedules', uuid());
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

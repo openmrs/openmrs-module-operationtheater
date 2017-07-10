@@ -38,6 +38,23 @@
     <surgical_appointment surgical_appointment_id="4" surgical_block_id="10" patient_id="1" actual_start_datetime="2017-04-24 17:35:00.0" actual_end_datetime="2017-04-24 17:40:00.0" status="CANCELLED" notes="need more assistants" uuid="5580cddd-1111-66c8-8d3a-96dc33d10922" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
 
     <surgical_appointment_attribute surgical_appointment_attribute_id="1" surgical_appointment_id="1" surgical_appointment_attribute_type_id="1"  value="Surgery on left hand" uuid="5580cddd-1111-66c8-8d3a-96dc33d10000" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+
+    <privilege privilege="Manage OT Schedules" description="Able to manage OT Schedules"/>
+    <privilege privilege="View OT Schedules" description="Able to view OT Schedules"/>
+
+    <role role="OT: FullAccess" description="To allow full access to OT module" uuid="3480cb6d-c551-46c8-8d3a-96dc33d109fb"/>
+    <role role="OT: ReadOnly" description="To allow view access to OT module" uuid="3480cb6d-c121-46c8-8d3a-96dc33d109fb"/>
+    <role_privilege role="OT: FullAccess" privilege="Manage OT Schedules"/>
+    <role_privilege role="OT: FullAccess" privilege="View OT Schedules"/>
+    <role_privilege role="OT: ReadOnly" privilege="View OT Schedules"/>
+
+    <users user_id="190" person_id="11" system_id="1-8" username="test-user" password="4a1750c8607d0fa237de36c6305715c223415189" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1210d442-e134-11de-babe-001e378eb670"/>
+    <user_role user_id="190" role="OT: FullAccess"/>
+
+    <users user_id="120" person_id="10" system_id="1-8" username="normal-user" password="62a9238a82b866a3e9e9ce8245ac230bf98bce2d" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1010d432-e134-11de-babe-001e378ev670"/>
+    <user_role user_id="120" role="OT: ReadOnly"/>
+
+    <users user_id="191" person_id="1" system_id="1-8" username="user-without-privilege" password="4a1750c8607d0fa237de36c6305715c223415189" salt="c788c6ad82a157b712392ca695dfcf2eed193d7f" secret_question="" creator="1" date_created="2005-01-01 00:00:00.0" changed_by="1" date_changed="2007-09-20 21:54:12.0" retired="false" retire_reason="" uuid="1299d442-e134-11de-babe-001e378eb670"/>
 </dataset>
 
 
