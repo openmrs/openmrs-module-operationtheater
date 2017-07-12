@@ -398,4 +398,24 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
         assertEquals(8, surgicalBlocks.get(4).getId(), 0.0);
         assertEquals(9, surgicalBlocks.get(5).getId(), 0.0);
     }
+
+    @Test
+    public void shouldReturnOverllappingSurgicalBlocksAsZeroWhenNewSurgicalBlockStartingTimeIsEqualToEndTimeOfAnotherSurgicalBlock() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 11:30:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, null, null);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
+
+    @Test
+    public void shouldReturnOverllappingSurgicalBlocksAsZeroWhenNewSurgicalBlockEndingTimeIsEqualToStartOfAnotherSurgicalBlock() throws Exception {
+        Date startDatetime = simpleDateFormat.parse("2017-04-24 17:00:00");
+        Date endDatetime = simpleDateFormat.parse("2017-04-24 17:30:00");
+
+        List<SurgicalBlock> surgicalBlocks = surgicalBlockDAO.getOverlappingSurgicalBlocksFor(startDatetime, endDatetime, null, null, null);
+
+        assertEquals(0, surgicalBlocks.size());
+    }
 }
