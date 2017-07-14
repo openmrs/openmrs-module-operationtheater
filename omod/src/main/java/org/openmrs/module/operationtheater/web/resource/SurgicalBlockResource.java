@@ -6,6 +6,8 @@ import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
@@ -19,6 +21,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudR
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+import org.openmrs.module.webservices.validation.ValidateUtil;
 
 import java.util.Date;
 import java.util.Set;
@@ -46,6 +49,18 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
     @Override
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
         return Context.getService(SurgicalBlockService.class).save(surgicalBlock);
+    }
+
+    @Override
+    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+        SurgicalBlock savedSurgicalBlock = this.getByUniqueId(uuid);
+        SurgicalBlock cloneOfSurgicalBlock = new SurgicalBlock(savedSurgicalBlock);
+        this.setConvertedProperties(cloneOfSurgicalBlock, propertiesToUpdate, this.getUpdatableProperties(), false);
+        Context.getService(SurgicalBlockService.class).validateSurgicalBlock(cloneOfSurgicalBlock);
+        this.setConvertedProperties(savedSurgicalBlock, propertiesToUpdate, this.getUpdatableProperties(), false);
+        ValidateUtil.validate(savedSurgicalBlock);
+        savedSurgicalBlock = this.save(savedSurgicalBlock);
+        return ConversionUtil.convertToRepresentation(savedSurgicalBlock, Representation.DEFAULT);
     }
 
     @Override

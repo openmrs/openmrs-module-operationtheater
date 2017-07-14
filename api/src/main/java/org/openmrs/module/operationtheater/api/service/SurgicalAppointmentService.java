@@ -17,4 +17,6 @@ public interface SurgicalAppointmentService extends OpenmrsService {
 
     @Authorized({"View OT Schedules"})
     SurgicalAppointmentAttribute getSurgicalAppointmentAttributeByUuid(String uuid);
+
+    void validateSurgicalAppointment(SurgicalAppointment surgicalAppointment);
 }

@@ -30,11 +30,14 @@ public class SurgicalBlockResourceTest {
     @Mock
     SurgicalBlockService surgicalBlockService;
 
+    private SurgicalBlockResource surgicalBlockResource;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         mockStatic(Context.class);
         PowerMockito.when(Context.getService(SurgicalBlockService.class)).thenReturn(surgicalBlockService);
+        surgicalBlockResource = new SurgicalBlockResource();
     }
 
     @Test
@@ -49,8 +52,15 @@ public class SurgicalBlockResourceTest {
         surgicalBlock.setLocation(location);
         surgicalBlock.setProvider(provider);
 
-        SurgicalBlockResource surgicalBlockResource = new SurgicalBlockResource();
         surgicalBlockResource.save(surgicalBlock);
         verify(surgicalBlockService, times(1)).save(surgicalBlock);
+    }
+
+    @Test
+    public void shouldGetTheSurgicalBlock() throws Exception {
+        String surgicalBlockUuid = "surgicalBlockUuid";
+        surgicalBlockResource.getByUniqueId(surgicalBlockUuid);
+
+        verify(surgicalBlockService, times(1)).getSurgicalBlockWithAppointments(surgicalBlockUuid);
     }
 }

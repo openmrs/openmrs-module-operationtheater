@@ -4,7 +4,10 @@ package org.openmrs.module.operationtheater.web.resource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
+import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
+import org.openmrs.module.webservices.rest.SimpleObject;
+import org.openmrs.module.webservices.rest.web.ConversionUtil;
 import org.openmrs.module.webservices.rest.web.RequestContext;
 import org.openmrs.module.webservices.rest.web.RestConstants;
 import org.openmrs.module.webservices.rest.web.annotation.PropertyGetter;
@@ -18,6 +21,7 @@ import org.openmrs.module.webservices.rest.web.resource.impl.DataDelegatingCrudR
 import org.openmrs.module.webservices.rest.web.resource.impl.DelegatingResourceDescription;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
+import org.openmrs.module.webservices.validation.ValidateUtil;
 
 import java.util.List;
 import java.util.Set;
@@ -44,6 +48,19 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
     @Override
     public SurgicalAppointment save(SurgicalAppointment surgicalAppointment) {
         return Context.getService(SurgicalAppointmentService.class).save(surgicalAppointment);
+    }
+
+    @Override
+    public Object update(String uuid, SimpleObject propertiesToUpdate, RequestContext context) throws ResponseException {
+        SurgicalAppointment surgicalAppointment = this.getByUniqueId(uuid);
+        SurgicalAppointment cloneOfSurgicalAppointment = new SurgicalAppointment(surgicalAppointment);
+        this.setConvertedProperties(cloneOfSurgicalAppointment, propertiesToUpdate, this.getUpdatableProperties(), false);
+        Context.getService(SurgicalAppointmentService.class).validateSurgicalAppointment(cloneOfSurgicalAppointment);
+        this.setConvertedProperties(surgicalAppointment, propertiesToUpdate, this.getUpdatableProperties(), false);
+        ValidateUtil.validate(surgicalAppointment);
+        surgicalAppointment = this.save(surgicalAppointment);
+        return ConversionUtil.convertToRepresentation(surgicalAppointment, Representation.DEFAULT);
+
     }
 
     @Override

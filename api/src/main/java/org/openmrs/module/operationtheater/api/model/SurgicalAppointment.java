@@ -18,6 +18,22 @@ public class SurgicalAppointment extends BaseOpenmrsData {
     private Integer sortWeight;
     private Set<SurgicalAppointmentAttribute> surgicalAppointmentAttributes;
 
+    public SurgicalAppointment() {
+    }
+
+    public SurgicalAppointment(SurgicalAppointment surgicalAppointment) {
+        this.setUuid(surgicalAppointment.getUuid());
+        this.setId(surgicalAppointment.getId());
+        this.setSurgicalBlock(surgicalAppointment.getSurgicalBlock());
+        this.setPatient(surgicalAppointment.getPatient());
+        this.setSortWeight(surgicalAppointment.getSortWeight());
+        this.setStatus(surgicalAppointment.getStatus());
+        this.setNotes(surgicalAppointment.getNotes());
+        this.setActualStartDatetime(surgicalAppointment.getActualStartDatetime());
+        this.setActualEndDatetime(surgicalAppointment.getActualEndDatetime());
+        this.setSurgicalAppointmentAttributes(surgicalAppointment.getSurgicalAppointmentAttributes());
+    }
+
     @Override
     public Integer getId() {
         return id;

@@ -8,6 +8,7 @@ import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.operationtheater.exception.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -23,13 +24,20 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
     }
 
     @Override
+    @Transactional
     public SurgicalBlock save(SurgicalBlock surgicalBlock) {
-        checkForOverlappingSurgicalBlocks(surgicalBlock);
-        checkForOverlappingSurgicalAppointmentsForThePatient(surgicalBlock);
+        validateSurgicalBlock(surgicalBlock);
         return surgicalBlockDAO.save(surgicalBlock);
     }
 
     @Override
+    public void validateSurgicalBlock(SurgicalBlock surgicalBlock) {
+        checkForOverlappingSurgicalBlocks(surgicalBlock);
+        checkForOverlappingSurgicalAppointmentsForThePatient(surgicalBlock);
+    }
+
+    @Override
+    @Transactional
     public SurgicalBlock getSurgicalBlockWithAppointments(String surgicalBlockUuid) {
         return surgicalBlockDAO.getSurgicalBlockWithAppointments(surgicalBlockUuid);
     }

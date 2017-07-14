@@ -6,6 +6,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.openmrs.module.webservices.rest.SimpleObject;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
@@ -23,7 +25,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
     @Override
     public String getUuid() {
-        return null;
+        return "5580cddd-1111-66c8-8d3a-96dc33d109f1";
     }
 
     @Override
@@ -78,7 +80,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
                 "\"actualStartDatetime\": \"2017-05-11T10:20:00.000\", \"actualEndDatetime\": \"2017-05-11T11:30:00.000\"," +
                 " \"status\": \"Completed\", \"sortWeight\": 0, \"notes\": \"need more assistants\"}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
-        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI() + "/" + getUuid(), post)));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);
@@ -101,7 +103,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
                 ", \"surgicalAppointmentAttributes\": [{\"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
-        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI() + "/" + getUuid(), post)));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);
@@ -129,7 +131,7 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
                 ", \"surgicalAppointmentAttributes\": [{\"id\": 1, \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d10000\", \"value\": \"Surgery on left leg\", \"surgicalAppointmentAttributeType\": {\"id\": 1}}]" +
                 "}";
         SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
-        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI(), post)));
+        SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI() + "/" + getUuid(), post)));
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
         assertNotNull(surgicalAppointment);

@@ -15,6 +15,18 @@ public class SurgicalBlock extends BaseOpenmrsData {
     private Date endDatetime;
     private Set<SurgicalAppointment> surgicalAppointments;
 
+    public SurgicalBlock() {
+    }
+
+    public SurgicalBlock(SurgicalBlock surgicalBlock) {
+        surgicalBlock.setProvider(surgicalBlock.getProvider());
+        surgicalBlock.setLocation(surgicalBlock.getLocation());
+        surgicalBlock.setId(surgicalBlock.getId());
+        surgicalBlock.setUuid(surgicalBlock.getUuid());
+        surgicalBlock.setStartDatetime(surgicalBlock.getStartDatetime());
+        surgicalBlock.setEndDatetime(surgicalBlock.getEndDatetime());
+        surgicalBlock.setSurgicalAppointments(surgicalBlock.getSurgicalAppointments());
+    }
 
     @Override
     public Integer getId() {
