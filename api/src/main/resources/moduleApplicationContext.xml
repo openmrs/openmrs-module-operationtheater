@@ -25,18 +25,6 @@
 
     <context:component-scan base-package="org.openmrs.module.operationtheater" />
 
-    <bean id="sessionFactory" class="org.openmrs.api.db.hibernate.HibernateSessionFactoryBean">
-        <property name="configLocations">
-            <list>
-                <value>classpath:hibernate.cfg.xml</value>
-                <value>classpath:test-hibernate.cfg.xml</value>
-            </list>
-        </property>
-        <property name="mappingJarLocations">
-            <ref bean="mappingJarResources"/>
-        </property>
-    </bean>
-
     <bean id="surgicalAppointmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>

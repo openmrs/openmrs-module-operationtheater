@@ -6,14 +6,12 @@ import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
 import org.openmrs.module.operationtheater.exception.ValidationException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 public class SurgicalAppointmentServiceImpl extends BaseOpenmrsService implements SurgicalAppointmentService{
 
-    @Autowired
     SurgicalAppointmentDao surgicalAppointmentDao;
 
     public void setSurgicalAppointmentDao(SurgicalAppointmentDao surgicalAppointmentDao) {
