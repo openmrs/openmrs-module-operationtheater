@@ -211,7 +211,7 @@
                                  baseTableName="surgical_appointment_attribute_type" baseColumnNames="retired_by"
                                  referencedTableName="users" referencedColumnNames="user_id"/>
     </changeSet>
-    <changeSet id="20170512103955" author="Santhosh, Shireesha">
+    <changeSet id="20170726131000" author="Santhosh, Shireesha">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="surgical_appointment_attribute"/>
@@ -259,10 +259,10 @@
                 <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint constraintName="surgical_appointment_attribute_surgical_appointment_id_by_fk"
+        <addForeignKeyConstraint constraintName="saa_surgical_appointment_id_by_fk"
                                  baseTableName="surgical_appointment_attribute" baseColumnNames="surgical_appointment_id"
                                  referencedTableName="surgical_appointment" referencedColumnNames="surgical_appointment_id"/>
-        <addForeignKeyConstraint constraintName="surgical_appointment_attribute_surgical_appointment_attribute_type_id_by_fk"
+        <addForeignKeyConstraint constraintName="saa_surgical_appointment_attribute_type_id_by_fk"
                                  baseTableName="surgical_appointment_attribute" baseColumnNames="surgical_appointment_attribute_type_id"
                                  referencedTableName="surgical_appointment_attribute_type" referencedColumnNames="surgical_appointment_attribute_type_id"/>
         <addForeignKeyConstraint constraintName="surgical_appointment_attribute_creator_by_fk"
