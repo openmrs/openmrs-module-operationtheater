@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>operationtheater</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<name>OperationTheater</name>
 	<description>This module is used to schedule and manage Operation Theaters in a hospital.</description>
