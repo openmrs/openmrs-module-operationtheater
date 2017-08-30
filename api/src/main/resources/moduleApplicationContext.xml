@@ -38,6 +38,13 @@
                         </property>
                     </bean>
                 </property>
+                <property name="surgicalBlockDao">
+                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO">
+                        <property name="sessionFactory">
+                            <ref bean="sessionFactory"/>
+                        </property>
+                    </bean>
+                </property>
             </bean>
         </property>
         <property name="preInterceptors">
