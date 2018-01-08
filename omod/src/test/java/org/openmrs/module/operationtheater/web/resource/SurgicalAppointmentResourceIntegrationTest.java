@@ -118,7 +118,6 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 
         java.util.List surgicalAppointmentAttributes = surgicalAppointment.get("surgicalAppointmentAttributes");
         LinkedHashMap<String, Object> surgicalAppointmentAttribute = (LinkedHashMap<String, Object>) surgicalAppointmentAttributes.get(0);
-        System.out.println(surgicalAppointmentAttribute.get("id")+"-------------");
         assertNotNull(surgicalAppointmentAttribute.get("id"));
         assertEquals("Surgery on left leg", surgicalAppointmentAttribute.get("value"));
     }
