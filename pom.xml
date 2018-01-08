@@ -77,6 +77,13 @@
 			<version>${javaxServletVersion}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>bedmanagement-api</artifactId>
+			<version>5.6-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 	<repositories>

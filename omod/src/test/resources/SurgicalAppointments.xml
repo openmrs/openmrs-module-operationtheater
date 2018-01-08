@@ -3,9 +3,27 @@
     <person person_id="1" gender="F" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128762"/>
     <person_name person_name_id="1" preferred="true" person_id="1" given_name="Iron" middle_name=" " family_name="Man" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb9151514df"/>
     <patient patient_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <patient_identifier patient_identifier_id="1" patient_id="1" identifier="GAN200000" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0b7cf2fa-b377-455c-8750-231cf34a21ac"/>
+
+    <person person_id="2" gender="M" dead="false" creator="1" date_created="2008-08-15 15:46:47.0" voided="false" uuid="2b597be0-83c7-4f1d-b3d2-1d61ab128763"/>
+    <person_name person_name_id="2" preferred="true" person_id="2" given_name="Saikumar" middle_name=" " family_name="V" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f1f7d08-076b-4fc6-acac-4bb9151514ab"/>
+    <patient patient_id="2" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <patient_identifier patient_identifier_id="2" patient_id="2" identifier="GAN200012" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0b7cf2fa-b377-455c-8750-231cf34a2cab"/>
 
     <surgical_appointment_attribute_type surgical_appointment_attribute_type_id="1" name="Procedure"  description="procedure" format="java.lang.String" sort_weight="1" creator="1" date_created="2005-01-01 00:00:00.0" uuid="0f1f7d08-076b-4fc6-acac-4bb915151sdd" retired="false"/>
-    <surgical_block surgical_block_id="1" primary_provider_id="1" location_id="1" start_datetime="2017-05-11 10:00:00.0" end_datetime="2017-05-11 18:00:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+    <surgical_block surgical_block_id="1" primary_provider_id="1" location_id="1" start_datetime="2017-05-11 10:00:00.0" end_datetime="2017-05-11 18:00:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33c109f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+    <surgical_block surgical_block_id="2" primary_provider_id="1" location_id="1" start_datetime="2017-06-11 10:00:00.0" end_datetime="2017-06-11 18:00:00.0" uuid="5580cddd-c290-66c8-8d3a-96dc33d109f2" creator="1" date_created="2017-05-28 00:00:00.0" voided="false"/>
     <surgical_appointment surgical_appointment_id="1" surgical_block_id="1" patient_id="1" actual_start_datetime="2017-05-11 10:20:00.0" actual_end_datetime="2017-05-11 11:30:0.0" status="Completed" notes="need more assistants" uuid="5580cddd-1111-66c8-8d3a-96dc33d109f1" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
-    <surgical_appointment_attribute surgical_appointment_attribute_id="1" surgical_appointment_id="1" surgical_appointment_attribute_type_id="1"  value="Surgery on left hand" uuid="5580cddd-1111-66c8-8d3a-96dc33d10000" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
-e</dataset>
+    <surgical_appointment surgical_appointment_id="2" surgical_block_id="2" patient_id="2" actual_start_datetime="2017-06-11 10:20:00.0" actual_end_datetime="2017-06-11 11:30:0.0" status="Completed" notes="need more assistants" uuid="5580cddd-1111-66c8-8d3a-96dc33d112f2" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+    <surgical_appointment_attribute surgical_appointment_attribute_id="1" surgical_appointment_id="2" surgical_appointment_attribute_type_id="1"  value="Surgery on left hand" uuid="5580cddd-1111-66c8-8d3a-96dc33d10123" creator="1" date_created="2017-04-28 00:00:00.0" voided="false"/>
+
+    <encounter_type encounter_type_id="7" name="ADMISSION" description="Admission into Hospital" creator="1" date_created="2015-10-27 12:39:55.0" retired="false" retired_by="0" retire_reason="for testing" uuid="02c533ab-b74b-aaaa-b6e5-ffb6d09a0ac8"/>
+    <encounter encounter_id="7" visit_id="5" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2008-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-aaab-42d0-9d11-4f52e89d123r"/>
+    <encounter encounter_id="8" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-cbcc-42d0-9d11-4f52e89d123r"/>
+    <encounter encounter_id="9" visit_id="6" encounter_type="7" patient_id="2" location_id="2" form_id="1" encounter_datetime="2013-10-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" uuid="y403fafb-dccc-42d0-9d01-4f52e89d123r"/>
+
+    <bed bed_id="1" bed_number="123" status="OCCUPIED" uuid="bedUuid" creator="1" date_created="2017-04-24 12:30:00.0" changed_by="1" date_changed="2017-04-24 12:30:00.0" voided="0"/>
+    <location name="Ward" location_id="1" uuid="locationUuid" creator="1" date_created="2017-04-24 12:30:00.0" retired="0"/>
+    <bed_location_map location_id="1" bed_id="1" row_number="1" column_number="1" bed_location_map_id="1"/>
+    <bed_patient_assignment_map patient_id="2" bed_id="1" date_started="2017-04-24 12:30:00.0" uuid="mapuuid" creator="1" date_created="2017-04-24 12:30:00.0" voided="0" bed_patient_assignment_map_id="1" encounter_id="7"/>
+</dataset>

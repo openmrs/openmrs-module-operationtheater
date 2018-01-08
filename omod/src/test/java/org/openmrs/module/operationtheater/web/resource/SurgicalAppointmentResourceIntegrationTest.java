@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -148,5 +149,17 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
         assertNotNull(surgicalAppointmentAttribute.get("id"));
         assertEquals(1, surgicalAppointmentAttribute.get("id"));
         assertEquals("Surgery on left leg", surgicalAppointmentAttribute.get("value"));
+    }
+
+    @Test
+    public void shouldGetBedNumberAndBedLocationAsNullForPatientHavingNoBedAssignment() throws Exception {
+        MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + "5580cddd-1111-66c8-8d3a-96dc33d112f2");
+        request.setParameter("v", "full");
+        SimpleObject surgicalAppointment = deserialize(handle(request));
+
+        assertNotNull(surgicalAppointment);
+        LinkedHashMap<String, Object> surgicalAppointmentValues = (LinkedHashMap<String, Object>) surgicalAppointment;
+        assertEquals("123", surgicalAppointmentValues.get("bedNumber"));
+        assertEquals("Ward", surgicalAppointmentValues.get("bedLocation"));
     }
 }

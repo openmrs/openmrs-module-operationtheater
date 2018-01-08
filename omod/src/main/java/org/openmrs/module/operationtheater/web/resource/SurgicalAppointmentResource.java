@@ -1,10 +1,13 @@
 package org.openmrs.module.operationtheater.web.resource;
 
 
+import org.openmrs.Patient;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.bedmanagement.BedDetails;
+import org.openmrs.module.bedmanagement.BedManagementService;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
-import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
 import org.openmrs.module.webservices.rest.SimpleObject;
 import org.openmrs.module.webservices.rest.web.ConversionUtil;
@@ -23,6 +26,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.validation.ValidateUtil;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.List;
 import java.util.Set;
 
@@ -80,6 +84,8 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
             description.addProperty("status");
             description.addProperty("notes");
             description.addProperty("sortWeight");
+            description.addProperty("bedNumber");
+            description.addProperty("bedLocation");
             description.addProperty("surgicalAppointmentAttributes");
             return description;
         }
@@ -93,6 +99,8 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
             description.addProperty("status");
             description.addProperty("notes");
             description.addProperty("sortWeight");
+            description.addProperty("bedNumber");
+            description.addProperty("bedLocation");
             description.addProperty("surgicalAppointmentAttributes");
             return description;
         }
@@ -118,6 +126,25 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
     @PropertyGetter("surgicalAppointmentAttributes")
     public static List<SurgicalAppointmentAttribute> getAttributes(SurgicalAppointment instance) {
         return instance.getActiveAttributes();
+    }
+
+    @PropertyGetter("bedNumber")
+    public static String getBedNumber(SurgicalAppointment surgicalAppointment) {
+        BedDetails bedDetails = Context.getService(BedManagementService.class).getBedAssignmentDetailsByPatient(surgicalAppointment.getPatient());
+        if(bedDetails == null) {
+            return null;
+        }
+        return bedDetails.getBedNumber();
+    }
+
+    @PropertyGetter("bedLocation")
+    public static String getBedLocation(SurgicalAppointment surgicalAppointment) {
+        Patient patient = surgicalAppointment.getPatient();
+        BedDetails bedDetails = Context.getService(BedManagementService.class).getBedAssignmentDetailsByPatient(patient);
+        if(bedDetails == null) {
+            return null;
+        }
+        return bedDetails.getPhysicalLocation().getName();
     }
 
     @PropertySetter("surgicalAppointmentAttributes")
