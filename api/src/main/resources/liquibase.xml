@@ -330,6 +330,17 @@
             VALUES('notes', 'Notes', 'java.lang.String' ,'10', 8, NOW(), UUID());
         </sql>
     </changeSet>
+    <changeSet id="Amman-201705031542" author="Kaustav, Shireesha" context="rel3.0" runOnChange="true">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(*) from location_tag where name = 'Operation Theater' and description = 'Operation Theater';
+            </sqlCheck>
+        </preConditions>
+        <comment>Add operation theater location tag</comment>
+        <sql>
+            INSERT INTO location_tag(name, description, creator, date_created, retired, uuid) VALUES ('Operation Theater', 'Operation Theater', 1, now(), 0, uuid());
+        </sql>
+    </changeSet>
     <changeSet id="201707031330" author="Santhosh, Maharjun" runOnChange="true">
         <comment>Adding patient listing queues for patients whose are in scheduled queue</comment>
         <sqlFile path="patientListingQueueScheduled.sql"/>
