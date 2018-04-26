@@ -302,7 +302,7 @@
             INSERT INTO privilege (privilege, description, uuid) VALUES ('Manage OT Schedules', 'Ability to manage OT schedules', uuid());
         </sql>
     </changeSet>
-    <changeSet id="Amman-201705151600" author="Shireesha, Santhosh" context="rel3.1">
+    <changeSet id="Amman-201804261032" author="Sai" context="rel3.1">
         <preConditions onFail="CONTINUE">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
         </preConditions>
