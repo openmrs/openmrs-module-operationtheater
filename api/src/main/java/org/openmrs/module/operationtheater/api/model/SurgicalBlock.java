@@ -19,13 +19,13 @@ public class SurgicalBlock extends BaseOpenmrsData {
     }
 
     public SurgicalBlock(SurgicalBlock surgicalBlock) {
-        surgicalBlock.setProvider(surgicalBlock.getProvider());
-        surgicalBlock.setLocation(surgicalBlock.getLocation());
-        surgicalBlock.setId(surgicalBlock.getId());
-        surgicalBlock.setUuid(surgicalBlock.getUuid());
-        surgicalBlock.setStartDatetime(surgicalBlock.getStartDatetime());
-        surgicalBlock.setEndDatetime(surgicalBlock.getEndDatetime());
-        surgicalBlock.setSurgicalAppointments(surgicalBlock.getSurgicalAppointments());
+        this.setProvider(surgicalBlock.getProvider());
+        this.setLocation(surgicalBlock.getLocation());
+        this.setId(surgicalBlock.getId());
+        this.setUuid(surgicalBlock.getUuid());
+        this.setStartDatetime(surgicalBlock.getStartDatetime());
+        this.setEndDatetime(surgicalBlock.getEndDatetime());
+        this.setSurgicalAppointments(surgicalBlock.getSurgicalAppointments());
     }
 
     @Override
