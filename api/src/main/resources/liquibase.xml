@@ -330,7 +330,7 @@
             VALUES('notes', 'Notes', 'java.lang.String' ,'10', 8, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="Amman-201705031542" author="Kaustav, Shireesha" context="rel3.0" runOnChange="true">
+    <changeSet id="Amman-201805131317" author="Maharjun , Saikumar" context="rel3.0" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
                 select count(*) from location_tag where name = 'Operation Theater' and description = 'Operation Theater';
