@@ -8,20 +8,21 @@ import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentAttrib
 import java.util.List;
 
 public class SurgicalAppointmentAttributeTypeServiceImpl extends BaseOpenmrsService implements SurgicalAppointmentAttributeTypeService {
-
-    SurgicalAppointmentAttributeTypeDAO surgicalAppointmentAttributeTypeDAO;
-
-    public void setSurgicalAppointmentAttributeTypeDAO(SurgicalAppointmentAttributeTypeDAO surgicalAppointmentAttributeTypeDAO) {
-        this.surgicalAppointmentAttributeTypeDAO = surgicalAppointmentAttributeTypeDAO;
-    }
-
-    @Override
-    public List<SurgicalAppointmentAttributeType> getAllAttributeTypes() {
-        return surgicalAppointmentAttributeTypeDAO.getAllAttributeTypes();
-    }
-
-    @Override
-    public SurgicalAppointmentAttributeType getSurgicalAppointmentAttributeTypeByUuid(String uuid) {
-        return surgicalAppointmentAttributeTypeDAO.getSurgicalAppointmentAttributeTypeByUuid(uuid);
-    }
+	
+	SurgicalAppointmentAttributeTypeDAO surgicalAppointmentAttributeTypeDAO;
+	
+	public void setSurgicalAppointmentAttributeTypeDAO(
+	        SurgicalAppointmentAttributeTypeDAO surgicalAppointmentAttributeTypeDAO) {
+		this.surgicalAppointmentAttributeTypeDAO = surgicalAppointmentAttributeTypeDAO;
+	}
+	
+	@Override
+	public List<SurgicalAppointmentAttributeType> getAllAttributeTypes() {
+		return surgicalAppointmentAttributeTypeDAO.getAllAttributeTypes();
+	}
+	
+	@Override
+	public SurgicalAppointmentAttributeType getSurgicalAppointmentAttributeTypeByUuid(String uuid) {
+		return surgicalAppointmentAttributeTypeDAO.getSurgicalAppointmentAttributeTypeByUuid(uuid);
+	}
 }

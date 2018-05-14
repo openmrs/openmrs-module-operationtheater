@@ -1,6 +1,5 @@
 package org.openmrs.module.operationtheater.web.resource;
 
-
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
 import org.openmrs.module.webservices.rest.web.RequestContext;
@@ -19,42 +18,43 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.List;
+
 @Component
 public class SurgicalBlockSearchHandler implements SearchHandler {
-
-    @Autowired
-    @Qualifier("surgicalBlockService")
-    SurgicalBlockService surgicalBlockService;
-
-
-
-    private final SearchConfig searchConfig = new SearchConfig("surgicalBlocksInDateRange", RestConstants.VERSION_1 + "/surgicalBlock",
-            Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"), new SearchQuery.Builder(
-            "Allows you to find surgical blocks which fall between the startDatetime and endDatetime").withRequiredParameters("startDatetime", "endDatetime").
-            withOptionalParameters("includeVoided").
-            build());
-
-    @Override
-    public SearchConfig getSearchConfig() {
-        return searchConfig;
-    }
-
-    @Override
-    public PageableResult search(RequestContext requestContext) throws ResponseException {
-        String startDatetime = requestContext.getRequest().getParameter("startDatetime");
-        String endDatetime = requestContext.getRequest().getParameter("endDatetime");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        String includeVoidedString = requestContext.getRequest().getParameter("includeVoided");
-        Boolean includeVoided = Boolean.valueOf(includeVoidedString);
-
-        List<SurgicalBlock> results = null;
-        try {
-            results = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(
-                    simpleDateFormat.parse(startDatetime), simpleDateFormat.parse(endDatetime), includeVoided);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return new AlreadyPaged<>(requestContext, results, false);
-    }
+	
+	@Autowired
+	@Qualifier("surgicalBlockService")
+	SurgicalBlockService surgicalBlockService;
+	
+	private final SearchConfig searchConfig = new SearchConfig("surgicalBlocksInDateRange",
+	        RestConstants.VERSION_1 + "/surgicalBlock", Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"),
+	        new SearchQuery.Builder(
+	                "Allows you to find surgical blocks which fall between the startDatetime and endDatetime")
+	                        .withRequiredParameters("startDatetime", "endDatetime").withOptionalParameters("includeVoided")
+	                        .build());
+	
+	@Override
+	public SearchConfig getSearchConfig() {
+		return searchConfig;
+	}
+	
+	@Override
+	public PageableResult search(RequestContext requestContext) throws ResponseException {
+		String startDatetime = requestContext.getRequest().getParameter("startDatetime");
+		String endDatetime = requestContext.getRequest().getParameter("endDatetime");
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+		String includeVoidedString = requestContext.getRequest().getParameter("includeVoided");
+		Boolean includeVoided = Boolean.valueOf(includeVoidedString);
+		
+		List<SurgicalBlock> results = null;
+		try {
+			results = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(
+			    simpleDateFormat.parse(startDatetime), simpleDateFormat.parse(endDatetime), includeVoided);
+		}
+		catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		return new AlreadyPaged<>(requestContext, results, false);
+	}
 }

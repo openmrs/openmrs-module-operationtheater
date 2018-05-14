@@ -17,24 +17,25 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@PrepareForTest({Context.class, SurgicalAppointmentResource.class})
+@PrepareForTest({ Context.class, SurgicalAppointmentResource.class })
 @RunWith(PowerMockRunner.class)
 public class SurgicalAppointmentAttributeTypeResourceTest {
-
-    @Mock
-    SurgicalAppointmentAttributeTypeService surgicalAppointmentAttributeTypeService;
-
-    @Before
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-        mockStatic(Context.class);
-        PowerMockito.when(Context.getService(SurgicalAppointmentAttributeTypeService.class)).thenReturn(surgicalAppointmentAttributeTypeService);
-    }
-
-    @Test
-    public void shouldSaveTheValidSurgicalAppointment() throws Exception {
-        SurgicalAppointmentAttributeTypeResource surgicalAppointmentAttributeTypeResource = new SurgicalAppointmentAttributeTypeResource();
-        surgicalAppointmentAttributeTypeResource.doGetAll(any(RequestContext.class));
-        verify(surgicalAppointmentAttributeTypeService, times(1)).getAllAttributeTypes();
-    }
+	
+	@Mock
+	SurgicalAppointmentAttributeTypeService surgicalAppointmentAttributeTypeService;
+	
+	@Before
+	public void setUp() throws Exception {
+		MockitoAnnotations.initMocks(this);
+		mockStatic(Context.class);
+		PowerMockito.when(Context.getService(SurgicalAppointmentAttributeTypeService.class))
+		        .thenReturn(surgicalAppointmentAttributeTypeService);
+	}
+	
+	@Test
+	public void shouldSaveTheValidSurgicalAppointment() throws Exception {
+		SurgicalAppointmentAttributeTypeResource surgicalAppointmentAttributeTypeResource = new SurgicalAppointmentAttributeTypeResource();
+		surgicalAppointmentAttributeTypeResource.doGetAll(any(RequestContext.class));
+		verify(surgicalAppointmentAttributeTypeService, times(1)).getAllAttributeTypes();
+	}
 }

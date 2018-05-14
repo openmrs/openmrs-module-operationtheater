@@ -1,7 +1,19 @@
-*/target/
-.DS_Store
-.idea/
-*/*.xml
-*/*.iml
-*/logs/*
+*.class
+*.iml
+*.idea
+**/.classpath
+**/.project
+**/.settings/*
+**/target/*
+.project
+*.sass-cache
+target
+.java-version
+*.releaseBackup
+release.properties
+
+# Package Files #
+*.jar
+*.war
+*.ear
 *.iml
