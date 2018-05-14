@@ -1,16 +1,16 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-    <parent>
-		<groupId>org.openmrs.module</groupId>
-		<artifactId>operationtheater</artifactId>
-		<version>1.1.0</version>
-	</parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>operationtheater-omod</artifactId>
-	<packaging>jar</packaging>
-	<name>OperationTheater OMOD</name>
-	<description>Omod submodule for OperationTheater</description>
+    <parent>
+        <groupId>org.openmrs.module</groupId>
+        <artifactId>operationtheater</artifactId>
+        <version>1.1.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>operationtheater-omod</artifactId>
+    <packaging>jar</packaging>
+    <name>Operation Theater OMOD</name>
+    <description>OMOD project for the Operation Theater module</description>
 
     <dependencies>
         <dependency>
@@ -19,29 +19,28 @@
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
-<dependencyManagement>
-    <dependencies>
-		<dependency>
-			<groupId>org.openmrs.web</groupId>
-			<artifactId>openmrs-web</artifactId>
-            <type>jar</type>
-		</dependency>
-        <dependency>
-            <groupId>org.openmrs.web</groupId>
-            <artifactId>openmrs-web</artifactId>
-            <scope>test</scope>
-            <type>test-jar</type>
-        </dependency>
-        <dependency>
-            <groupId>org.openmrs.module</groupId>
-            <artifactId>webservices.rest-omod</artifactId>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-</dependencyManagement>
 
-
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.openmrs.web</groupId>
+                <artifactId>openmrs-web</artifactId>
+                <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.web</groupId>
+                <artifactId>openmrs-web</artifactId>
+                <scope>test</scope>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.module</groupId>
+                <artifactId>webservices.rest-omod</artifactId>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
     <build>
         <finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
         <resources>
@@ -66,14 +65,12 @@
                 <targetPath>web/module</targetPath>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
         </testResources>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -101,7 +98,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                                 <pluginExecution>
@@ -114,7 +111,7 @@
                                         </goals>
                                     </pluginExecutionFilter>
                                     <action>
-                                        <ignore></ignore>
+                                        <ignore/>
                                     </action>
                                 </pluginExecution>
                             </pluginExecutions>
@@ -123,7 +120,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.openmrs.maven.plugins</groupId>
@@ -166,14 +162,12 @@
                     </execution>
                 </executions>
             </plugin>
-
             <!-- Jacoco Code Coverage -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-
-
         </plugins>
     </build>
+    
 </project>

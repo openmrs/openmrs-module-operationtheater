@@ -1,16 +1,17 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>operationtheater</artifactId>
-		<version>1.1.0</version>
+		<version>1.1.1-SNAPSHOT</version>
 	</parent>
-
+	
 	<artifactId>operationtheater-api</artifactId>
 	<packaging>jar</packaging>
-	<name>OperationTheater API</name>
-	<description>API project for OperationTheater</description>
+	<name>Operation Theater API</name>
+	<description>API project for the Operation Theater module</description>
+	
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -54,7 +55,7 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-
+	
 	<build>
 		<resources>
 			<resource>
@@ -62,7 +63,6 @@
 				<filtering>true</filtering>
 			</resource>
 		</resources>
-
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -117,6 +117,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
 
 </project>
