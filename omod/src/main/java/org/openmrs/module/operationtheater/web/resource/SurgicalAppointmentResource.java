@@ -4,7 +4,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
-import org.openmrs.module.bedmanagement.BedManagementService;
+import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
