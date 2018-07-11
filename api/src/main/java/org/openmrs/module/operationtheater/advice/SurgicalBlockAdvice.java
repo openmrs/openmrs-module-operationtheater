@@ -19,55 +19,65 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 public class SurgicalBlockAdvice implements AfterReturningAdvice {
-    private static final String CATEGORY = "surgicalblock";
-    private static final String TITLE = "Surgical Block";
-    private static final String SAVE_PATIENT_SURGICAL_BLOCK_METHOD = "save";
-    private static final String RAISE_PATIENT_SURGICAL_BLOCK_EVENT_GLOBAL_PROPERTY = "atomfeed.publish.eventsForSurgicalBlockChange";
-    private static final String SURGICAL_BLOCK_EVENT_URL_PATTERN_GLOBAL_PROPERTY = "atomfeed.event.urlPatternForSurgicalBlock";
-    private static final String DEFAULT_SURGICAL_BLOCK_URL_PATTERN = "/openmrs/ws/rest/v1/surgicalBlock/{uuid}?v=full";
-    private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
-    private EventService eventService;
-
-    public SurgicalBlockAdvice() throws SQLException {
-        atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
-        AllEventRecordsQueue allEventRecordsQueue = new AllEventRecordsQueueJdbcImpl(atomFeedSpringTransactionManager);
-
-        this.eventService = new EventServiceImpl(allEventRecordsQueue);
-    }
-
-    @Override
-    public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
-        if (shouldRaiseRelationshipEvent() && SAVE_PATIENT_SURGICAL_BLOCK_METHOD.equals(method.getName())) {
-            String contents = getUrlPattern().replace("{uuid}", ((SurgicalBlock) returnValue).getUuid());
-            final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents, CATEGORY);
-
-            atomFeedSpringTransactionManager.executeWithTransaction(
-                    new AFTransactionWorkWithoutResult() {
-                        @Override
-                        protected void doInTransaction() {
-                            eventService.notify(event);
-                        }
-
-                        @Override
-                        public PropagationDefinition getTxPropagationDefinition() {
-                            return PropagationDefinition.PROPAGATION_REQUIRED;
-                        }
-                    }
-            );
-        }
-    }
-
-    private boolean shouldRaiseRelationshipEvent() {
-        String raiseEvent = Context.getAdministrationService().getGlobalProperty(RAISE_PATIENT_SURGICAL_BLOCK_EVENT_GLOBAL_PROPERTY);
-        return Boolean.valueOf(raiseEvent);
-    }
-
-    private String getUrlPattern() {
-        return Context.getAdministrationService().getGlobalProperty(SURGICAL_BLOCK_EVENT_URL_PATTERN_GLOBAL_PROPERTY, DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
-    }
-
-    private PlatformTransactionManager getSpringPlatformTransactionManager() {
-        return Context.getRegisteredComponents(PlatformTransactionManager.class).get(0);
-    }
-
+	
+	private static final String CATEGORY = "surgicalblock";
+	
+	private static final String TITLE = "Surgical Block";
+	
+	private static final String SAVE_PATIENT_SURGICAL_BLOCK_METHOD = "save";
+	
+	private static final String RAISE_PATIENT_SURGICAL_BLOCK_EVENT_GLOBAL_PROPERTY = "atomfeed.publish.eventsForSurgicalBlockChange";
+	
+	private static final String SURGICAL_BLOCK_EVENT_URL_PATTERN_GLOBAL_PROPERTY = "atomfeed.event.urlPatternForSurgicalBlock";
+	
+	private static final String DEFAULT_SURGICAL_BLOCK_URL_PATTERN = "/openmrs/ws/rest/v1/surgicalBlock/{uuid}?v=full";
+	
+	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
+	
+	private EventService eventService;
+	
+	public SurgicalBlockAdvice() throws SQLException {
+		atomFeedSpringTransactionManager = new AtomFeedSpringTransactionManager(getSpringPlatformTransactionManager());
+		AllEventRecordsQueue allEventRecordsQueue = new AllEventRecordsQueueJdbcImpl(atomFeedSpringTransactionManager);
+		
+		this.eventService = new EventServiceImpl(allEventRecordsQueue);
+	}
+	
+	@Override
+	public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
+		if (shouldRaiseRelationshipEvent() && SAVE_PATIENT_SURGICAL_BLOCK_METHOD.equals(method.getName())) {
+			String contents = getUrlPattern().replace("{uuid}", ((SurgicalBlock) returnValue).getUuid());
+			final Event event = new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents,
+			        CATEGORY);
+			
+			atomFeedSpringTransactionManager.executeWithTransaction(new AFTransactionWorkWithoutResult() {
+				
+				@Override
+				protected void doInTransaction() {
+					eventService.notify(event);
+				}
+				
+				@Override
+				public PropagationDefinition getTxPropagationDefinition() {
+					return PropagationDefinition.PROPAGATION_REQUIRED;
+				}
+			});
+		}
+	}
+	
+	private boolean shouldRaiseRelationshipEvent() {
+		String raiseEvent = Context.getAdministrationService()
+		        .getGlobalProperty(RAISE_PATIENT_SURGICAL_BLOCK_EVENT_GLOBAL_PROPERTY);
+		return Boolean.valueOf(raiseEvent);
+	}
+	
+	private String getUrlPattern() {
+		return Context.getAdministrationService().getGlobalProperty(SURGICAL_BLOCK_EVENT_URL_PATTERN_GLOBAL_PROPERTY,
+		    DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
+	}
+	
+	private PlatformTransactionManager getSpringPlatformTransactionManager() {
+		return Context.getRegisteredComponents(PlatformTransactionManager.class).get(0);
+	}
+	
 }

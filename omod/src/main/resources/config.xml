@@ -20,7 +20,7 @@
 
 	<require_modules>
 		<require_module version="${webservicesRestModuleVersion}">org.openmrs.module.webservices.rest</require_module>
-		<require_module version="5.6">org.openmrs.module.bedmanagement</require_module>
+		<require_module version="5.7">org.openmrs.module.bedmanagement</require_module>
 		<require_module version="${openmrsAtomfeedVersion}">org.ict4h.openmrs.openmrs-atomfeed</require_module>
 	</require_modules>
 

@@ -33,6 +33,7 @@
 		<javaxServletVersion>3.0.1</javaxServletVersion>
         <openmrsAtomfeedVersion>2.5.6</openmrsAtomfeedVersion>
         <atomfeed.version>1.9.4</atomfeed.version>
+		<webservicesRestModuleVersion>2.16</webservicesRestModuleVersion>
 	</properties>
 	
 	<dependencies>
