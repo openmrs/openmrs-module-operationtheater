@@ -25,27 +25,33 @@
 
     <context:component-scan base-package="org.openmrs.module.operationtheater" />
 
+    <bean id="surgicalBlockDao" class="org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="surgicalAppointmentDao" class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="surgicalAppointmentServiceImpl" class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentServiceImpl">
+        <property name="surgicalAppointmentDao">
+            <ref bean="surgicalAppointmentDao"/>
+        </property>
+        <property name="surgicalBlockDao">
+            <ref bean="surgicalBlockDao"/>
+        </property>
+    </bean>
+
     <bean id="surgicalAppointmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentServiceImpl">
-                <property name="surgicalAppointmentDao">
-                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentDao">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-                <property name="surgicalBlockDao">
-                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
+            <ref bean="surgicalAppointmentServiceImpl"/>
         </property>
         <property name="preInterceptors">
             <ref bean="serviceInterceptors"/>
@@ -64,20 +70,18 @@
         </property>
     </bean>
 
+    <bean id="surgicalBlockServiceImpl" class="org.openmrs.module.operationtheater.api.service.impl.SurgicalBlockServiceImpl">
+        <property name="surgicalBlockDAO">
+            <ref bean="surgicalBlockDao"/>
+        </property>
+    </bean>
+
     <bean id="surgicalBlockService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalBlockServiceImpl">
-                <property name="surgicalBlockDAO">
-                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
+            <ref bean="surgicalBlockServiceImpl"/>
         </property>
         <property name="preInterceptors">
             <ref bean="serviceInterceptors"/>
@@ -96,20 +100,24 @@
         </property>
     </bean>
 
+    <bean id="surgicalAppointmentAttributeTypeDAO" class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentAttributeTypeDAO">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+
+    <bean id="surgicalAppointmentAttributeTypeServiceImpl" class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentAttributeTypeServiceImpl">
+        <property name="surgicalAppointmentAttributeTypeDAO">
+            <ref bean="surgicalAppointmentAttributeTypeDAO"/>
+        </property>
+    </bean>
+
     <bean id="surgicalAppointmentAttributeTypeService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
         <property name="transactionManager">
             <ref bean="transactionManager"/>
         </property>
         <property name="target">
-            <bean class="org.openmrs.module.operationtheater.api.service.impl.SurgicalAppointmentAttributeTypeServiceImpl">
-                <property name="surgicalAppointmentAttributeTypeDAO">
-                    <bean class="org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentAttributeTypeDAO">
-                        <property name="sessionFactory">
-                            <ref bean="sessionFactory"/>
-                        </property>
-                    </bean>
-                </property>
-            </bean>
+            <ref bean="surgicalAppointmentAttributeTypeServiceImpl"/>
         </property>
         <property name="preInterceptors">
             <ref bean="serviceInterceptors"/>
