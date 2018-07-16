@@ -29,6 +29,11 @@
 		<class>org.openmrs.module.operationtheater.advice.SurgicalBlockAdvice</class>
 	</advice>
 
+	<advice>
+		<point>org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService</point>
+		<class>org.openmrs.module.operationtheater.advice.SurgicalAppointmentAdvice</class>
+	</advice>
+
 	<mappingFiles>
 		SurgicalAppointment.hbm.xml
 		SurgicalBlock.hbm.xml

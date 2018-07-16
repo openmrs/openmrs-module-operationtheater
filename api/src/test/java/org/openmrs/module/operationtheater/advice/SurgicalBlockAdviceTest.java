@@ -11,19 +11,25 @@ import org.mockito.Mock;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import java.lang.reflect.Method;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
@@ -57,6 +63,9 @@ public class SurgicalBlockAdviceTest {
 	private AllEventRecordsQueueJdbcImpl allEventRecordsQueue;
 	
 	@Mock
+	private SurgicalAppointmentAdvice surgicalAppointmentAdvice;
+	
+	@Mock
 	private Event event;
 	
 	@Mock
@@ -75,6 +84,7 @@ public class SurgicalBlockAdviceTest {
 		atomFeedSpringTransactionManager = spy(new AtomFeedSpringTransactionManager(transactionManager));
 		
 		whenNew(AtomFeedSpringTransactionManager.class).withAnyArguments().thenReturn(atomFeedSpringTransactionManager);
+		whenNew(SurgicalAppointmentAdvice.class).withNoArguments().thenReturn(surgicalAppointmentAdvice);
 		
 		when(surgicalBlock.getUuid()).thenReturn(UUID);
 		whenNew(AllEventRecordsQueueJdbcImpl.class).withArguments(this.atomFeedSpringTransactionManager)
@@ -100,6 +110,29 @@ public class SurgicalBlockAdviceTest {
 		verify(eventService, times(1)).notify(any());
 		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(Date.class), any(URI.class),
 		    eq(String.format("/openmrs/ws/rest/v1/surgicalBlock/%s?v=full", UUID)), eq("surgicalblock"));
+	}
+	
+	@Test
+	public void shouldRaiseSurgicalAppointmentEventAlongWithSurgicalBlockChanges() throws Throwable {
+		SurgicalAppointment surgicalAppointment1 = mock(SurgicalAppointment.class);
+		SurgicalAppointment surgicalAppointment2 = mock(SurgicalAppointment.class);
+		
+		Set<SurgicalAppointment> surgicalAppointments = new HashSet<>(
+		        Arrays.asList(surgicalAppointment1, surgicalAppointment2));
+		Method saveMethod = this.getClass().getMethod("save");
+		
+		when(surgicalBlock.getSurgicalAppointments()).thenReturn(surgicalAppointments);
+		surgicalBlockAdvice.afterReturning(surgicalBlock, saveMethod, null, null);
+		
+		verify(atomFeedSpringTransactionManager, times(1)).executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
+		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_BLOCK_CHANGE);
+		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
+		verify(eventService, times(1)).notify(any());
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(Date.class), any(URI.class),
+		    eq(String.format("/openmrs/ws/rest/v1/surgicalBlock/%s?v=full", UUID)), eq("surgicalblock"));
+		verifyNew(SurgicalAppointmentAdvice.class).withNoArguments();
+		verify(surgicalAppointmentAdvice).afterReturning(surgicalAppointment1, saveMethod, null, null);
+		verify(surgicalAppointmentAdvice).afterReturning(surgicalAppointment2, saveMethod, null, null);
 	}
 	
 	@Test
