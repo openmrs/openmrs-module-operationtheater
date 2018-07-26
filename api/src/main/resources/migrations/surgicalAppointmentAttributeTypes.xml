@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
+                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+
+    <changeSet id="201807031546" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'procedure'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding procedure attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('procedure', 'Procedure', 'java.lang.String' ,'1', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031554" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'estTimeHours'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding estTimeHours attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('estTimeHours', 'Estimated time in hours','java.lang.String', '2', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031555" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'estTimeMinutes'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding estTimeMinutes attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('estTimeMinutes', 'Estimated time in minutes','java.lang.String', '3', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031556" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'cleaningTime'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding cleaningTime attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('cleaningTime', 'Cleaning time in minutes', 'java.lang.String' ,'4', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031610" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'otherSurgeon'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding otherSurgeon attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('otherSurgeon', 'Other Surgeon', 'org.openmrs.Provider' ,'5', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031611" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'surgicalAssistant'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding surgicalAssistant attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('surgicalAssistant', 'Surgical Assistant', 'java.lang.String' ,'6', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031612" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'anaesthetist'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding anaesthetist attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('anaesthetist', 'Anaesthetist', 'java.lang.String' ,'7', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031613" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'scrubNurse'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding scrubNurse attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('scrubNurse', 'Scrub Nurse', 'java.lang.String' ,'8', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031614" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
+                'circulatingNurse'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding circulatingNurse attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('circulatingNurse', 'Circulating Nurse', 'java.lang.String' ,'9', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+    <changeSet id="201807031615" author="Siva, Saikumar">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name = 'notes'
+            </sqlCheck>
+        </preConditions>
+        <comment>Adding notes attribute into surgical_appointment_attribute_type</comment>
+        <sql>
+            INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
+            date_created, uuid)
+            VALUES('notes', 'Notes', 'java.lang.String' ,'10', 8, NOW(), UUID());
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
