@@ -4,7 +4,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
 
-    <changeSet id="201807031546" author="Siva, Saikumar">
+    <changeSet id="201807031546-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -15,10 +15,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('procedure', 'Procedure', 'java.lang.String' ,'1', 8, NOW(), UUID());
+            VALUES('procedure', 'Procedure', 'java.lang.String' ,'1', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031554" author="Siva, Saikumar">
+    <changeSet id="201807031554-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -29,10 +29,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('estTimeHours', 'Estimated time in hours','java.lang.String', '2', 8, NOW(), UUID());
+            VALUES('estTimeHours', 'Estimated time in hours','java.lang.String', '2', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031555" author="Siva, Saikumar">
+    <changeSet id="201807031555-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -43,10 +43,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('estTimeMinutes', 'Estimated time in minutes','java.lang.String', '3', 8, NOW(), UUID());
+            VALUES('estTimeMinutes', 'Estimated time in minutes','java.lang.String', '3', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031556" author="Siva, Saikumar">
+    <changeSet id="201807031556-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -57,10 +57,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('cleaningTime', 'Cleaning time in minutes', 'java.lang.String' ,'4', 8, NOW(), UUID());
+            VALUES('cleaningTime', 'Cleaning time in minutes', 'java.lang.String' ,'4', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031610" author="Siva, Saikumar">
+    <changeSet id="201807031610-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -71,10 +71,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('otherSurgeon', 'Other Surgeon', 'org.openmrs.Provider' ,'5', 8, NOW(), UUID());
+            VALUES('otherSurgeon', 'Other Surgeon', 'org.openmrs.Provider' ,'5', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031611" author="Siva, Saikumar">
+    <changeSet id="201807031611-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -85,10 +85,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('surgicalAssistant', 'Surgical Assistant', 'java.lang.String' ,'6', 8, NOW(), UUID());
+            VALUES('surgicalAssistant', 'Surgical Assistant', 'java.lang.String' ,'6', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031612" author="Siva, Saikumar">
+    <changeSet id="201807031612-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -99,10 +99,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('anaesthetist', 'Anaesthetist', 'java.lang.String' ,'7', 8, NOW(), UUID());
+            VALUES('anaesthetist', 'Anaesthetist', 'java.lang.String' ,'7', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031613" author="Siva, Saikumar">
+    <changeSet id="201807031613-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -113,10 +113,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('scrubNurse', 'Scrub Nurse', 'java.lang.String' ,'8', 8, NOW(), UUID());
+            VALUES('scrubNurse', 'Scrub Nurse', 'java.lang.String' ,'8', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031614" author="Siva, Saikumar">
+    <changeSet id="201807031614-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
@@ -127,10 +127,10 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('circulatingNurse', 'Circulating Nurse', 'java.lang.String' ,'9', 8, NOW(), UUID());
+            VALUES('circulatingNurse', 'Circulating Nurse', 'java.lang.String' ,'9', 1, NOW(), UUID());
         </sql>
     </changeSet>
-    <changeSet id="201807031615" author="Siva, Saikumar">
+    <changeSet id="201807031615-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name = 'notes'
@@ -140,7 +140,7 @@
         <sql>
             INSERT INTO surgical_appointment_attribute_type (name, description, format, sort_weight, creator,
             date_created, uuid)
-            VALUES('notes', 'Notes', 'java.lang.String' ,'10', 8, NOW(), UUID());
+            VALUES('notes', 'Notes', 'java.lang.String' ,'10', 1, NOW(), UUID());
         </sql>
     </changeSet>
 
