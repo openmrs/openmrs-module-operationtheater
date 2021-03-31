@@ -30,9 +30,9 @@ public class SurgicalBlockSearchHandler implements SearchHandler {
 	        RestConstants.VERSION_1 + "/surgicalBlock", Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*"),
 	        new SearchQuery.Builder(
 	                "Allows you to find surgical blocks which fall between the startDatetime and endDatetime")
-	                        .withRequiredParameters("startDatetime", "endDatetime").withOptionalParameters("includeVoided")
-	                        .build());
-	
+	                        .withRequiredParameters("startDatetime", "endDatetime")
+							.withOptionalParameters("includeVoided", "activeBlocks").build());
+
 	@Override
 	public SearchConfig getSearchConfig() {
 		return searchConfig;
@@ -45,11 +45,13 @@ public class SurgicalBlockSearchHandler implements SearchHandler {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 		String includeVoidedString = requestContext.getRequest().getParameter("includeVoided");
 		Boolean includeVoided = Boolean.valueOf(includeVoidedString);
-		
+		String activeBlocksString = requestContext.getRequest().getParameter("activeBlocks");
+		Boolean activeBlocks = Boolean.valueOf(activeBlocksString);
+
 		List<SurgicalBlock> results = null;
 		try {
 			results = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(
-			    simpleDateFormat.parse(startDatetime), simpleDateFormat.parse(endDatetime), includeVoided);
+			    simpleDateFormat.parse(startDatetime), simpleDateFormat.parse(endDatetime), includeVoided, activeBlocks);
 		}
 		catch (ParseException e) {
 			e.printStackTrace();

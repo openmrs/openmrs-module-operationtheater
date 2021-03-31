@@ -98,8 +98,8 @@ public class SurgicalBlockServiceTest extends BaseModuleWebContextSensitiveTest 
 		Date startDatetime = simpleDateFormat.parse("2017-04-25 09:00:00.0");
 		Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 		Context.authenticate(superUser, superUserPassword);
-		assertNotNull(
-		    surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false));
+		assertNotNull(surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime,
+		    false, false));
 	}
 	
 	@Test
@@ -108,8 +108,8 @@ public class SurgicalBlockServiceTest extends BaseModuleWebContextSensitiveTest 
 		Date startDatetime = simpleDateFormat.parse("2017-04-25 09:00:00.0");
 		Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 		Context.authenticate(normalUser, normalUserPassword);
-		assertNotNull(
-		    surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false));
+		assertNotNull(surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime,
+		    false, false));
 	}
 	
 	@Test(expected = APIAuthenticationException.class)
@@ -118,8 +118,8 @@ public class SurgicalBlockServiceTest extends BaseModuleWebContextSensitiveTest 
 		Date startDatetime = simpleDateFormat.parse("2017-04-25 09:00:00.0");
 		Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 		Context.authenticate(userWithoutPrivilege, userWithoutPrivilegePassword);
-		assertNotNull(
-		    surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false));
+		assertNotNull(surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime,
+		    false, false));
 	}
 	
 }

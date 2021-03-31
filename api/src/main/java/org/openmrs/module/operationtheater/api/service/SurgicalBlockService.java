@@ -19,7 +19,7 @@ public interface SurgicalBlockService extends OpenmrsService {
 	
 	@Authorized({ "View OT Schedules" })
 	List<SurgicalBlock> getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(Date startDatetime, Date endDatetime,
-	        Boolean includeVoided);
-	
+	        Boolean includeVoided, Boolean activeBlocks);
+
 	void validateSurgicalBlock(SurgicalBlock surgicalBlock);
 }
