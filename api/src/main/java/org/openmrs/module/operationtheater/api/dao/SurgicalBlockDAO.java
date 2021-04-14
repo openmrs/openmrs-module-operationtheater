@@ -52,11 +52,16 @@ public class SurgicalBlockDAO {
 	}
 	
 	public List<SurgicalBlock> getSurgicalBlocksFor(Date startDatetime, Date endDatetime, Provider provider,
-	        Location location, Boolean includeVoided) {
+	        Location location, Boolean includeVoided, Boolean activeBlocks) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(SurgicalBlock.class, "surgicalBlock");
-		criteria.add(Restrictions.ge("startDatetime", startDatetime));
-		criteria.add(Restrictions.le("endDatetime", endDatetime));
+		if (activeBlocks) {
+			criteria.add(Restrictions.ge("endDatetime", startDatetime));
+			criteria.add(Restrictions.le("startDatetime", endDatetime));
+		} else {
+			criteria.add(Restrictions.ge("startDatetime", startDatetime));
+			criteria.add(Restrictions.le("endDatetime", endDatetime));
+		}
 		if (!includeVoided) {
 			criteria.add(Restrictions.eq("voided", false));
 		}

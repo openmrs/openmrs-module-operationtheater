@@ -227,13 +227,13 @@ public class SurgicalBlockServiceImplTest {
 		Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 		
-		when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(false)))
-		        .thenReturn(Arrays.asList(surgicalBlock));
+		when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(false),
+		    eq(false))).thenReturn(Arrays.asList(surgicalBlock));
 		
 		List<SurgicalBlock> surgicalBlocks = surgicalBlockService
-		        .getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false);
+		        .getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false, false);
 		
-		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false);
+		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false, false);
 		assertEquals(surgicalBlock, surgicalBlocks.get(0));
 	}
 	
@@ -242,13 +242,29 @@ public class SurgicalBlockServiceImplTest {
 		Date startDatetime = simpleDateFormat.parse("2017-04-25 13:45:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-25 14:45:00");
 		
-		when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(true)))
-		        .thenReturn(Arrays.asList(surgicalBlock));
+		when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(true),
+		    eq(false))).thenReturn(Arrays.asList(surgicalBlock));
 		
 		List<SurgicalBlock> surgicalBlocks = surgicalBlockService
-		        .getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, true);
+		        .getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, true, false);
 		
-		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, true);
+		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, true, false);
+		assertEquals(surgicalBlock, surgicalBlocks.get(0));
+	}
+	
+	@Test
+	public void shouldGetSurgicalBlocksAllSurgicalBlocksWhichAreAcrossMultipleDaysIfWePassActiveAsTrue()
+	        throws ParseException {
+		Date startDatetime = simpleDateFormat.parse("2016-04-24 10:00:00");
+		Date endDatetime = simpleDateFormat.parse("2016-04-25 16:00:00");
+		
+		when(surgicalBlockDAO.getSurgicalBlocksFor(eq(startDatetime), eq(endDatetime), eq(null), eq(null), eq(false),
+		    eq(true))).thenReturn(Arrays.asList(surgicalBlock));
+		
+		List<SurgicalBlock> surgicalBlocks = surgicalBlockService
+		        .getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(startDatetime, endDatetime, false, true);
+		
+		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false, true);
 		assertEquals(surgicalBlock, surgicalBlocks.get(0));
 	}
 }
