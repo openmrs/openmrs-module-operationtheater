@@ -4,7 +4,7 @@
 	
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>operationtheater</artifactId>
-	<version>1.3.0-SNAPSHOT</version>
+	<version>1.3.0</version>
 	<packaging>pom</packaging>
 	<name>Operation Theater</name>
 	<description>This module supports scheduling and management of operation theaters in a hospital.</description>
@@ -13,7 +13,7 @@
 		<connection>scm:git:git@github.com:openmrs/openmrs-module-operationtheater.git</connection>
 		<developerConnection>scm:git:git@github.com:openmrs/openmrs-module-operationtheater.git</developerConnection>
 		<url>https://github.com/openmrs/openmrs-module-operationtheater/</url>
-		<tag>HEAD</tag>
+		<tag>1.3.0</tag>
 	</scm>
 	
 	<modules>
