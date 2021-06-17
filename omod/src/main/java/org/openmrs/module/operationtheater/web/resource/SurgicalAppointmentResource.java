@@ -1,5 +1,11 @@
 package org.openmrs.module.operationtheater.web.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
@@ -107,6 +113,28 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 		}
 		return null;
 	}
+
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+					.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
+					.property("surgicalAppointmentAttributes", new StringProperty());
+		}
+		if (rep instanceof FullRepresentation) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+					.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
+					.property("surgicalAppointmentAttributes", new StringProperty());
+		}
+		return modelImpl;
+	}
 	
 	@Override
 	public DelegatingResourceDescription getCreatableProperties() {
@@ -122,6 +150,16 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 		delegatingResourceDescription.addProperty("sortWeight");
 		delegatingResourceDescription.addProperty("surgicalAppointmentAttributes");
 		return delegatingResourceDescription;
+	}
+
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+				.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+				.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+				.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+				.property("surgicalBlock", new StringProperty())
+				.property("surgicalAppointmentAttributes", new StringProperty());
 	}
 	
 	@PropertyGetter("surgicalAppointmentAttributes")

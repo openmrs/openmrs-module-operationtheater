@@ -1,5 +1,10 @@
 package org.openmrs.module.operationtheater.web.resource;
 
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
@@ -68,6 +73,22 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
 		}
 		return null;
 	}
+
+	@Override
+	public Model getGETModel(Representation rep) {
+		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
+		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+					.property("value", new StringProperty())
+					.property("surgicalAppointmentAttributeType", new StringProperty());
+		}
+		if (rep instanceof FullRepresentation) {
+			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+					.property("value", new StringProperty())
+					.property("surgicalAppointmentAttributeType", new StringProperty());
+		}
+		return modelImpl;
+	}
 	
 	@Override
 	public DelegatingResourceDescription getCreatableProperties() {
@@ -78,7 +99,13 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
 		delegatingResourceDescription.addProperty("value");
 		return delegatingResourceDescription;
 	}
-	
+
+	@Override
+	public Model getCREATEModel(Representation rep) {
+		return new ModelImpl().property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
+				.property("value", new StringProperty()).property("surgicalAppointmentAttributeType", new StringProperty());
+	}
+
 	@Override
 	public SurgicalAppointment getParent(SurgicalAppointmentAttribute instance) {
 		return instance.getSurgicalAppointment();
