@@ -24,7 +24,7 @@
 	<properties>
 		<openmrsPlatformVersion>2.0.4</openmrsPlatformVersion>
 		<openmrsLegacyUiVersion>1.0</openmrsLegacyUiVersion>
-		<webservices.restVersion>2.17</webservices.restVersion>
+		<webservices.restVersion>2.21.0</webservices.restVersion>
 		<bedmanagementVersion>5.10.0</bedmanagementVersion>
 		<junitVersion>4.12</junitVersion>
 		<powerMockVersion>1.6.5</powerMockVersion>
