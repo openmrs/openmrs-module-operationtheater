@@ -1,7 +1,7 @@
 package org.openmrs.module.operationtheater.advice;
 
 import org.ict4h.atomfeed.server.service.Event;
-import org.joda.time.DateTime;
+import java.time.LocalDateTime;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 
 import java.lang.reflect.Method;
@@ -26,7 +26,7 @@ public class SurgicalAppointmentAdvice extends BaseAdvice {
 	public void afterReturning(Object returnValue, Method method, Object[] arguments, Object target) throws Throwable {
 		if (shouldRaiseEvent() && SAVE_PATIENT_SURGICAL_APPOINTMENT_METHOD.equals(method.getName())) {
 			String contents = getUrlPattern().replace("{uuid}", ((SurgicalAppointment) returnValue).getUuid());
-			notifyEvent(new Event(UUID.randomUUID().toString(), TITLE, DateTime.now(), (URI) null, contents, CATEGORY));
+			notifyEvent(new Event(UUID.randomUUID().toString(), TITLE, LocalDateTime.now(), (URI) null, contents, CATEGORY));
 		}
 	}
 	
