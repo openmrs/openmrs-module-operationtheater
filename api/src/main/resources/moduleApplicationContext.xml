@@ -65,7 +65,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService</value>
-                <ref local="surgicalAppointmentService"/>
+                <ref bean="surgicalAppointmentService"/>
             </list>
         </property>
     </bean>
@@ -95,7 +95,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.operationtheater.api.service.SurgicalBlockService</value>
-                <ref local="surgicalBlockService"/>
+                <ref bean="surgicalBlockService"/>
             </list>
         </property>
     </bean>
@@ -131,7 +131,7 @@
         <property name="moduleService">
             <list merge="true">
                 <value>org.openmrs.module.operationtheater.api.service.SurgicalAppointmentAttributeTypeService</value>
-                <ref local="surgicalAppointmentAttributeTypeService"/>
+                <ref bean="surgicalAppointmentAttributeTypeService"/>
             </list>
         </property>
     </bean>

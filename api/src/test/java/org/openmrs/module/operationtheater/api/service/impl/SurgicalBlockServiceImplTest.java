@@ -94,7 +94,7 @@ public class SurgicalBlockServiceImplTest {
 		surgicalBlocks.add(surgicalBlock);
 		
 		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()),
-		    eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(null))).thenReturn(surgicalBlocks);
+		    eq(surgicalBlock.getEndDatetime()), any(), eq(null), eq(null))).thenReturn(surgicalBlocks);
 		
 		exception.expect(ValidationException.class);
 		exception.expectMessage("Surgical Block has conflicting time with existing block(s) for this surgeon");

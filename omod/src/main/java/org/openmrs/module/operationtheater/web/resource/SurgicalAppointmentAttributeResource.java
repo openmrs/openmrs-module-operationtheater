@@ -23,7 +23,7 @@ import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOp
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
 @SubResource(parent = SurgicalAppointmentResource.class, path = "attribute", supportedClass = SurgicalAppointmentAttribute.class, supportedOpenmrsVersions = {
-        "2.0.*", "2.1.*" })
+        "2.0.*", "2.1.*", "2.2.*", "2.3.*", "2.4.*" })
 public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<SurgicalAppointmentAttribute, SurgicalAppointment, SurgicalAppointmentResource> {
 	
 	@Override

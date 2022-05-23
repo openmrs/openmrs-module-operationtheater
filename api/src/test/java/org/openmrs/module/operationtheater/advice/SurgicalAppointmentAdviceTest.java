@@ -12,13 +12,13 @@ import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
+import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -35,6 +35,7 @@ import static org.powermock.api.mockito.PowerMockito.whenNew;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ Context.class, SurgicalAppointmentAdvice.class })
+@PowerMockIgnore("javax.management.*")
 public class SurgicalAppointmentAdviceTest {
 	
 	private static final String URL_PATTERN = "atomfeed.event.urlPatternForSurgicalAppointment";
@@ -99,8 +100,8 @@ public class SurgicalAppointmentAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_APPOINTMENT_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Appointment"), any(Date.class),
-		    any(URI.class), eq(String.format("/openmrs/ws/rest/v1/surgicalAppointment/%s?v=full", UUID)),
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Appointment"), any(LocalDateTime.class),
+		    eq(null), eq(String.format("/openmrs/ws/rest/v1/surgicalAppointment/%s?v=full", UUID)),
 		    eq("surgicalappointment"));
 	}
 	
@@ -115,8 +116,8 @@ public class SurgicalAppointmentAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_APPOINTMENT_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Appointment"), any(Date.class),
-		    any(URI.class), eq(String.format("/openmrs/ws/%s", UUID)), eq("surgicalappointment"));
+		verifyNew(Event.class, times(1)).withArguments(any(String.class), eq("Surgical Appointment"),
+		    any(LocalDateTime.class), eq(null), eq(String.format("/openmrs/ws/%s", UUID)), eq("surgicalappointment"));
 	}
 	
 	@Test

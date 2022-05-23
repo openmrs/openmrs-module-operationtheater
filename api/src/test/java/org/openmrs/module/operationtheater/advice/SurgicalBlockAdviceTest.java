@@ -18,10 +18,9 @@ import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.lang.reflect.Method;
-import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -108,7 +107,7 @@ public class SurgicalBlockAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_BLOCK_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(Date.class), any(URI.class),
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(LocalDateTime.class), eq(null),
 		    eq(String.format("/openmrs/ws/rest/v1/surgicalBlock/%s?v=full", UUID)), eq("surgicalblock"));
 	}
 	
@@ -128,7 +127,7 @@ public class SurgicalBlockAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_BLOCK_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(Date.class), any(URI.class),
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(LocalDateTime.class), eq(null),
 		    eq(String.format("/openmrs/ws/rest/v1/surgicalBlock/%s?v=full", UUID)), eq("surgicalblock"));
 		verifyNew(SurgicalAppointmentAdvice.class).withNoArguments();
 		verify(surgicalAppointmentAdvice).afterReturning(surgicalAppointment1, saveMethod, null, null);
@@ -146,7 +145,7 @@ public class SurgicalBlockAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_BLOCK_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_BLOCK_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(Date.class), any(URI.class),
+		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Block"), any(LocalDateTime.class), eq(null),
 		    eq(String.format("/openmrs/ws/%s", UUID)), eq("surgicalblock"));
 	}
 	
