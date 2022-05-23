@@ -1,20 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	
 	<modelVersion>4.0.0</modelVersion>
-	<dependencies>
-		<dependency>
-			<groupId>org.ict4h.openmrs</groupId>
-			<artifactId>openmrs-atomfeed-common</artifactId>
-			<version>${openmrsAtomfeedVersion}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.ict4h</groupId>
-			<artifactId>atomfeed-server</artifactId>
-			<version>${atomfeed.version}</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>operationtheater</artifactId>
@@ -59,7 +45,7 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>javax.servlet-api</artifactId>
 				<version>${javaxServletVersion}</version>
-				<scope>test</scope>
+				<scope>provided</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
