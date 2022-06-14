@@ -27,7 +27,7 @@ public class SurgicalBlockSearchHandler implements SearchHandler {
 	SurgicalBlockService surgicalBlockService;
 	
 	private final SearchConfig searchConfig = new SearchConfig("surgicalBlocksInDateRange",
-	        RestConstants.VERSION_1 + "/surgicalBlock", Arrays.asList("1.10.*", "1.11.*", "1.12.*", "2.0.*", "2.1.*", "2.2.*", "2.3.*", "2.4.*"),
+	        RestConstants.VERSION_1 + "/surgicalBlock", Arrays.asList("1.10.*  - 9.*"),
 	        new SearchQuery.Builder(
 	                "Allows you to find surgical blocks which fall between the startDatetime and endDatetime")
 	                        .withRequiredParameters("startDatetime", "endDatetime")

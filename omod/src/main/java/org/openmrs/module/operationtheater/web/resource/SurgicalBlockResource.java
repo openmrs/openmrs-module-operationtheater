@@ -32,8 +32,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Resource(name = RestConstants.VERSION_1
-        + "/surgicalBlock", supportedClass = SurgicalBlock.class, supportedOpenmrsVersions = { "2.0.*", "2.1.*", "2.2.*",
-                "2.3.*", "2.4.*" })
+        + "/surgicalBlock", supportedClass = SurgicalBlock.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
 public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBlock> {
 	
 	@Override

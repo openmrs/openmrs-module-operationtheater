@@ -36,8 +36,7 @@ import java.util.List;
 import java.util.Set;
 
 @Resource(name = RestConstants.VERSION_1
-        + "/surgicalAppointment", supportedClass = SurgicalAppointment.class, supportedOpenmrsVersions = { "2.0.*", "2.1.*",
-                "2.2.*", "2.3.*", "2.4.*" })
+        + "/surgicalAppointment", supportedClass = SurgicalAppointment.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
 public class SurgicalAppointmentResource extends DataDelegatingCrudResource<SurgicalAppointment> {
 	
 	@Override
