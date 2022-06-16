@@ -277,7 +277,7 @@
     </changeSet>
     <changeSet id="Amman-201707121103" author="Shireesha, Maharjun">
         <preConditions onFail="CONTINUE">
-            <tableExists tableName="surgical_appointment_attribute" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute"/>
         </preConditions>
         <comment>Increase the column size</comment>
         <sql>
@@ -304,12 +304,11 @@
     </changeSet>
     <changeSet id="201807031533" author="Siva, Saikumar" context="rel3.1">
         <preConditions onFail="CONTINUE">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
         </preConditions>
         <comment>Adding unique constraint for name column</comment>
         <addUniqueConstraint columnNames="name"
                              constraintName="unique_attributes"
-                             schemaName="openmrs"
                              tableName="surgical_appointment_attribute_type"/>
     </changeSet>
     <include file="migrations/surgicalAppointmentAttributeTypes.xml" />

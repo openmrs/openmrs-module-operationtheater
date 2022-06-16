@@ -6,7 +6,7 @@
 
     <changeSet id="201807031546-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'procedure'
             </sqlCheck>
@@ -20,7 +20,7 @@
     </changeSet>
     <changeSet id="201807031554-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'estTimeHours'
             </sqlCheck>
@@ -34,7 +34,7 @@
     </changeSet>
     <changeSet id="201807031555-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'estTimeMinutes'
             </sqlCheck>
@@ -48,7 +48,7 @@
     </changeSet>
     <changeSet id="201807031556-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'cleaningTime'
             </sqlCheck>
@@ -62,7 +62,7 @@
     </changeSet>
     <changeSet id="201807031610-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'otherSurgeon'
             </sqlCheck>
@@ -76,7 +76,7 @@
     </changeSet>
     <changeSet id="201807031611-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'surgicalAssistant'
             </sqlCheck>
@@ -90,7 +90,7 @@
     </changeSet>
     <changeSet id="201807031612-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'anaesthetist'
             </sqlCheck>
@@ -104,7 +104,7 @@
     </changeSet>
     <changeSet id="201807031613-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'scrubNurse'
             </sqlCheck>
@@ -118,7 +118,7 @@
     </changeSet>
     <changeSet id="201807031614-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name =
                 'circulatingNurse'
             </sqlCheck>
@@ -132,7 +132,7 @@
     </changeSet>
     <changeSet id="201807031615-1" author="Siva, Saikumar">
         <preConditions onFail="MARK_RAN">
-            <tableExists tableName="surgical_appointment_attribute_type" schemaName="openmrs"/>
+            <tableExists tableName="surgical_appointment_attribute_type"/>
             <sqlCheck expectedResult="0">select count(1) from surgical_appointment_attribute_type where name = 'notes'
             </sqlCheck>
         </preConditions>
