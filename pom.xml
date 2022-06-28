@@ -27,7 +27,7 @@
 		<webservices.restVersion>2.29.0</webservices.restVersion>
 		<bedmanagementVersion>5.13.0</bedmanagementVersion>
 		<javaxServletVersion>4.0.1</javaxServletVersion>
-		<openmrsAtomfeedVersion>2.6.1</openmrsAtomfeedVersion>
+		<openmrsAtomfeedVersion>2.6.2-SNAPSHOT</openmrsAtomfeedVersion>
 		<atomfeed.version>1.10.1</atomfeed.version>
 	</properties>
 	
