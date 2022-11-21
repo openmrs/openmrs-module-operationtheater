@@ -27,7 +27,7 @@
 		<webservices.restVersion>2.29.0</webservices.restVersion>
 		<bedmanagementVersion>5.13.0</bedmanagementVersion>
 		<javaxServletVersion>4.0.1</javaxServletVersion>
-		<openmrsAtomfeedVersion>2.6.1</openmrsAtomfeedVersion>
+		<openmrsAtomfeedVersion>2.6.2</openmrsAtomfeedVersion>
 		<atomfeed.version>1.10.1</atomfeed.version>
 	</properties>
 	
@@ -218,6 +218,18 @@
 			<name>OpenMRS Nexus Repository</name>
 			<url>https://mavenrepo.openmrs.org/public</url>
 		</repository>
+		<repository>
+			<id>sonatype-nexus-snapshots</id>
+			<name>Sonatype Nexus Snapshots</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>interval:10080</updatePolicy>
+			</snapshots>
+		</repository>
 	</repositories>
 	<pluginRepositories>
 		<pluginRepository>
@@ -242,5 +254,4 @@
 			<url>https://mavenrepo.openmrs.org/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
-
 </project>
