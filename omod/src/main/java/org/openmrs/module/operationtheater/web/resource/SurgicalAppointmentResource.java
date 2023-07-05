@@ -6,6 +6,8 @@ import io.swagger.models.properties.DateProperty;
 import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
+import org.apache.commons.lang.StringUtils;
+import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
@@ -34,6 +36,8 @@ import org.openmrs.module.webservices.validation.ValidateUtil;
 import javax.xml.bind.SchemaOutputResolver;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collections;
 
 @Resource(name = RestConstants.VERSION_1
         + "/surgicalAppointment", supportedClass = SurgicalAppointment.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
@@ -93,6 +97,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedNumber");
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
+			description.addProperty("patientObservations");
 			return description;
 		}
 		if ((representation instanceof FullRepresentation)) {
@@ -108,6 +113,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedNumber");
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
+			description.addProperty("patientObservations");
 			return description;
 		}
 		return null;
@@ -122,7 +128,8 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
 					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
 					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
-					.property("surgicalAppointmentAttributes", new StringProperty());
+					.property("surgicalAppointmentAttributes", new StringProperty())
+					.property("patientObservations", new StringProperty());
 		}
 		if (rep instanceof FullRepresentation) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
@@ -130,7 +137,8 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
 					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
 					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
-					.property("surgicalAppointmentAttributes", new StringProperty());
+					.property("surgicalAppointmentAttributes", new StringProperty())
+					.property("patientObservations", new StringProperty());
 		}
 		return modelImpl;
 	}
@@ -192,5 +200,21 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			attr.setSurgicalAppointment(surgicalAppointment);
 		}
 		surgicalAppointment.setSurgicalAppointmentAttributes(attrs);
+	}
+	
+	@PropertyGetter("patientObservations")
+	public static List<Obs> getPatientObservations(SurgicalAppointment surgicalAppointment) {
+		String obsConceptNames = Context.getAdministrationService().getGlobalProperty("obs.conceptsForOT");
+		List<Obs> obsList = new ArrayList<Obs>();
+		if (StringUtils.isNotBlank(obsConceptNames)) {
+			String[] conceptNames = obsConceptNames.split(",");
+			for (String concept : conceptNames) {
+				obsList.addAll(Context.getObsService().getObservationsByPersonAndConcept(
+				    surgicalAppointment.getPatient().getPerson(), Context.getConceptService().getConcept(concept)));
+
+			}
+		}
+		Collections.sort(obsList, (Obs o1, Obs o2) -> o2.getObsId().compareTo(o1.getObsId()));
+		return obsList;
 	}
 }

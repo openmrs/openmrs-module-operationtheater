@@ -8,6 +8,9 @@ import org.mockito.MockitoAnnotations;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
+import org.openmrs.Person;
+import org.openmrs.Obs;
+import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
@@ -19,12 +22,16 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.openmrs.api.context.Context.getAdministrationService;
+import static org.openmrs.api.context.Context.getObsService;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @PrepareForTest({ Context.class, SurgicalAppointmentResource.class })
@@ -114,5 +121,33 @@ public class SurgicalAppointmentResourceTest {
 		
 		assertEquals("Ward", bedLocation);
 		verify(bedManagementService, times(1)).getBedAssignmentDetailsByPatient(patient);
+	}
+
+	@Test
+	public void shouldGetObservationsForPatient() {
+		SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+		Person person = new Person();
+		person.setPersonId(1);
+		Patient patient = new Patient();
+		patient.setUuid("uuid");
+		patient.setPersonId(1);
+		surgicalAppointment.setPatient(patient);
+
+		Concept concept = new Concept();
+		concept.setUuid("conceptuuid");
+		Obs obs = new Obs();
+		obs.setConcept(concept);
+		obs.setPerson(person);
+		obs.setObsDatetime(new Date());
+		List<Obs> expectedObsList = new ArrayList<>();
+		expectedObsList.add(obs);
+
+		when(getAdministrationService().getGlobalProperty("obs.conceptsForOT")).thenReturn("observation");
+		when(getObsService().getObservationsByPersonAndConcept(person, concept)).thenReturn(expectedObsList);
+
+		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
+
+		assertEquals(expectedObsList, actualObsList);
+		verify(Context.getObsService(), times(1)).getObservationsByPersonAndConcept(person, concept);
 	}
 }
