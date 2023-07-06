@@ -11,6 +11,9 @@ import org.openmrs.Provider;
 import org.openmrs.Person;
 import org.openmrs.Obs;
 import org.openmrs.Concept;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.ObsService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.bedmanagement.BedDetails;
 import org.openmrs.module.bedmanagement.service.BedManagementService;
@@ -30,8 +33,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.openmrs.api.context.Context.getAdministrationService;
-import static org.openmrs.api.context.Context.getObsService;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 @PrepareForTest({ Context.class, SurgicalAppointmentResource.class })
@@ -45,6 +46,15 @@ public class SurgicalAppointmentResourceTest {
 	
 	@Mock
 	BedManagementService bedManagementService;
+
+	@Mock
+	private AdministrationService administrationService;
+
+	@Mock
+	private ConceptService conceptService;
+
+	@Mock
+	private ObsService obsService;
 	
 	@Before
 	public void setUp() throws Exception {
@@ -52,6 +62,9 @@ public class SurgicalAppointmentResourceTest {
 		mockStatic(Context.class);
 		PowerMockito.when(Context.getService(SurgicalAppointmentService.class)).thenReturn(surgicalAppointmentService);
 		PowerMockito.when(Context.getService(BedManagementService.class)).thenReturn(bedManagementService);
+		PowerMockito.when(Context.getAdministrationService()).thenReturn(administrationService);
+		PowerMockito.when(Context.getConceptService()).thenReturn(conceptService);
+		PowerMockito.when(Context.getObsService()).thenReturn(obsService);
 	}
 	
 	@Test
@@ -142,8 +155,9 @@ public class SurgicalAppointmentResourceTest {
 		List<Obs> expectedObsList = new ArrayList<>();
 		expectedObsList.add(obs);
 
-		when(getAdministrationService().getGlobalProperty("obs.conceptsForOT")).thenReturn("observation");
-		when(getObsService().getObservationsByPersonAndConcept(person, concept)).thenReturn(expectedObsList);
+		when(administrationService.getGlobalProperty("obs.conceptMappingsForOT")).thenReturn("emrsource:observation");
+		when(conceptService.getConceptByMapping("observation", "emrsource", false)).thenReturn(concept);
+		when(obsService.getObservationsByPersonAndConcept(person, concept)).thenReturn(expectedObsList);
 
 		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
 

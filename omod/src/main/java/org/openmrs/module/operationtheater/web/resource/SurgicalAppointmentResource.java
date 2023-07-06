@@ -7,6 +7,7 @@ import io.swagger.models.properties.IntegerProperty;
 import io.swagger.models.properties.StringProperty;
 import io.swagger.models.properties.UUIDProperty;
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Concept;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
@@ -204,14 +205,16 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 	
 	@PropertyGetter("patientObservations")
 	public static List<Obs> getPatientObservations(SurgicalAppointment surgicalAppointment) {
-		String obsConceptNames = Context.getAdministrationService().getGlobalProperty("obs.conceptsForOT");
+		String obsConceptMappings = Context.getAdministrationService().getGlobalProperty("obs.conceptMappingsForOT");
 		List<Obs> obsList = new ArrayList<Obs>();
-		if (StringUtils.isNotBlank(obsConceptNames)) {
-			String[] conceptNames = obsConceptNames.split(",");
-			for (String concept : conceptNames) {
-				obsList.addAll(Context.getObsService().getObservationsByPersonAndConcept(
-				    surgicalAppointment.getPatient().getPerson(), Context.getConceptService().getConcept(concept)));
-
+		if (StringUtils.isNotBlank(obsConceptMappings)) {
+			String[] conceptMappingList = obsConceptMappings.split(",");
+			for (String conceptMapping : conceptMappingList) {
+				String[] conceptSourceAndCode = conceptMapping.split(":");
+				Concept concept = Context.getConceptService().getConceptByMapping(conceptSourceAndCode[1],
+				    conceptSourceAndCode[0], false);
+				obsList.addAll(Context.getObsService()
+				        .getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept));
 			}
 		}
 		Collections.sort(obsList, (Obs o1, Obs o2) -> o2.getObsId().compareTo(o1.getObsId()));
