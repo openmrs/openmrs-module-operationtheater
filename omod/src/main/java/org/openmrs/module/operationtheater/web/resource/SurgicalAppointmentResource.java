@@ -217,7 +217,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 				        .getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept));
 			}
 		}
-		Collections.sort(obsList, (Obs o1, Obs o2) -> o2.getObsId().compareTo(o1.getObsId()));
+//		Collections.sort(obsList, (Obs o1, Obs o2) -> o2.getObsId().compareTo(o1.getObsId()));
 		return obsList;
 	}
 }
