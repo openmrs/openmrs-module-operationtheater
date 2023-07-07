@@ -148,20 +148,27 @@ public class SurgicalAppointmentResourceTest {
 
 		Concept concept = new Concept();
 		concept.setUuid("conceptuuid");
+		concept.setConceptId(1);
+
 		Obs obs = new Obs();
+		obs.setObsId(1);
 		obs.setConcept(concept);
 		obs.setPerson(person);
 		obs.setObsDatetime(new Date());
-		List<Obs> expectedObsList = new ArrayList<>();
+		List<Obs> expectedObsList = new ArrayList<Obs>();
 		expectedObsList.add(obs);
 
 		when(administrationService.getGlobalProperty("obs.conceptMappingsForOT")).thenReturn("emrsource:observation");
 		when(conceptService.getConceptByMapping("observation", "emrsource", false)).thenReturn(concept);
-		when(obsService.getObservationsByPersonAndConcept(person, concept)).thenReturn(expectedObsList);
+		when(obsService.getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept))
+		        .thenReturn(expectedObsList);
 
 		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
 
 		assertEquals(expectedObsList, actualObsList);
-		verify(Context.getObsService(), times(1)).getObservationsByPersonAndConcept(person, concept);
+		verify(administrationService, times(1)).getGlobalProperty("obs.conceptMappingsForOT");
+		verify(conceptService, times(1)).getConceptByMapping("observation", "emrsource", false);
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(),
+		    concept);
 	}
 }
