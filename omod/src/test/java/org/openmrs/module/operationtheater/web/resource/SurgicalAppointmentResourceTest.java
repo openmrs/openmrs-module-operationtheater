@@ -46,13 +46,13 @@ public class SurgicalAppointmentResourceTest {
 	
 	@Mock
 	BedManagementService bedManagementService;
-
+	
 	@Mock
 	private AdministrationService administrationService;
-
+	
 	@Mock
 	private ConceptService conceptService;
-
+	
 	@Mock
 	private ObsService obsService;
 	
@@ -135,40 +135,68 @@ public class SurgicalAppointmentResourceTest {
 		assertEquals("Ward", bedLocation);
 		verify(bedManagementService, times(1)).getBedAssignmentDetailsByPatient(patient);
 	}
-
+	
 	@Test
 	public void shouldGetObservationsForPatient() {
 		SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
-		Person person = new Person();
-		person.setPersonId(1);
 		Patient patient = new Patient();
 		patient.setUuid("uuid");
 		patient.setPersonId(1);
 		surgicalAppointment.setPatient(patient);
-
+		
 		Concept concept = new Concept();
 		concept.setUuid("conceptuuid");
 		concept.setConceptId(1);
-
+		
 		Obs obs = new Obs();
 		obs.setObsId(1);
 		obs.setConcept(concept);
-		obs.setPerson(person);
+		obs.setPerson(patient);
 		obs.setObsDatetime(new Date());
 		List<Obs> expectedObsList = new ArrayList<Obs>();
 		expectedObsList.add(obs);
-
+		
 		when(administrationService.getGlobalProperty("obs.conceptMappingsForOT")).thenReturn("emrsource:observation");
 		when(conceptService.getConceptByMapping("observation", "emrsource", false)).thenReturn(concept);
-		when(obsService.getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept))
-		        .thenReturn(expectedObsList);
-
+		when(obsService.getObservationsByPersonAndConcept(patient, concept)).thenReturn(expectedObsList);
+		
 		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
-
+		
 		assertEquals(expectedObsList, actualObsList);
 		verify(administrationService, times(1)).getGlobalProperty("obs.conceptMappingsForOT");
 		verify(conceptService, times(1)).getConceptByMapping("observation", "emrsource", false);
-		verify(obsService, times(1)).getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(),
-		    concept);
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, concept);
+	}
+	
+	@Test
+	public void shouldGetObservationsForPatientWithConceptName() {
+		SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+		Patient patient = new Patient();
+		patient.setUuid("uuid");
+		patient.setPersonId(1);
+		surgicalAppointment.setPatient(patient);
+		
+		Concept concept = new Concept();
+		concept.setUuid("conceptuuid");
+		concept.setConceptId(2);
+		
+		Obs obs = new Obs();
+		obs.setObsId(2);
+		obs.setConcept(concept);
+		obs.setPerson(patient);
+		obs.setObsDatetime(new Date());
+		List<Obs> expectedObsList = new ArrayList<Obs>();
+		expectedObsList.add(obs);
+		
+		when(administrationService.getGlobalProperty("obs.conceptMappingsForOT")).thenReturn("BloodPressure");
+		when(conceptService.getConceptByName("BloodPressure")).thenReturn(concept);
+		when(obsService.getObservationsByPersonAndConcept(patient, concept)).thenReturn(expectedObsList);
+		
+		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
+		
+		assertEquals(expectedObsList, actualObsList);
+		verify(administrationService, times(1)).getGlobalProperty("obs.conceptMappingsForOT");
+		verify(conceptService, times(1)).getConceptByName("BloodPressure");
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, concept);
 	}
 }
