@@ -1,11 +1,10 @@
 package org.openmrs.module.operationtheater.web.resource;
 
-import io.swagger.models.Model;
-import io.swagger.models.ModelImpl;
-import io.swagger.models.properties.DateProperty;
-import io.swagger.models.properties.IntegerProperty;
-import io.swagger.models.properties.StringProperty;
-import io.swagger.models.properties.UUIDProperty;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Concept;
 import org.openmrs.Obs;
@@ -35,10 +34,13 @@ import org.openmrs.module.webservices.rest.web.response.ResponseException;
 import org.openmrs.module.webservices.validation.ValidateUtil;
 
 import javax.xml.bind.SchemaOutputResolver;
-import java.util.List;
-import java.util.Set;
-import java.util.ArrayList;
-import java.util.Collections;
+
+import io.swagger.models.Model;
+import io.swagger.models.ModelImpl;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.IntegerProperty;
+import io.swagger.models.properties.StringProperty;
+import io.swagger.models.properties.UUIDProperty;
 
 @Resource(name = RestConstants.VERSION_1
         + "/surgicalAppointment", supportedClass = SurgicalAppointment.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
@@ -119,27 +121,27 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 		}
 		return null;
 	}
-
+	
 	@Override
 	public Model getGETModel(Representation rep) {
 		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
 		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
-					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
-					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
-					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
-					.property("surgicalAppointmentAttributes", new StringProperty())
-					.property("patientObservations", new StringProperty());
+			        .property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+			        .property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+			        .property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+			        .property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
+			        .property("surgicalAppointmentAttributes", new StringProperty())
+			        .property("patientObservations", new StringProperty());
 		}
 		if (rep instanceof FullRepresentation) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
-					.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
-					.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
-					.property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
-					.property("surgicalAppointmentAttributes", new StringProperty())
-					.property("patientObservations", new StringProperty());
+			        .property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+			        .property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+			        .property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+			        .property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
+			        .property("surgicalAppointmentAttributes", new StringProperty())
+			        .property("patientObservations", new StringProperty());
 		}
 		return modelImpl;
 	}
@@ -159,15 +161,15 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 		delegatingResourceDescription.addProperty("surgicalAppointmentAttributes");
 		return delegatingResourceDescription;
 	}
-
+	
 	@Override
 	public Model getCREATEModel(Representation rep) {
 		return new ModelImpl().property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-				.property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
-				.property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
-				.property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
-				.property("surgicalBlock", new StringProperty())
-				.property("surgicalAppointmentAttributes", new StringProperty());
+		        .property("patient", new StringProperty()).property("actualStartDateTime", new DateProperty())
+		        .property("actualEndDateTime", new DateProperty()).property("status", new StringProperty())
+		        .property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
+		        .property("surgicalBlock", new StringProperty())
+		        .property("surgicalAppointmentAttributes", new StringProperty());
 	}
 	
 	@PropertyGetter("surgicalAppointmentAttributes")
@@ -205,19 +207,40 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 	
 	@PropertyGetter("patientObservations")
 	public static List<Obs> getPatientObservations(SurgicalAppointment surgicalAppointment) {
-		String obsConceptMappings = Context.getAdministrationService().getGlobalProperty("obs.conceptMappingsForOT");
 		List<Obs> obsList = new ArrayList<Obs>();
+		String obsConceptMappings = Context.getAdministrationService().getGlobalProperty("obs.conceptMappingsForOT");
 		if (StringUtils.isNotBlank(obsConceptMappings)) {
 			String[] conceptMappingList = obsConceptMappings.split(",");
 			for (String conceptMapping : conceptMappingList) {
-				String[] conceptSourceAndCode = conceptMapping.split(":");
-				Concept concept = Context.getConceptService().getConceptByMapping(conceptSourceAndCode[1],
-				    conceptSourceAndCode[0], false);
-				obsList.addAll(Context.getObsService()
-				        .getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept));
+				String trimmedMapping = conceptMapping.trim();
+				String[] conceptSourceAndCode = trimmedMapping.split(":");
+				Concept concept = null;
+				
+				String source = conceptSourceAndCode[0].trim();
+				String code = (conceptSourceAndCode.length > 1 && StringUtils.isNotBlank(conceptSourceAndCode[1]))
+				        ? conceptSourceAndCode[1].trim()
+				        : null;
+				if (StringUtils.isNotBlank(code)) {
+					concept = Context.getConceptService().getConceptByMapping(code, source, false);
+				} else if (StringUtils.isNotBlank(source)) {
+					concept = Context.getConceptService().getConceptByName(source);
+				}
+				
+				if (concept != null) {
+					List<Obs> conceptObs = Context.getObsService()
+					        .getObservationsByPersonAndConcept(surgicalAppointment.getPatient().getPerson(), concept);
+					if (conceptObs != null) {
+						obsList.addAll(conceptObs);
+					}
+				}
 			}
 		}
-		Collections.sort(obsList, (Obs o1, Obs o2) -> o2.getObsId().compareTo(o1.getObsId()));
+		Collections.sort(obsList, (o1, o2) -> {
+			if (o1.getObsId() == null || o2.getObsId() == null) {
+				return 0;
+			}
+			return o2.getObsId().compareTo(o1.getObsId());
+		});
 		return obsList;
 	}
 }
