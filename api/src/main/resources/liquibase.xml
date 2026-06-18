@@ -312,6 +312,16 @@
                              tableName="surgical_appointment_attribute_type"/>
     </changeSet>
     <include file="migrations/surgicalAppointmentAttributeTypes.xml" />
+    <changeSet id="surgical-appointment-order-id" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="surgical_appointment" columnName="order_id"/></not>
+        </preConditions>
+        <addColumn tableName="surgical_appointment">
+            <column name="order_id" type="int">
+                <constraints nullable="true" foreignKeyName="fk_surgical_appointment_order" references="orders(order_id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
     <changeSet id="Amman-201805131317" author="Maharjun , Saikumar" context="rel3.0" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">

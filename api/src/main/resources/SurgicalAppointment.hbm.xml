@@ -11,6 +11,7 @@
 
         <many-to-one name="patient" column="patient_id" class="org.openmrs.Patient" not-null="true" />
         <many-to-one name="surgicalBlock" column="surgical_block_id" class="org.openmrs.module.operationtheater.api.model.SurgicalBlock" not-null="true" />
+        <many-to-one name="order" column="order_id" class="org.openmrs.Order" not-null="false" />
 
         <property name="actualStartDatetime" type="java.util.Date" column="actual_start_datetime" length="19"/>
         <property name="actualEndDatetime" type="java.util.Date" column="actual_end_datetime" length="19"/>

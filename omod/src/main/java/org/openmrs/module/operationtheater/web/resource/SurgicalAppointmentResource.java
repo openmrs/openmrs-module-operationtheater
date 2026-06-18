@@ -101,6 +101,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
 			description.addProperty("patientObservations");
+			description.addProperty("order", Representation.REF);
 			return description;
 		}
 		if ((representation instanceof FullRepresentation)) {
@@ -117,6 +118,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
 			description.addProperty("patientObservations");
+			description.addProperty("order", Representation.REF);
 			return description;
 		}
 		return null;
