@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -198,5 +199,75 @@ public class SurgicalAppointmentResourceTest {
 		verify(administrationService, times(1)).getGlobalProperty("obs.conceptMappingsForOT");
 		verify(conceptService, times(1)).getConceptByName("BloodPressure");
 		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, concept);
+	}
+	
+	@Test
+	public void shouldGetObservationsForPatientWithMixedConceptMappingsAndReturnInDescendingObsIdOrder() {
+		SurgicalAppointment surgicalAppointment = new SurgicalAppointment();
+		Patient patient = new Patient();
+		patient.setUuid("uuid");
+		patient.setPersonId(1);
+		surgicalAppointment.setPatient(patient);
+		
+		Concept mappedConcept = new Concept();
+		mappedConcept.setUuid("mappedConceptUuid");
+		mappedConcept.setConceptId(1);
+		
+		Concept namedConcept = new Concept();
+		namedConcept.setUuid("namedConceptUuid");
+		namedConcept.setConceptId(2);
+		
+		Concept nullIdConcept = new Concept();
+		nullIdConcept.setUuid("nullIdConceptUuid");
+		nullIdConcept.setConceptId(3);
+		
+		Obs obsFromMapping = new Obs();
+		obsFromMapping.setObsId(5);
+		obsFromMapping.setConcept(mappedConcept);
+		obsFromMapping.setPerson(patient);
+		obsFromMapping.setObsDatetime(new Date());
+		List<Obs> mappedConceptObs = new ArrayList<Obs>();
+		mappedConceptObs.add(obsFromMapping);
+		
+		Obs obsFromName = new Obs();
+		obsFromName.setObsId(10);
+		obsFromName.setConcept(namedConcept);
+		obsFromName.setPerson(patient);
+		obsFromName.setObsDatetime(new Date());
+		List<Obs> namedConceptObs = new ArrayList<Obs>();
+		namedConceptObs.add(obsFromName);
+		
+		Obs obsWithNullId = new Obs();
+		obsWithNullId.setObsId(null);
+		obsWithNullId.setConcept(nullIdConcept);
+		obsWithNullId.setPerson(patient);
+		obsWithNullId.setObsDatetime(new Date());
+		List<Obs> nullIdConceptObs = new ArrayList<Obs>();
+		nullIdConceptObs.add(obsWithNullId);
+		
+		when(administrationService.getGlobalProperty("obs.conceptMappingsForOT"))
+		        .thenReturn("emrsource:observation,BloodPressure,Pulse");
+		when(conceptService.getConceptByMapping("observation", "emrsource", false)).thenReturn(mappedConcept);
+		when(conceptService.getConceptByName("BloodPressure")).thenReturn(namedConcept);
+		when(conceptService.getConceptByName("Pulse")).thenReturn(nullIdConcept);
+		
+		when(obsService.getObservationsByPersonAndConcept(patient, mappedConcept)).thenReturn(mappedConceptObs);
+		when(obsService.getObservationsByPersonAndConcept(patient, namedConcept)).thenReturn(namedConceptObs);
+		when(obsService.getObservationsByPersonAndConcept(patient, nullIdConcept)).thenReturn(nullIdConceptObs);
+		
+		List<Obs> actualObsList = SurgicalAppointmentResource.getPatientObservations(surgicalAppointment);
+		
+		assertEquals(3, actualObsList.size());
+		assertEquals(Integer.valueOf(10), actualObsList.get(0).getObsId());
+		assertEquals(Integer.valueOf(5), actualObsList.get(1).getObsId());
+		assertNull(actualObsList.get(2).getObsId());
+		
+		verify(administrationService, times(1)).getGlobalProperty("obs.conceptMappingsForOT");
+		verify(conceptService, times(1)).getConceptByMapping("observation", "emrsource", false);
+		verify(conceptService, times(1)).getConceptByName("BloodPressure");
+		verify(conceptService, times(1)).getConceptByName("Pulse");
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, mappedConcept);
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, namedConcept);
+		verify(obsService, times(1)).getObservationsByPersonAndConcept(patient, nullIdConcept);
 	}
 }
