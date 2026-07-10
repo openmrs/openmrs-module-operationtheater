@@ -397,4 +397,35 @@
             <column name="description" value="URL pattern to use for published surgical appointment events. Default is /openmrs/ws/rest/v1/surgicalAppointment/{uuid}?v=full. If you change default value, please add your custom implementation for the given URL"/>
         </insert>
     </changeSet>
+
+    <changeSet id="ot-add-surgery-order-type" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM order_type WHERE name = 'Surgery Order'</sqlCheck>
+        </preConditions>
+        <comment>Add Surgery Order order type for surgical appointments</comment>
+        <insert tableName="order_type">
+            <column name="name" value="Surgery Order"/>
+            <column name="description" value="Order created automatically when a surgical appointment is scheduled"/>
+            <column name="java_class_name" value="org.openmrs.Order"/>
+            <column name="date_created" valueDate="now()"/>
+            <column name="creator" value="1"/>
+            <column name="uuid" value="c1e3d8a2-4f7b-4a9e-b5c6-d2f8e3a1b4c7"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgical-order-concept" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM concept_name WHERE name = 'General Surgical Procedure' AND concept_name_type = 'FULLY_SPECIFIED' AND voided = 0</sqlCheck>
+        </preConditions>
+        <comment>Add General Surgical Procedure concept used when creating Surgery Orders for scheduled appointments</comment>
+        <sql>
+            INSERT INTO concept (retired, is_set, date_created, creator, uuid, datatype_id, class_id)
+            VALUES (0, 0, NOW(), 1, 'c8a89784-e16e-4929-ab5c-be2f3d47f2de',
+                (SELECT concept_datatype_id FROM concept_datatype WHERE name = 'N/A'),
+                (SELECT concept_class_id FROM concept_class WHERE name = 'Misc'));
+            INSERT INTO concept_name (concept_id, name, locale, locale_preferred, concept_name_type, creator, date_created, voided, uuid)
+            VALUES (LAST_INSERT_ID(), 'General Surgical Procedure', 'en', 1, 'FULLY_SPECIFIED', 1, NOW(), 0, UUID());
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

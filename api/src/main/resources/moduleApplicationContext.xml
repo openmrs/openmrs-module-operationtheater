@@ -44,6 +44,12 @@
         <property name="surgicalBlockDao">
             <ref bean="surgicalBlockDao"/>
         </property>
+        <property name="orderService">
+            <ref bean="orderService"/>
+        </property>
+        <property name="conceptService">
+            <ref bean="conceptService"/>
+        </property>
     </bean>
 
     <bean id="surgicalAppointmentService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
