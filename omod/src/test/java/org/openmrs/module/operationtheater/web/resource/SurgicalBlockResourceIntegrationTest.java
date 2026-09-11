@@ -258,6 +258,20 @@ public class SurgicalBlockResourceIntegrationTest extends MainResourceController
 	}
 	
 	@Test
+	public void shouldReturnOrderOnAppointmentInBlockGetResponse() throws Exception {
+		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + getUuid());
+		request.setParameter("v", "full");
+		SimpleObject surgicalBlock = deserialize(handle(request));
+		
+		java.util.List surgicalAppointments = surgicalBlock.get("surgicalAppointments");
+		LinkedHashMap<String, Object> surgicalAppointment = (LinkedHashMap<String, Object>) surgicalAppointments.get(0);
+		LinkedHashMap<String, Object> order = (LinkedHashMap<String, Object>) surgicalAppointment.get("order");
+		assertNotNull(order);
+		assertNotNull(order.get("uuid"));
+		assertNotNull(order.get("display"));
+	}
+	
+	@Test
 	public void shouldSetTheVoidReasonAndDateVoidedOfTheSurgicalBlock() throws Exception {
 		String json = "{\"startDatetime\": \"2017-04-25T10:00:00.000\", \"endDatetime\": \"2017-04-25T12:00:00.000\", \"provider\":{\"id\": \"1\"}, \"location\": {\"id\": \"1\"}, \"voided\": \"true\", \"voidReason\": \"Public holiday\","
 		        + " \"surgicalAppointments\":[{\"patient\": {\"uuid\":\"5631b434-78aa-102b-91a0-001e378eb17e\"}, \"actualStartDatetime\": \"2017-04-25T10:00:00.000\", \"actualEndDatetime\": \"2017-04-25T11:00:00.000\","

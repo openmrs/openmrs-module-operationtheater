@@ -4,7 +4,7 @@
     <person_name person_name_id="1" preferred="true" person_id="1" given_name="Patient" middle_name="" family_name="One" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f127d08-076b-4fc6-acac-4bb91515141e"/>
     <patient patient_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
 
-    <person person_id="10" uuid="5631b434-78aa-102b-91a0-001e378eb110" gender="M" birthdate="1950-04-01" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
+    <person person_id="10" uuid="5631b434-78aa-102b-91a0-001e378eb110" gender="M" birthdate="1950-04-01" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
     <person_name person_name_id="10" preferred="true" person_id="10" given_name="Doctor" middle_name="" family_name="Strange" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="0f127d08-076b-4fc6-acac-4bb915151111"/>
     <patient patient_id="10" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
 

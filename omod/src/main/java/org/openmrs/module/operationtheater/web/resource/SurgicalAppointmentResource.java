@@ -46,6 +46,10 @@ import io.swagger.models.properties.UUIDProperty;
         + "/surgicalAppointment", supportedClass = SurgicalAppointment.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
 public class SurgicalAppointmentResource extends DataDelegatingCrudResource<SurgicalAppointment> {
 	
+	public SurgicalAppointmentResource() {
+		propertiesIgnoredWhenUpdating.add("order");
+	}
+	
 	@Override
 	public SurgicalAppointment getByUniqueId(String surgicalAppointmentUuid) {
 		return Context.getService(SurgicalAppointmentService.class).getSurgicalAppointmentByUuid(surgicalAppointmentUuid);
@@ -101,6 +105,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
 			description.addProperty("patientObservations");
+			description.addProperty("order", Representation.REF);
 			return description;
 		}
 		if ((representation instanceof FullRepresentation)) {
@@ -117,6 +122,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			description.addProperty("bedLocation");
 			description.addProperty("surgicalAppointmentAttributes");
 			description.addProperty("patientObservations");
+			description.addProperty("order", Representation.REF);
 			return description;
 		}
 		return null;
@@ -132,7 +138,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			        .property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
 			        .property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
 			        .property("surgicalAppointmentAttributes", new StringProperty())
-			        .property("patientObservations", new StringProperty());
+			        .property("patientObservations", new StringProperty()).property("order", new StringProperty());
 		}
 		if (rep instanceof FullRepresentation) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
@@ -141,7 +147,7 @@ public class SurgicalAppointmentResource extends DataDelegatingCrudResource<Surg
 			        .property("notes", new StringProperty()).property("sortWeight", new IntegerProperty())
 			        .property("bedNumber", new StringProperty()).property("bedLocation", new StringProperty())
 			        .property("surgicalAppointmentAttributes", new StringProperty())
-			        .property("patientObservations", new StringProperty());
+			        .property("patientObservations", new StringProperty()).property("order", new StringProperty());
 		}
 		return modelImpl;
 	}

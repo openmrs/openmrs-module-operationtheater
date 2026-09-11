@@ -159,6 +159,19 @@ public class SurgicalAppointmentResourceIntegrationTest extends MainResourceCont
 	}
 	
 	@Test
+	public void shouldIgnoreOrderFieldWhenPostedInAppointmentPayload() throws Exception {
+		String json = "{\"id\": \"1\", \"uuid\": \"5580cddd-1111-66c8-8d3a-96dc33d109f1\", \"patient\": {\"id\": 1},"
+		        + " \"surgicalBlock\": { \"id\": 1, \"uuid\": \"5580cddd-c290-66c8-8d3a-96dc33d109f1\"},"
+		        + " \"status\": \"Scheduled\", \"order\": {\"uuid\": \"dfca4077-493c-496b-8312-856ee5d1cc26\"}}";
+		SimpleObject post = new ObjectMapper().readValue(json, SimpleObject.class);
+		SimpleObject surgicalAppointment = deserialize(handle(newPostRequest(getURI() + "/" + getUuid(), post)));
+		
+		assertNotNull(surgicalAppointment);
+		assertEquals("1", surgicalAppointment.get("id").toString());
+		assertEquals(null, surgicalAppointment.get("order"));
+	}
+	
+	@Test
 	public void shouldGetBedNumberAndBedLocationAsNullForPatientHavingNoBedAssignment() throws Exception {
 		MockHttpServletRequest request = request(RequestMethod.GET, getURI() + "/" + "5580cddd-1111-66c8-8d3a-96dc33d112f2");
 		request.setParameter("v", "full");

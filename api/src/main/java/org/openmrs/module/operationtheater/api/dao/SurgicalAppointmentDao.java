@@ -14,7 +14,7 @@ import java.util.List;
 public class SurgicalAppointmentDao {
 	
 	private SessionFactory sessionFactory;
-
+	
 	public void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}

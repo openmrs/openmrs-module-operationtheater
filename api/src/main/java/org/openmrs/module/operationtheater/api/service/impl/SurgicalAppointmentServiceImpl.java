@@ -31,6 +31,12 @@ public class SurgicalAppointmentServiceImpl extends BaseOpenmrsService implement
 	public SurgicalAppointment save(SurgicalAppointment surgicalAppointment) {
 		validateSurgicalAppointment(surgicalAppointment);
 		validatePatientForConflictingSurgicalAppointment(surgicalAppointment);
+		// NOTE: Surgery Order creation is handled in SurgicalBlockServiceImpl.save(),
+		// which is the path taken by the OT client. If a future caller creates an
+		// appointment directly through this method (e.g. POST
+		// /ws/rest/v1/surgicalAppointment),
+		// it will not receive a linked Surgery Order — that caller must be updated
+		// to trigger order creation explicitly.
 		return surgicalAppointmentDao.save(surgicalAppointment);
 	}
 	

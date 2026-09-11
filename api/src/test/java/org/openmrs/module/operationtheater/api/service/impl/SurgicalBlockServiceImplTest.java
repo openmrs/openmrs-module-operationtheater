@@ -8,6 +8,10 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.openmrs.*;
+import org.openmrs.api.AdministrationService;
+import org.openmrs.api.ConceptService;
+import org.openmrs.api.EncounterService;
+import org.openmrs.api.OrderService;
 import org.openmrs.api.context.Context;
 
 import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
@@ -21,8 +25,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import org.mockito.ArgumentCaptor;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
@@ -32,6 +41,18 @@ public class SurgicalBlockServiceImplTest {
 	
 	@Mock
 	SurgicalBlockDAO surgicalBlockDAO;
+	
+	@Mock
+	AdministrationService adminService;
+	
+	@Mock
+	EncounterService encounterService;
+	
+	@Mock
+	OrderService orderService;
+	
+	@Mock
+	ConceptService conceptService;
 	
 	@InjectMocks
 	SurgicalBlockServiceImpl surgicalBlockService;
@@ -266,5 +287,138 @@ public class SurgicalBlockServiceImplTest {
 		
 		verify(surgicalBlockDAO, times(1)).getSurgicalBlocksFor(startDatetime, endDatetime, null, null, false, true);
 		assertEquals(surgicalBlock, surgicalBlocks.get(0));
+	}
+	
+	@Test
+	public void shouldCreateEncounterAndOrderForNewAppointment() throws ParseException {
+		SurgicalBlock block = buildValidBlock();
+		SurgicalAppointment newAppointment = buildNewAppointment(block);
+		block.setSurgicalAppointments(Collections.singleton(newAppointment));
+		setupOrderCreationMocks();
+		Encounter savedEncounter = new Encounter();
+		Order savedOrder = new Order();
+		doReturn(savedEncounter).when(encounterService).saveEncounter(any(Encounter.class));
+		doReturn(savedOrder).when(orderService).saveOrder(any(Order.class), eq(null));
+		doReturn(block).when(surgicalBlockDAO).save(block);
+		
+		surgicalBlockService.save(block);
+		
+		ArgumentCaptor<Encounter> encounterCaptor = ArgumentCaptor.forClass(Encounter.class);
+		verify(encounterService).saveEncounter(encounterCaptor.capture());
+		Encounter capturedEncounter = encounterCaptor.getValue();
+		assertEquals(newAppointment.getPatient(), capturedEncounter.getPatient());
+		assertNotNull(capturedEncounter.getEncounterType());
+		assertNotNull(capturedEncounter.getEncounterDatetime());
+		assertNull(capturedEncounter.getVisit());
+		
+		ArgumentCaptor<Order> orderCaptor = ArgumentCaptor.forClass(Order.class);
+		verify(orderService).saveOrder(orderCaptor.capture(), eq(null));
+		Order capturedOrder = orderCaptor.getValue();
+		assertEquals(newAppointment.getPatient(), capturedOrder.getPatient());
+		assertEquals(savedEncounter, capturedOrder.getEncounter());
+		assertNotNull(capturedOrder.getOrderType());
+		assertNotNull(capturedOrder.getConcept());
+		assertNotNull(capturedOrder.getCareSetting());
+		assertEquals(block.getProvider(), capturedOrder.getOrderer());
+		assertNotNull(capturedOrder.getDateActivated());
+		assertEquals(savedOrder, newAppointment.getOrder());
+	}
+	
+	@Test
+	public void shouldSkipOrderCreationForExistingAppointment() throws ParseException {
+		SurgicalBlock block = buildValidBlock();
+		SurgicalAppointment existingAppointment = buildNewAppointment(block);
+		existingAppointment.setId(99); // already persisted
+		block.setSurgicalAppointments(Collections.singleton(existingAppointment));
+		when(surgicalBlockDAO.save(block)).thenReturn(block);
+		
+		surgicalBlockService.save(block);
+		
+		verify(encounterService, never()).saveEncounter(any(Encounter.class));
+		verify(orderService, never()).saveOrder(any(Order.class), any());
+		assertNull(existingAppointment.getOrder());
+	}
+	
+	@Test
+	public void shouldSkipOrderCreationForVoidedNewAppointment() throws ParseException {
+		SurgicalBlock block = buildValidBlock();
+		SurgicalAppointment voidedAppointment = buildNewAppointment(block);
+		voidedAppointment.setVoided(true);
+		block.setSurgicalAppointments(Collections.singleton(voidedAppointment));
+		when(surgicalBlockDAO.save(block)).thenReturn(block);
+		
+		surgicalBlockService.save(block);
+		
+		verify(encounterService, never()).saveEncounter(any(Encounter.class));
+		verify(orderService, never()).saveOrder(any(Order.class), any());
+	}
+	
+	@Test
+	public void shouldNotSetOrderWhenGPNotConfigured() throws ParseException {
+		SurgicalBlock block = buildValidBlock();
+		SurgicalAppointment newAppointment = buildNewAppointment(block);
+		block.setSurgicalAppointments(Collections.singleton(newAppointment));
+		org.powermock.api.mockito.PowerMockito.mockStatic(Context.class);
+		doReturn("").when(adminService).getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_SCHEDULING_ENCOUNTER_TYPE_GP, "");
+		doReturn(block).when(surgicalBlockDAO).save(block);
+		
+		surgicalBlockService.save(block);
+		
+		verify(encounterService, never()).saveEncounter(any(Encounter.class));
+		assertNull(newAppointment.getOrder());
+	}
+	
+	@Test
+	public void shouldPropagateExceptionWhenOrderSaveFails() throws ParseException {
+		SurgicalBlock block = buildValidBlock();
+		SurgicalAppointment newAppointment = buildNewAppointment(block);
+		block.setSurgicalAppointments(Collections.singleton(newAppointment));
+		setupOrderCreationMocks();
+		Encounter savedEncounter = new Encounter();
+		when(encounterService.saveEncounter(any(Encounter.class))).thenReturn(savedEncounter);
+		when(orderService.saveOrder(any(Order.class), eq(null))).thenThrow(new RuntimeException("Order save failed"));
+		
+		exception.expect(RuntimeException.class);
+		exception.expectMessage("Order save failed");
+		surgicalBlockService.save(block);
+	}
+	
+	private SurgicalBlock buildValidBlock() throws ParseException {
+		SurgicalBlock block = new SurgicalBlock();
+		block.setStartDatetime(simpleDateFormat.parse("2017-04-25 13:45:00"));
+		block.setEndDatetime(simpleDateFormat.parse("2017-04-25 14:45:00"));
+		block.setLocation(new Location(1));
+		Provider provider = new Provider(1);
+		block.setProvider(provider);
+		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(any(), any(), any(), eq(null), any()))
+		        .thenReturn(new ArrayList<>());
+		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(any(), any(), eq(null), any(), any()))
+		        .thenReturn(new ArrayList<>());
+		when(surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(any(), any(), any(), any()))
+		        .thenReturn(new ArrayList<>());
+		return block;
+	}
+	
+	private SurgicalAppointment buildNewAppointment(SurgicalBlock block) {
+		SurgicalAppointment appointment = new SurgicalAppointment();
+		appointment.setPatient(new Patient(1));
+		appointment.setSurgicalBlock(block);
+		return appointment; // getId() == null → new appointment
+	}
+	
+	private void setupOrderCreationMocks() {
+		org.powermock.api.mockito.PowerMockito.mockStatic(Context.class);
+		org.powermock.api.mockito.PowerMockito.when(Context.getEncounterService()).thenReturn(encounterService);
+		doReturn("encounter-type-uuid").when(adminService)
+		        .getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_SCHEDULING_ENCOUNTER_TYPE_GP, "");
+		doReturn("order-type-uuid").when(adminService).getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_ORDER_TYPE_UUID_GP,
+		    "");
+		doReturn("concept-uuid").when(adminService)
+		        .getGlobalProperty(SurgicalBlockServiceImpl.SURGICAL_ORDER_CONCEPT_UUID_GP, "");
+		doReturn(new EncounterType()).when(encounterService).getEncounterTypeByUuid("encounter-type-uuid");
+		doReturn(new OrderType()).when(orderService).getOrderTypeByUuid("order-type-uuid");
+		doReturn(new Concept()).when(conceptService).getConceptByUuid("concept-uuid");
+		doReturn(new CareSetting()).when(orderService)
+		        .getCareSettingByName(CareSetting.CareSettingType.OUTPATIENT.toString());
 	}
 }

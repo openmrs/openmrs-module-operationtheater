@@ -312,6 +312,16 @@
                              tableName="surgical_appointment_attribute_type"/>
     </changeSet>
     <include file="migrations/surgicalAppointmentAttributeTypes.xml" />
+    <changeSet id="surgical-appointment-order-id" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <not><columnExists tableName="surgical_appointment" columnName="order_id"/></not>
+        </preConditions>
+        <addColumn tableName="surgical_appointment">
+            <column name="order_id" type="int">
+                <constraints nullable="true" foreignKeyName="fk_surgical_appointment_order" references="orders(order_id)"/>
+            </column>
+        </addColumn>
+    </changeSet>
     <changeSet id="Amman-201805131317" author="Maharjun , Saikumar" context="rel3.0" runOnChange="true">
         <preConditions onFail="MARK_RAN">
             <sqlCheck expectedResult="0">
@@ -387,4 +397,88 @@
             <column name="description" value="URL pattern to use for published surgical appointment events. Default is /openmrs/ws/rest/v1/surgicalAppointment/{uuid}?v=full. If you change default value, please add your custom implementation for the given URL"/>
         </insert>
     </changeSet>
+
+    <changeSet id="ot-add-surgery-scheduling-encounter-type" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM encounter_type WHERE uuid = 'a2d9f6b3-1c4e-4a7f-b8d2-e5f3c1a6d9b4' OR name = 'SURGERY_SCHEDULING'</sqlCheck>
+        </preConditions>
+        <comment>Encounter created during surgery scheduling to associate a Surgery Order with the scheduled surgical appointment</comment>
+        <insert tableName="encounter_type">
+            <column name="name" value="SURGERY_SCHEDULING"/>
+            <column name="description" value="Encounter created during surgery scheduling to associate a Surgery Order with the scheduled surgical appointment"/>
+            <column name="creator" value="1"/>
+            <column name="date_created" valueDate="now()"/>
+            <column name="uuid" value="a2d9f6b3-1c4e-4a7f-b8d2-e5f3c1a6d9b4"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgery-scheduling-encounter-type-gp" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM global_property WHERE property = 'operationtheater.surgerySchedulingEncounterTypeUuid'</sqlCheck>
+        </preConditions>
+        <comment>GP for configurable SURGERY_SCHEDULING encounter type UUID used when creating Surgery Orders</comment>
+        <insert tableName="global_property">
+            <column name="property" value="operationtheater.surgerySchedulingEncounterTypeUuid"/>
+            <column name="property_value" value="a2d9f6b3-1c4e-4a7f-b8d2-e5f3c1a6d9b4"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="UUID of the encounter type used when creating a Surgery Scheduling encounter. Configurable to use a site-specific encounter type. Note: on a site whose visits.assignmentHandler is ExistingOrNewVisitAssignmentHandler, visits.encounterTypeToVisitTypeMapping must either be empty or carry an entry for this encounter type, or scheduling will fail."/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgery-order-type-gp" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM global_property WHERE property = 'operationtheater.surgeryOrderTypeUuid'</sqlCheck>
+        </preConditions>
+        <comment>Configurable UUID for the Surgery Order type. Override if your site already has a surgery order type under a different UUID.</comment>
+        <insert tableName="global_property">
+            <column name="property" value="operationtheater.surgeryOrderTypeUuid"/>
+            <column name="property_value" value="c1e3d8a2-4f7b-4a9e-b5c6-d2f8e3a1b4c7"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="UUID of the order type used when creating Surgery Orders on appointment scheduling. Override to use a site-specific order type."/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgery-order-type" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM order_type WHERE uuid = 'c1e3d8a2-4f7b-4a9e-b5c6-d2f8e3a1b4c7' OR name = 'Surgery Order'</sqlCheck>
+        </preConditions>
+        <comment>Add Surgery Order order type for surgical appointments</comment>
+        <insert tableName="order_type">
+            <column name="name" value="Surgery Order"/>
+            <column name="description" value="Order created automatically when a surgical appointment is scheduled"/>
+            <column name="java_class_name" value="org.openmrs.Order"/>
+            <column name="date_created" valueDate="now()"/>
+            <column name="creator" value="1"/>
+            <column name="uuid" value="c1e3d8a2-4f7b-4a9e-b5c6-d2f8e3a1b4c7"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgical-order-concept-gp" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM global_property WHERE property = 'operationtheater.surgicalOrderConceptUuid'</sqlCheck>
+        </preConditions>
+        <comment>Configurable UUID for the General Surgical Procedure concept. Override if your site already has a procedure concept under a different UUID.</comment>
+        <insert tableName="global_property">
+            <column name="property" value="operationtheater.surgicalOrderConceptUuid"/>
+            <column name="property_value" value="c8a89784-e16e-4929-ab5c-be2f3d47f2de"/>
+            <column name="uuid" valueComputed="UUID()"/>
+            <column name="description" value="UUID of the concept used when creating Surgery Orders on appointment scheduling. Override to use a site-specific procedure concept."/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ot-add-surgical-order-concept" author="vivek">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">SELECT COUNT(*) FROM concept WHERE uuid = 'c8a89784-e16e-4929-ab5c-be2f3d47f2de' OR concept_id IN (SELECT concept_id FROM concept_name WHERE name = 'General Surgical Procedure' AND concept_name_type = 'FULLY_SPECIFIED' AND voided = 0)</sqlCheck>
+        </preConditions>
+        <comment>Add General Surgical Procedure concept used when creating Surgery Orders for scheduled appointments</comment>
+        <sql>
+            INSERT INTO concept (retired, is_set, date_created, creator, uuid, datatype_id, class_id)
+            VALUES (0, 0, NOW(), 1, 'c8a89784-e16e-4929-ab5c-be2f3d47f2de',
+                (SELECT concept_datatype_id FROM concept_datatype WHERE name = 'N/A'),
+                (SELECT concept_class_id FROM concept_class WHERE name = 'Misc'));
+            INSERT INTO concept_name (concept_id, name, locale, locale_preferred, concept_name_type, creator, date_created, voided, uuid)
+            VALUES (LAST_INSERT_ID(), 'General Surgical Procedure', 'en', 1, 'FULLY_SPECIFIED', 1, NOW(), 0, UUID());
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

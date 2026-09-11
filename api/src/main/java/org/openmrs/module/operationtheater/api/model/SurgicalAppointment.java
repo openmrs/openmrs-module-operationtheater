@@ -1,6 +1,7 @@
 package org.openmrs.module.operationtheater.api.model;
 
 import org.openmrs.BaseOpenmrsData;
+import org.openmrs.Order;
 import org.openmrs.Patient;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.util.StringUtils;
@@ -27,6 +28,8 @@ public class SurgicalAppointment extends BaseOpenmrsData {
 	
 	private Set<SurgicalAppointmentAttribute> surgicalAppointmentAttributes;
 	
+	private Order order;
+	
 	public SurgicalAppointment() {
 	}
 	
@@ -41,6 +44,7 @@ public class SurgicalAppointment extends BaseOpenmrsData {
 		this.setActualStartDatetime(surgicalAppointment.getActualStartDatetime());
 		this.setActualEndDatetime(surgicalAppointment.getActualEndDatetime());
 		this.setSurgicalAppointmentAttributes(surgicalAppointment.getSurgicalAppointmentAttributes());
+		this.setOrder(surgicalAppointment.getOrder());
 	}
 	
 	@Override
@@ -118,6 +122,14 @@ public class SurgicalAppointment extends BaseOpenmrsData {
 	
 	public void setSurgicalAppointmentAttributes(Set<SurgicalAppointmentAttribute> surgicalAppointmentAttributes) {
 		this.surgicalAppointmentAttributes = surgicalAppointmentAttributes;
+	}
+	
+	public Order getOrder() {
+		return order;
+	}
+	
+	public void setOrder(Order order) {
+		this.order = order;
 	}
 	
 	public List<SurgicalAppointmentAttribute> getActiveAttributes() {
