@@ -9,5 +9,16 @@
         <mapping resource="SurgicalBlock.hbm.xml"/>
         <mapping resource="SurgicalAppointmentAttributeType.hbm.xml"/>
         <mapping resource="SurgicalAppointmentAttribute.hbm.xml"/>
+        <!-- bedmanagement's own beans (e.g. VisitWithBedPatientAssignmentValidator) are wired into
+             this test context via its bundled moduleApplicationContext.xml (picked up through a
+             classpath* wildcard import from openmrs-api), and that validator runs against ANY Visit
+             save - so its entities need to be mapped here too, the same way a running OpenMRS
+             instance would map them once the module is actually started. -->
+        <mapping resource="Bed.hbm.xml"/>
+        <mapping resource="BedType.hbm.xml"/>
+        <mapping resource="BedTag.hbm.xml"/>
+        <mapping resource="BedTagMap.hbm.xml"/>
+        <mapping resource="BedLocationMapping.hbm.xml"/>
+        <mapping resource="BedPatientAssignment.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
