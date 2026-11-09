@@ -24,10 +24,10 @@
 	<properties>
 		<openmrsPlatformVersion>2.8.9</openmrsPlatformVersion>
 		<openmrsLegacyUiVersion>2.0.0</openmrsLegacyUiVersion>
-		<webservices.restVersion>3.0.0</webservices.restVersion>
-		<bedmanagementVersion>7.2.0</bedmanagementVersion>
+		<webservices.restVersion>3.6.0-SNAPSHOT</webservices.restVersion>
+		<bedmanagementVersion>7.3.0-SNAPSHOT</bedmanagementVersion>
 		<javaxServletVersion>4.0.1</javaxServletVersion>
-		<openmrsAtomfeedVersion>2.6.3</openmrsAtomfeedVersion>
+		<openmrsAtomfeedVersion>2.7.0-SNAPSHOT</openmrsAtomfeedVersion>
 		<atomfeed.version>1.10.1</atomfeed.version>
 		<mockito.inline.version>3.12.4</mockito.inline.version>
 	</properties>
