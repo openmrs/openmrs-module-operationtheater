@@ -143,10 +143,18 @@ public class SurgicalBlockServiceImpl extends BaseOpenmrsService implements Surg
 	}
 	
 	private void createAndLinkSurgeryOrder(SurgicalAppointment appointment, SurgicalBlock block) {
+		// "Get Admission Locations"/"Get Beds" aren't OpenMRS core privileges (no
+		// PrivilegeConstants
+		// entry exists for either) - they're required by bedmanagement's
+		// VisitWithBedPatientAssignmentValidator,
+		// which is registered as a global Visit validator and so runs against ANY new
+		// visit, including
+		// the one ADD_VISITS/saveEncounter below triggers here.
 		List<String> privileges = Arrays.asList(PrivilegeConstants.GET_ENCOUNTER_TYPES, PrivilegeConstants.ADD_ENCOUNTERS,
 		    PrivilegeConstants.GET_VISITS, PrivilegeConstants.GET_VISIT_TYPES, PrivilegeConstants.ADD_VISITS,
 		    PrivilegeConstants.GET_ORDER_TYPES, PrivilegeConstants.ADD_ORDERS, PrivilegeConstants.GET_CONCEPTS,
-		    PrivilegeConstants.GET_CARE_SETTINGS, PrivilegeConstants.GET_VISIT_ATTRIBUTE_TYPES);
+		    PrivilegeConstants.GET_CARE_SETTINGS, PrivilegeConstants.GET_VISIT_ATTRIBUTE_TYPES,
+		    PrivilegeConstants.GET_GLOBAL_PROPERTIES, "Get Admission Locations", "Get Beds");
 		privileges.forEach(Context::addProxyPrivilege);
 		try {
 			createAndLinkSurgeryOrderWithPrivileges(appointment, block);

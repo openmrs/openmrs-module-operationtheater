@@ -1,24 +1,22 @@
 package org.openmrs.module.operationtheater.web.resource;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttribute;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.SimpleDateFormat;
 
 import static org.mockito.Mockito.*;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@PrepareForTest({ Context.class, SurgicalAppointmentResource.class })
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalAppointmentAttributeResourceTest {
 	
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -26,11 +24,18 @@ public class SurgicalAppointmentAttributeResourceTest {
 	@Mock
 	SurgicalAppointmentService surgicalAppointmentService;
 	
+	private MockedStatic<Context> mockedContext;
+	
 	@Before
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		mockStatic(Context.class);
-		PowerMockito.when(Context.getService(SurgicalAppointmentService.class)).thenReturn(surgicalAppointmentService);
+		mockedContext = Mockito.mockStatic(Context.class);
+		mockedContext.when(() -> Context.getService(SurgicalAppointmentService.class))
+		        .thenReturn(surgicalAppointmentService);
+	}
+	
+	@After
+	public void tearDown() {
+		mockedContext.close();
 	}
 	
 	@Test

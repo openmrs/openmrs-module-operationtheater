@@ -103,27 +103,27 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
 		}
 		return null;
 	}
-
+	
 	@Override
 	public Model getGETModel(Representation rep) {
 		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
 		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("provider", new StringProperty()).property("startDateTime", new DateProperty())
-					.property("endDateTime", new DateProperty()).property("location", new StringProperty())
-					.property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
-					.property("surgicalAppointments", new StringProperty());
+			        .property("provider", new StringProperty()).property("startDateTime", new DateProperty())
+			        .property("endDateTime", new DateProperty()).property("location", new StringProperty())
+			        .property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
+			        .property("surgicalAppointments", new StringProperty());
 		}
 		if (rep instanceof FullRepresentation) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("provider", new StringProperty()).property("startDateTime", new DateProperty())
-					.property("endDateTime", new DateProperty()).property("location", new StringProperty())
-					.property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
-					.property("surgicalAppointments", new StringProperty());
+			        .property("provider", new StringProperty()).property("startDateTime", new DateProperty())
+			        .property("endDateTime", new DateProperty()).property("location", new StringProperty())
+			        .property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
+			        .property("surgicalAppointments", new StringProperty());
 		}
 		return modelImpl;
 	}
-
+	
 	@Override
 	public DelegatingResourceDescription getCreatableProperties() {
 		DelegatingResourceDescription delegatingResourceDescription = new DelegatingResourceDescription();
@@ -138,14 +138,14 @@ public class SurgicalBlockResource extends DataDelegatingCrudResource<SurgicalBl
 		delegatingResourceDescription.addProperty("voidReason");
 		return delegatingResourceDescription;
 	}
-
+	
 	@Override
 	public Model getCREATEModel(Representation rep) {
 		return new ModelImpl().property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-				.property("provider", new StringProperty()).property("startDateTime", new DateProperty())
-				.property("endDateTime", new DateProperty()).property("location", new StringProperty())
-				.property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
-				.property("surgicalAppointments", new StringProperty());
+		        .property("provider", new StringProperty()).property("startDateTime", new DateProperty())
+		        .property("endDateTime", new DateProperty()).property("location", new StringProperty())
+		        .property("voided", new StringProperty()).property("voidedReason", new IntegerProperty())
+		        .property("surgicalAppointments", new StringProperty());
 	}
 	
 	@PropertyGetter("surgicalAppointments")

@@ -42,13 +42,13 @@ import java.util.List;
  * Facilitates testing controllers.
  */
 public abstract class MainResourceControllerTest extends BaseModuleWebContextSensitiveTest {
-
+	
 	@Autowired
 	private RequestMappingHandlerAdapter handlerAdapter;
-
+	
 	@Autowired
 	private List<RequestMappingHandlerMapping> handlerMappings;
-
+	
 	/**
 	 * Creates a request from the given parameters.
 	 * <p>

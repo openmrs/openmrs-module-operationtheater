@@ -1,10 +1,13 @@
 package org.openmrs.module.operationtheater.web.resource;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.Location;
 import org.openmrs.Patient;
 import org.openmrs.Provider;
@@ -20,9 +23,6 @@ import org.openmrs.module.bedmanagement.service.BedManagementService;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalAppointmentService;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,10 +34,8 @@ import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@PrepareForTest({ Context.class, SurgicalAppointmentResource.class })
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalAppointmentResourceTest {
 	
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -57,15 +55,22 @@ public class SurgicalAppointmentResourceTest {
 	@Mock
 	private ObsService obsService;
 	
+	private MockedStatic<Context> mockedContext;
+	
 	@Before
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		mockStatic(Context.class);
-		PowerMockito.when(Context.getService(SurgicalAppointmentService.class)).thenReturn(surgicalAppointmentService);
-		PowerMockito.when(Context.getService(BedManagementService.class)).thenReturn(bedManagementService);
-		PowerMockito.when(Context.getAdministrationService()).thenReturn(administrationService);
-		PowerMockito.when(Context.getConceptService()).thenReturn(conceptService);
-		PowerMockito.when(Context.getObsService()).thenReturn(obsService);
+		mockedContext = Mockito.mockStatic(Context.class);
+		mockedContext.when(() -> Context.getService(SurgicalAppointmentService.class))
+		        .thenReturn(surgicalAppointmentService);
+		mockedContext.when(() -> Context.getService(BedManagementService.class)).thenReturn(bedManagementService);
+		mockedContext.when(Context::getAdministrationService).thenReturn(administrationService);
+		mockedContext.when(Context::getConceptService).thenReturn(conceptService);
+		mockedContext.when(Context::getObsService).thenReturn(obsService);
+	}
+	
+	@After
+	public void tearDown() {
+		mockedContext.close();
 	}
 	
 	@Test

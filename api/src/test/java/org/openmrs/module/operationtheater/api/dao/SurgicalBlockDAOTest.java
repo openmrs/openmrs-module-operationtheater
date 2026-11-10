@@ -264,7 +264,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	public void shouldReturnOverlappingSurgicalAppointmentsFromTheOtherSurgicalBlocksForAPatient() throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -279,7 +279,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -294,7 +294,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -309,7 +309,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 14:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 15:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -324,7 +324,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 15:30:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -339,7 +339,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 10:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 12:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -352,7 +352,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 16:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 20:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
 		        .getOverlappingSurgicalAppointmentsForPatient(startDatetime, endDatetime, patient, null);
@@ -365,7 +365,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	        throws Exception {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 15:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		Integer surgicalBlockId = 2;
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO
@@ -375,7 +375,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 		assertNotNull(surgicalBlocks.get(0));
 		assertEquals(2, surgicalBlocks.get(0).getId(), 0.0);
 		assertNotNull(surgicalBlocks.get(0).getPatient());
-		assertEquals(1, surgicalBlocks.get(0).getPatient().getId(), 0.0);
+		assertEquals(100, surgicalBlocks.get(0).getPatient().getId(), 0.0);
 		assertNotNull(surgicalBlocks.get(0).getSurgicalBlock());
 		assertNotEquals(surgicalBlockId, surgicalBlocks.get(0).getSurgicalBlock().getId());
 	}
@@ -395,7 +395,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 		assertNotNull(surgicalAppointment);
 		assertEquals(1, surgicalAppointment.getId(), 0.0);
 		assertEquals(2, surgicalAppointment.getSurgicalBlock().getId(), 0.0);
-		assertEquals(1, surgicalAppointment.getPatient().getId(), 0.0);
+		assertEquals(100, surgicalAppointment.getPatient().getId(), 0.0);
 		assertNotNull(surgicalAppointment.getSurgicalAppointmentAttributes());
 		SurgicalAppointmentAttribute surgicalAppointmentAttribute = surgicalAppointment.getSurgicalAppointmentAttributes()
 		        .iterator().next();
@@ -410,7 +410,7 @@ public class SurgicalBlockDAOTest extends BaseModuleWebContextSensitiveTest {
 	public void shouldNotGetOverlappingSurgicalAppointmentsWithStatusAsCancelledOrPostponed() throws ParseException {
 		Date startDatetime = simpleDateFormat.parse("2017-04-24 17:00:00");
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 18:00:00");
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		
 		Integer surgicalBlockId = 2;
 		List<SurgicalAppointment> surgicalBlocks = surgicalBlockDAO

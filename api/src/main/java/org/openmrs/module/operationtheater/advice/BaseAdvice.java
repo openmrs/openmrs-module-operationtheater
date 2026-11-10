@@ -8,6 +8,7 @@ import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
+import org.openmrs.util.PrivilegeConstants;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -29,11 +30,23 @@ public abstract class BaseAdvice implements AfterReturningAdvice {
 	}
 	
 	protected boolean shouldRaiseEvent(String globalPropertyName) {
-		return Boolean.valueOf(Context.getAdministrationService().getGlobalProperty(globalPropertyName));
+		Context.addProxyPrivilege(PrivilegeConstants.GET_GLOBAL_PROPERTIES);
+		try {
+			return Boolean.valueOf(Context.getAdministrationService().getGlobalProperty(globalPropertyName));
+		}
+		finally {
+			Context.removeProxyPrivilege(PrivilegeConstants.GET_GLOBAL_PROPERTIES);
+		}
 	}
 	
 	protected String getUrlPattern(String urlPatternGlobalPropertyName, String defaultUrlPattern) {
-		return Context.getAdministrationService().getGlobalProperty(urlPatternGlobalPropertyName, defaultUrlPattern);
+		Context.addProxyPrivilege(PrivilegeConstants.GET_GLOBAL_PROPERTIES);
+		try {
+			return Context.getAdministrationService().getGlobalProperty(urlPatternGlobalPropertyName, defaultUrlPattern);
+		}
+		finally {
+			Context.removeProxyPrivilege(PrivilegeConstants.GET_GLOBAL_PROPERTIES);
+		}
 	}
 	
 	protected void notifyEvent(Event event) {

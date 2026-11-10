@@ -1,28 +1,26 @@
 package org.openmrs.module.operationtheater.web.resource;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.Location;
 import org.openmrs.Provider;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.api.service.SurgicalBlockService;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
-@PrepareForTest({ Context.class, SurgicalBlockResource.class })
-@RunWith(PowerMockRunner.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalBlockResourceTest {
 	
 	SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -32,12 +30,18 @@ public class SurgicalBlockResourceTest {
 	
 	private SurgicalBlockResource surgicalBlockResource;
 	
+	private MockedStatic<Context> mockedContext;
+	
 	@Before
 	public void setUp() throws Exception {
-		MockitoAnnotations.initMocks(this);
-		mockStatic(Context.class);
-		PowerMockito.when(Context.getService(SurgicalBlockService.class)).thenReturn(surgicalBlockService);
+		mockedContext = Mockito.mockStatic(Context.class);
+		mockedContext.when(() -> Context.getService(SurgicalBlockService.class)).thenReturn(surgicalBlockService);
 		surgicalBlockResource = new SurgicalBlockResource();
+	}
+	
+	@After
+	public void tearDown() {
+		mockedContext.close();
 	}
 	
 	@Test

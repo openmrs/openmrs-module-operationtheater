@@ -4,38 +4,37 @@ import org.ict4h.atomfeed.server.repository.jdbc.AllEventRecordsQueueJdbcImpl;
 import org.ict4h.atomfeed.server.service.Event;
 import org.ict4h.atomfeed.server.service.EventServiceImpl;
 import org.ict4h.atomfeed.transaction.AFTransactionWorkWithoutResult;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.atomfeed.transaction.support.AtomFeedSpringTransactionManager;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
-import org.powermock.core.classloader.annotations.PowerMockIgnore;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.spy;
-import static org.powermock.api.mockito.PowerMockito.verifyNew;
-import static org.powermock.api.mockito.PowerMockito.when;
-import static org.powermock.api.mockito.PowerMockito.whenNew;
+import static org.mockito.Mockito.when;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class, SurgicalAppointmentAdvice.class })
-@PowerMockIgnore("javax.management.*")
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalAppointmentAdviceTest {
 	
 	private static final String URL_PATTERN = "atomfeed.event.urlPatternForSurgicalAppointment";
@@ -55,54 +54,88 @@ public class SurgicalAppointmentAdviceTest {
 	@Mock
 	private AdministrationService administrationService;
 	
-	@Mock
-	private AllEventRecordsQueueJdbcImpl allEventRecordsQueue;
+	private MockedStatic<Context> mockedContext;
 	
-	@Mock
-	private Event event;
+	private MockedConstruction<AtomFeedSpringTransactionManager> mockedTxManager;
 	
-	@Mock
-	private EventServiceImpl eventService;
+	private MockedConstruction<AllEventRecordsQueueJdbcImpl> mockedAllEventRecordsQueue;
+	
+	private MockedConstruction<EventServiceImpl> mockedEventService;
+	
+	private MockedConstruction<Event> mockedEvent;
 	
 	private SurgicalAppointmentAdvice surgicalAppointmentAdvice;
 	
 	private AtomFeedSpringTransactionManager atomFeedSpringTransactionManager;
 	
+	private EventServiceImpl eventService;
+	
+	private List<List<?>> capturedEventConstructorArgs;
+	
 	@Before
 	public void setUp() throws Exception {
-		mockStatic(Context.class);
-		when(Context.getRegisteredComponents(any())).thenReturn(Collections.singletonList(transactionManager));
-		when(Context.getAdministrationService()).thenReturn(administrationService);
+		capturedEventConstructorArgs = new ArrayList<>();
 		
-		atomFeedSpringTransactionManager = spy(new AtomFeedSpringTransactionManager(transactionManager));
+		mockedContext = Mockito.mockStatic(Context.class);
+		mockedContext.when(() -> Context.getRegisteredComponents(any()))
+		        .thenReturn(Collections.singletonList(transactionManager));
+		mockedContext.when(Context::getAdministrationService).thenReturn(administrationService);
 		
-		whenNew(AtomFeedSpringTransactionManager.class).withAnyArguments().thenReturn(atomFeedSpringTransactionManager);
+		mockedTxManager = Mockito.mockConstruction(AtomFeedSpringTransactionManager.class, (mock, ctx) -> {
+			Mockito.doAnswer(invocation -> {
+				AFTransactionWorkWithoutResult work = (AFTransactionWorkWithoutResult) invocation.getArgument(0);
+				work.execute();
+				return null;
+			}).when(mock).executeWithTransaction(any());
+		});
+		
+		mockedAllEventRecordsQueue = Mockito.mockConstruction(AllEventRecordsQueueJdbcImpl.class);
+		
+		mockedEventService = Mockito.mockConstruction(EventServiceImpl.class, (mock, ctx) -> {
+			doNothing().when(mock).notify(any());
+		});
+		
+		mockedEvent = Mockito.mockConstruction(Event.class, (mock, ctx) -> {
+			capturedEventConstructorArgs.add(ctx.arguments());
+		});
 		
 		when(surgicalAppointment.getUuid()).thenReturn(UUID);
-		whenNew(AllEventRecordsQueueJdbcImpl.class).withArguments(this.atomFeedSpringTransactionManager)
-		        .thenReturn(allEventRecordsQueue);
-		whenNew(EventServiceImpl.class).withArguments(allEventRecordsQueue).thenReturn(eventService);
-		whenNew(Event.class).withAnyArguments().thenReturn(event);
 		when(administrationService.getGlobalProperty(EVENTS_FOR_SURGICAL_APPOINTMENT_CHANGE)).thenReturn("true");
 		when(administrationService.getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN))
 		        .thenReturn(DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN);
 		
-		doNothing().when(eventService).notify(any());
 		surgicalAppointmentAdvice = new SurgicalAppointmentAdvice();
+		
+		atomFeedSpringTransactionManager = mockedTxManager.constructed().get(0);
+		eventService = mockedEventService.constructed().get(0);
+	}
+	
+	@After
+	public void tearDown() {
+		mockedContext.close();
+		mockedTxManager.close();
+		mockedAllEventRecordsQueue.close();
+		mockedEventService.close();
+		mockedEvent.close();
 	}
 	
 	@Test
 	public void shouldRaiseSurgicalAppointmentChangeEventToEventRecordsTable() throws Throwable {
-		
 		surgicalAppointmentAdvice.afterReturning(surgicalAppointment, this.getClass().getMethod("save"), null, null);
 		
 		verify(atomFeedSpringTransactionManager, times(1)).executeWithTransaction(any(AFTransactionWorkWithoutResult.class));
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_APPOINTMENT_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(anyString(), eq("Surgical Appointment"), any(LocalDateTime.class),
-		    eq(null), eq(String.format("/openmrs/ws/rest/v1/surgicalAppointment/%s?v=full", UUID)),
-		    eq("surgicalappointment"));
+		
+		assertEquals(1, capturedEventConstructorArgs.size());
+		List<?> args = capturedEventConstructorArgs.get(0);
+		assertNotNull(args.get(0));
+		assertEquals("Surgical Appointment", args.get(1));
+		assertNotNull(args.get(2));
+		assertNull(args.get(3));
+		assertEquals(String.format("/openmrs/ws/rest/v1/surgicalAppointment/%s?v=full", UUID), args.get(4));
+		assertEquals("surgicalappointment", args.get(5));
 	}
 	
 	@Test
@@ -116,8 +149,15 @@ public class SurgicalAppointmentAdviceTest {
 		verify(administrationService, times(1)).getGlobalProperty(EVENTS_FOR_SURGICAL_APPOINTMENT_CHANGE);
 		verify(administrationService, times(1)).getGlobalProperty(URL_PATTERN, DEFAULT_SURGICAL_APPOINTMENT_URL_PATTERN);
 		verify(eventService, times(1)).notify(any());
-		verifyNew(Event.class, times(1)).withArguments(any(String.class), eq("Surgical Appointment"),
-		    any(LocalDateTime.class), eq(null), eq(String.format("/openmrs/ws/%s", UUID)), eq("surgicalappointment"));
+		
+		assertEquals(1, capturedEventConstructorArgs.size());
+		List<?> args = capturedEventConstructorArgs.get(0);
+		assertNotNull(args.get(0));
+		assertEquals("Surgical Appointment", args.get(1));
+		assertNotNull(args.get(2));
+		assertNull(args.get(3));
+		assertEquals(String.format("/openmrs/ws/%s", UUID), args.get(4));
+		assertEquals("surgicalappointment", args.get(5));
 	}
 	
 	@Test

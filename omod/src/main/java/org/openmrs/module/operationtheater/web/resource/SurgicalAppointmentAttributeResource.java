@@ -22,7 +22,8 @@ import org.openmrs.module.webservices.rest.web.resource.impl.NeedsPaging;
 import org.openmrs.module.webservices.rest.web.response.ResourceDoesNotSupportOperationException;
 import org.openmrs.module.webservices.rest.web.response.ResponseException;
 
-@SubResource(parent = SurgicalAppointmentResource.class, path = "attribute", supportedClass = SurgicalAppointmentAttribute.class, supportedOpenmrsVersions = { "2.0.* - 9.*" })
+@SubResource(parent = SurgicalAppointmentResource.class, path = "attribute", supportedClass = SurgicalAppointmentAttribute.class, supportedOpenmrsVersions = {
+        "2.0.* - 9.*" })
 public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<SurgicalAppointmentAttribute, SurgicalAppointment, SurgicalAppointmentResource> {
 	
 	@Override
@@ -72,19 +73,19 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
 		}
 		return null;
 	}
-
+	
 	@Override
 	public Model getGETModel(Representation rep) {
 		ModelImpl modelImpl = ((ModelImpl) super.getGETModel(rep));
 		if ((rep instanceof DefaultRepresentation) || (rep instanceof RefRepresentation)) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("value", new StringProperty())
-					.property("surgicalAppointmentAttributeType", new StringProperty());
+			        .property("value", new StringProperty())
+			        .property("surgicalAppointmentAttributeType", new StringProperty());
 		}
 		if (rep instanceof FullRepresentation) {
 			modelImpl.property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-					.property("value", new StringProperty())
-					.property("surgicalAppointmentAttributeType", new StringProperty());
+			        .property("value", new StringProperty())
+			        .property("surgicalAppointmentAttributeType", new StringProperty());
 		}
 		return modelImpl;
 	}
@@ -98,13 +99,13 @@ public class SurgicalAppointmentAttributeResource extends DelegatingSubResource<
 		delegatingResourceDescription.addProperty("value");
 		return delegatingResourceDescription;
 	}
-
+	
 	@Override
 	public Model getCREATEModel(Representation rep) {
 		return new ModelImpl().property("id", new IntegerProperty()).property("uuid", new UUIDProperty())
-				.property("value", new StringProperty()).property("surgicalAppointmentAttributeType", new StringProperty());
+		        .property("value", new StringProperty()).property("surgicalAppointmentAttributeType", new StringProperty());
 	}
-
+	
 	@Override
 	public SurgicalAppointment getParent(SurgicalAppointmentAttribute instance) {
 		return instance.getSurgicalAppointment();

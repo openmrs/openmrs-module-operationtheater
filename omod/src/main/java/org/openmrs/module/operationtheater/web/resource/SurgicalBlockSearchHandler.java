@@ -31,8 +31,8 @@ public class SurgicalBlockSearchHandler implements SearchHandler {
 	        new SearchQuery.Builder(
 	                "Allows you to find surgical blocks which fall between the startDatetime and endDatetime")
 	                        .withRequiredParameters("startDatetime", "endDatetime")
-							.withOptionalParameters("includeVoided", "activeBlocks").build());
-
+	                        .withOptionalParameters("includeVoided", "activeBlocks").build());
+	
 	@Override
 	public SearchConfig getSearchConfig() {
 		return searchConfig;
@@ -47,7 +47,7 @@ public class SurgicalBlockSearchHandler implements SearchHandler {
 		Boolean includeVoided = Boolean.valueOf(includeVoidedString);
 		String activeBlocksString = requestContext.getRequest().getParameter("activeBlocks");
 		Boolean activeBlocks = Boolean.valueOf(activeBlocksString);
-
+		
 		List<SurgicalBlock> results = null;
 		try {
 			results = surgicalBlockService.getSurgicalBlocksBetweenStartDatetimeAndEndDatetime(

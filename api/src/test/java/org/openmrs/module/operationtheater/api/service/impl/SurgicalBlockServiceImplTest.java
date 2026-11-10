@@ -1,5 +1,6 @@
 package org.openmrs.module.operationtheater.api.service.impl;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -7,6 +8,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.*;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.ConceptService;
@@ -18,8 +22,6 @@ import org.openmrs.module.operationtheater.api.dao.SurgicalBlockDAO;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointment;
 import org.openmrs.module.operationtheater.api.model.SurgicalBlock;
 import org.openmrs.module.operationtheater.exception.ValidationException;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,13 +32,12 @@ import org.mockito.ArgumentCaptor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class })
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalBlockServiceImplTest {
 	
 	@Mock
@@ -60,6 +61,8 @@ public class SurgicalBlockServiceImplTest {
 	@Mock
 	SurgicalAppointmentServiceImpl surgicalAppointmentService;
 	
+	private MockedStatic<Context> mockedContext;
+	
 	private SimpleDateFormat simpleDateFormat;
 	
 	private SurgicalBlock surgicalBlock;
@@ -67,8 +70,15 @@ public class SurgicalBlockServiceImplTest {
 	@Before
 	public void run() {
 		initMocks(this);
+		mockedContext = Mockito.mockStatic(Context.class);
+		mockedContext.when(Context::getAdministrationService).thenReturn(adminService);
 		simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		surgicalBlock = new SurgicalBlock();
+	}
+	
+	@After
+	public void tearDown() {
+		mockedContext.close();
 	}
 	
 	@Rule
@@ -134,9 +144,6 @@ public class SurgicalBlockServiceImplTest {
 		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()),
 		    eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(surgicalBlock.getId())))
 		            .thenReturn(surgicalBlocks);
-		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()),
-		    eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(surgicalBlock.getId())))
-		            .thenReturn(surgicalBlocks);
 		when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 		
 		surgicalBlockService.save(surgicalBlock);
@@ -154,8 +161,6 @@ public class SurgicalBlockServiceImplTest {
 		
 		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()),
 		    eq(surgicalBlock.getEndDatetime()), eq(null), any(Location.class), eq(null))).thenReturn(surgicalBlocks);
-		when(surgicalBlockDAO.getOverlappingSurgicalBlocksFor(eq(surgicalBlock.getStartDatetime()),
-		    eq(surgicalBlock.getEndDatetime()), any(Provider.class), eq(null), eq(null))).thenReturn(surgicalBlocks);
 		when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 		
 		surgicalBlockService.save(surgicalBlock);
@@ -207,7 +212,6 @@ public class SurgicalBlockServiceImplTest {
 		when(surgicalBlockDAO.getOverlappingSurgicalAppointmentsForPatient(eq(surgicalBlock.getStartDatetime()),
 		    eq(surgicalBlock.getEndDatetime()), eq(surgicalAppointment.getPatient()), eq(surgicalBlock.getId())))
 		            .thenReturn(overlappingSurgicalAppointments);
-		when(surgicalBlockDAO.save(surgicalBlock)).thenReturn(surgicalBlock);
 		
 		exception.expect(ValidationException.class);
 		exception.expectMessage("Iron Man has conflicting appointment at Stark Labs with Dr. Tony Stark");
@@ -358,7 +362,6 @@ public class SurgicalBlockServiceImplTest {
 		SurgicalBlock block = buildValidBlock();
 		SurgicalAppointment newAppointment = buildNewAppointment(block);
 		block.setSurgicalAppointments(Collections.singleton(newAppointment));
-		org.powermock.api.mockito.PowerMockito.mockStatic(Context.class);
 		doReturn("").when(adminService).getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_SCHEDULING_ENCOUNTER_TYPE_GP, "");
 		doReturn(block).when(surgicalBlockDAO).save(block);
 		
@@ -407,8 +410,7 @@ public class SurgicalBlockServiceImplTest {
 	}
 	
 	private void setupOrderCreationMocks() {
-		org.powermock.api.mockito.PowerMockito.mockStatic(Context.class);
-		org.powermock.api.mockito.PowerMockito.when(Context.getEncounterService()).thenReturn(encounterService);
+		mockedContext.when(Context::getEncounterService).thenReturn(encounterService);
 		doReturn("encounter-type-uuid").when(adminService)
 		        .getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_SCHEDULING_ENCOUNTER_TYPE_GP, "");
 		doReturn("order-type-uuid").when(adminService).getGlobalProperty(SurgicalBlockServiceImpl.SURGERY_ORDER_TYPE_UUID_GP,

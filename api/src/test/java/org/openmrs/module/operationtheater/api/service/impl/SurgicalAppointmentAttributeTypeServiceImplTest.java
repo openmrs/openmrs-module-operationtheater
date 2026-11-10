@@ -7,11 +7,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.openmrs.api.context.Context;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.openmrs.module.operationtheater.api.dao.SurgicalAppointmentAttributeTypeDAO;
 import org.openmrs.module.operationtheater.api.model.SurgicalAppointmentAttributeType;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -20,8 +18,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(PowerMockRunner.class)
-@PrepareForTest({ Context.class })
+@RunWith(MockitoJUnitRunner.class)
 public class SurgicalAppointmentAttributeTypeServiceImplTest {
 	
 	@Mock

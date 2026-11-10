@@ -50,7 +50,7 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
 		Date endDatetime = simpleDateFormat.parse("2017-04-24 13:00:00");
 		Location location = Context.getLocationService().getLocation(1);
 		Provider provider = Context.getProviderService().getProvider(1);
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		surgicalBlock.setId(1);
 		surgicalBlock.setStartDatetime(startDatetime);
 		surgicalBlock.setEndDatetime(endDatetime);
@@ -78,7 +78,7 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
 		Date endDatetime = simpleDateFormat.parse("2017-06-06 10:30:00");
 		Location location = Context.getLocationService().getLocation(1);
 		Provider provider = Context.getProviderService().getProvider(1);
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		surgicalBlock.setId(1);
 		surgicalBlock.setStartDatetime(startDatetime);
 		surgicalBlock.setEndDatetime(endDatetime);
@@ -116,7 +116,7 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
 		Date endDatetime = simpleDateFormat.parse("2017-06-06 12:30:00");
 		Location location = Context.getLocationService().getLocation(1);
 		Provider provider = Context.getProviderService().getProvider(1);
-		Patient patient = Context.getPatientService().getPatient(1);
+		Patient patient = Context.getPatientService().getPatient(100);
 		surgicalBlock.setId(1);
 		surgicalBlock.setStartDatetime(startDatetime);
 		surgicalBlock.setEndDatetime(endDatetime);
@@ -139,7 +139,7 @@ public class SurgicalAppointmentDaoTest extends BaseModuleWebContextSensitiveTes
 		assertEquals(surgicalAppointment.getId(), 6, 0);
 		assertEquals(surgicalAppointment.getUuid(), appointmentUuid);
 		assertEquals(surgicalAppointment.getSurgicalBlock().getId(), 1, 0);
-		assertEquals(surgicalAppointment.getPatient().getId(), 1, 0);
+		assertEquals(surgicalAppointment.getPatient().getId(), 100, 0);
 		assertEquals(surgicalAppointment.getStatus(), "Completed");
 	}
 	
